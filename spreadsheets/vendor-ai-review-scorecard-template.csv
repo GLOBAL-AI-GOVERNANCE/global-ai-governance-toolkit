@@ -1,0 +1,2 @@
+Vendor,Product,Data Protection,Security Controls,Privacy Controls,Auditability,Model Update Transparency,Incident Notification,Subprocessor Transparency,Termination Rights,Liability/Accountability,Shutdown Support,Total Score,Decision Band,Notes
+Example Vendor,Example AI Product,3,3,3,2,2,3,2,3,2,2,=SUM(C2:L2),Proceed with restrictions,Sample row

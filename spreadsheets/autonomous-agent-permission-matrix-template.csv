@@ -1,0 +1,2 @@
+Agent Name,Permission Type,Default Position,Requested Access,Approval Required,Approver,Control Required,Decision,Notes
+Research Agent,Read internal non-sensitive docs,Restricted,Yes,Yes,Data Owner,Logging + scope restriction,Approved with restrictions,Sample row

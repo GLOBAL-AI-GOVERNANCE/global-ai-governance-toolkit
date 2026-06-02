@@ -1,0 +1,2 @@
+System ID,System Name,Description,Owner,Vendor/Internal,Risk Tier,Status,Data Used,Impact Area,Human Owner,Technical Owner,Executive Owner,Monitoring Active,Shutdown Path Exists,Last Review Date,Next Review Date,Notes
+AI-001,Internal FAQ Chatbot,Answers employee policy questions,HR Ops,Internal,Low,Pilot,Approved policy docs,Operations,HR Ops Lead,IT Apps Lead,,Yes,Yes,2026-06-01,2026-12-01,Sample row

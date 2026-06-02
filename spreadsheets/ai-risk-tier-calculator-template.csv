@@ -1,0 +1,2 @@
+System ID,System Name,People/Rights Impact,Safety/Security Impact,Money/Ops Impact,Autonomy Level,Data Sensitivity,Public Impact,Cyber Exposure,Shutdown Difficulty,Total Score,Suggested Risk Tier,Approval Gate,Notes
+AI-001,Internal FAQ Chatbot,0,0,1,1,0,0,1,1,=SUM(C2:J2),Low,Team Owner,Sample row
