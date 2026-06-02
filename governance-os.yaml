@@ -1,0 +1,74 @@
+system_name: Global AI Governance Solutions
+version: 1.0
+codename: Aligned Order
+
+mission: >
+  Make AI systems visible, accountable, safe, useful, and governable.
+
+operating_law: >
+  No AI system moves faster than ownership, evidence, authority, and control.
+
+root_command:
+  - see_it
+  - own_it
+  - classify_it
+  - test_it
+  - govern_it
+  - monitor_it
+  - correct_it
+  - shut_it_down_if_necessary
+
+governance_commandments:
+  - id: GAI-001
+    rule: No owner, no deployment.
+  - id: GAI-002
+    rule: No inventory, no governance.
+  - id: GAI-003
+    rule: No evidence, no approval.
+  - id: GAI-004
+    rule: No high-impact AI without meaningful human authority.
+  - id: GAI-005
+    rule: No public-impact AI without appeal and correction.
+  - id: GAI-006
+    rule: No autonomous agent without least privilege.
+  - id: GAI-007
+    rule: No sensitive data without protection.
+  - id: GAI-008
+    rule: No vendor AI without contractual accountability.
+  - id: GAI-009
+    rule: No model without monitoring.
+  - id: GAI-010
+    rule: No decision system without audit trail.
+  - id: GAI-011
+    rule: No frontier capability without shutdown path.
+  - id: GAI-012
+    rule: No trust without verification.
+
+risk_tiers:
+  low:
+    description: Minimal operational or public impact.
+    approval_required: team_owner
+  moderate:
+    description: Meaningful business, user, or workflow impact.
+    approval_required: business_owner
+  high:
+    description: Impacts people, rights, money, safety, security, or public trust.
+    approval_required: executive_owner
+  critical:
+    description: Mission-critical, safety-critical, national-security, legal, or rights-sensitive use.
+    approval_required: executive_governance_board
+  frontier:
+    description: Advanced autonomous, high-capability, or hard-to-control system.
+    approval_required: board_level_review
+
+required_controls:
+  inventory: true
+  named_owner: true
+  risk_classification: true
+  evidence_review: true
+  human_authority: true
+  least_privilege: true
+  audit_trail: true
+  monitoring: true
+  incident_response: true
+  shutdown_path: true
