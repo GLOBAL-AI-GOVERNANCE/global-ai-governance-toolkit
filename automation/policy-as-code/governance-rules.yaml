@@ -1,0 +1,41 @@
+rules:
+  - id: GAI-AUTO-001
+    name: Owner Required
+    description: Every AI system must have a named human owner.
+    fail_when:
+      owner_empty: true
+    severity: critical
+
+  - id: GAI-AUTO-002
+    name: Monitoring Required
+    description: Every deployed AI system must have active monitoring.
+    fail_when:
+      monitoring_active: "No"
+    severity: high
+
+  - id: GAI-AUTO-003
+    name: Shutdown Path Required
+    description: No AI system may deploy without a shutdown path.
+    fail_when:
+      shutdown_path_exists: "No"
+    severity: critical
+
+  - id: GAI-AUTO-004
+    name: Evidence Required For High Impact
+    description: High, Critical, and Frontier systems require complete evidence.
+    fail_when:
+      evidence_complete: "No"
+      risk_tier_in:
+        - High
+        - Critical
+        - Frontier
+    severity: high
+
+  - id: GAI-AUTO-005
+    name: Full Autonomy Escalates Risk
+    description: Full autonomy should trigger at least Critical review, and often Frontier review.
+    fail_when:
+      autonomy_level: "Full"
+      risk_tier_below:
+        - Critical
+    severity: high

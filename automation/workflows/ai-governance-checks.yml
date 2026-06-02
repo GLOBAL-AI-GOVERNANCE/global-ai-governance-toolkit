@@ -1,0 +1,33 @@
+name: AI Governance Checks
+
+on:
+  pull_request:
+    paths:
+      - 'automation/sample-data/**'
+      - 'sample-registers/**'
+      - 'spreadsheets/**'
+      - 'automation/scripts/**'
+  workflow_dispatch:
+
+jobs:
+  governance-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run governance checks on sample inventory
+        run: |
+          python automation/scripts/run_governance_checks.py automation/sample-data/sample-ai-inventory.csv --outdir automation/reports
+
+      - name: Upload governance reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: governance-reports
+          path: automation/reports/
