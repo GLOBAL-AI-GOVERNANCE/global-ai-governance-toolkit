@@ -1,6 +1,6 @@
 system_name: Global AI Governance Solutions
-version: 1.0
-codename: Aligned Order
+version: 2.0
+codename: Enterprise Adoption Package
 
 mission: >
   Make AI systems visible, accountable, safe, useful, and governable.
@@ -17,6 +17,12 @@ root_command:
   - monitor_it
   - correct_it
   - shut_it_down_if_necessary
+
+version_path:
+  v1_0: Governance OS
+  v1_1: Practical Toolkit
+  v1_2: Automation Layer
+  v2_0: Enterprise Adoption Package
 
 governance_commandments:
   - id: GAI-001
@@ -68,7 +74,20 @@ required_controls:
   evidence_review: true
   human_authority: true
   least_privilege: true
-  audit_trail: true
+  vendor_accountability: true
   monitoring: true
+  audit_trail: true
   incident_response: true
   shutdown_path: true
+
+enterprise_adoption:
+  board_reporting: true
+  executive_decision_memos: true
+  department_rollout_playbooks: true
+  evidence_binders: true
+  vendor_onboarding: true
+  procurement_review_gate: true
+  role_based_training: true
+  sector_tracks: true
+  dashboard_metrics: true
+  enterprise_risk_register: true

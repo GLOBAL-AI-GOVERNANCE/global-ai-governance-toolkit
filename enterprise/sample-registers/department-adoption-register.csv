@@ -1,0 +1,11 @@
+department,executive_owner,inventory_complete,risk_reviews_complete,evidence_binder_complete,vendor_review_complete,training_complete,shutdown_paths_complete,status
+Security,CISO,Yes,Yes,Yes,Yes,Yes,Yes,Operational
+Legal,General Counsel,Yes,Yes,Partial,Yes,Yes,Partial,In Progress
+Privacy,Chief Privacy Officer,Yes,Partial,Partial,Partial,Yes,Partial,In Progress
+HR,Chief People Officer,Partial,Partial,No,Partial,Partial,No,At Risk
+Product,Chief Product Officer,Yes,Partial,Partial,Partial,Partial,Partial,In Progress
+Engineering,CTO,Yes,Yes,Partial,Partial,Partial,Partial,In Progress
+Customer Support,COO,Partial,Partial,No,Partial,Partial,No,At Risk
+Procurement,CFO,Partial,No,No,Partial,Partial,No,At Risk
+Operations,COO,Yes,Partial,Partial,Partial,Partial,Partial,In Progress
+Executive Office,CEO,Yes,Yes,Yes,Yes,Yes,Yes,Operational

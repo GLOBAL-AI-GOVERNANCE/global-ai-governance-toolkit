@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.0] - 2026-06-01 — Enterprise Adoption Package
+
+- Added `/enterprise` directory.
+- Added board and executive reporting pack.
+- Added Executive AI Governance Board Charter.
+- Added Executive AI Governance Decision Memo template.
+- Added Quarterly AI Risk Report template.
+- Added Enterprise 30/60/90/180-day rollout plan.
+- Added department rollout playbook.
+- Added audit-ready evidence binder.
+- Added vendor onboarding package.
+- Added procurement AI review gate.
+- Added role-based training materials.
+- Added sector adoption tracks.
+- Added executive dashboard metrics.
+- Added sample department adoption and enterprise risk registers.
+- Added enterprise adoption workbook.
+
 ## [1.2] - 2026-06-01 — Automation Layer
 
 - Added `/automation` directory.

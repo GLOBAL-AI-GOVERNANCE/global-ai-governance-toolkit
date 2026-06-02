@@ -1,0 +1,5 @@
+risk_id,risk_name,risk_description,owner,impact,likelihood,status,mitigation,next_review
+R-001,Uninventoried AI Use,Shadow AI use may bypass governance,CIO,High,High,Open,Launch enterprise discovery,2026-07-01
+R-002,Vendor Data Exposure,AI vendors may retain or train on enterprise data,CPO,High,Medium,Open,Add vendor contract controls,2026-07-15
+R-003,Missing Shutdown Paths,Some AI systems may not be stoppable,CISO,Critical,Medium,Open,Require shutdown testing,2026-07-15
+R-004,High-Impact Decisions Without Appeal,Public or employee-impacting systems may lack correction process,General Counsel,High,Medium,Open,Implement appeal and correction workflow,2026-08-01

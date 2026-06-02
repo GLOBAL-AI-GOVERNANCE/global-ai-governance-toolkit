@@ -1,4 +1,4 @@
-# Global AI Governance Solutions v1.2 — Automation Layer
+# Global AI Governance Solutions v2.0 — Enterprise Adoption Package
 
 Global AI Governance Solutions is an open AI governance framework for transforming AI chaos into aligned order through visibility, ownership, risk classification, evidence, controls, monitoring, correction, and shutdown authority.
 
@@ -24,11 +24,33 @@ MONITOR IT.
 CORRECT IT.  
 SHUT IT DOWN IF NECESSARY.
 
-## What v1.2 Adds
+## What v2.0 Adds
 
-v1.2 adds lightweight automation for risk tiering, governance validation, executive reporting, policy-as-code checks, and GitHub workflow scaffolding.
+v2.0 adds the enterprise adoption layer for scaling AI governance across real organizations.
 
-The automation layer is located in `/automation`.
+The enterprise adoption package is located in `/enterprise`.
+
+Included:
+
+- Board and executive reporting pack
+- Executive AI Governance Board Charter
+- Quarterly AI Risk Report Template
+- Executive AI Governance Decision Memo Template
+- Enterprise 30/60/90/180-day rollout plan
+- Department rollout playbook
+- Audit-ready evidence binder
+- Vendor onboarding package
+- Procurement AI review gate
+- Role-based training materials
+- Sector adoption tracks
+- Executive dashboard metrics
+- Sample department adoption register
+- Enterprise AI risk register
+- Enterprise adoption workbook
+
+## v1.2 Automation Layer Preserved
+
+v1.2 remains included through `/automation`.
 
 Included:
 
@@ -41,9 +63,8 @@ Included:
 - Sample AI inventory data
 - GitHub Actions workflow scaffold
 - Sample generated governance reports
-- v1.2 release notes
 
-## Example Command
+Example command:
 
 ```bash
 python automation/scripts/run_governance_checks.py automation/sample-data/sample-ai-inventory.csv --outdir automation/reports
@@ -72,7 +93,8 @@ No trust without verification.
 - `.github`: issue templates and workflow scaffolding.
 - `automation`: v1.2 automation scripts, sample data, reports, schemas, policy-as-code, and workflow scaffold.
 - `checklists`: deployment and review checklists.
-- `docs`: doctrine, risk tiers, approval gates, monitoring, shutdown protocol, automation documentation, and release notes.
+- `docs`: doctrine, risk tiers, approval gates, monitoring, shutdown protocol, automation documentation, enterprise adoption documentation, and release notes.
+- `enterprise`: v2.0 enterprise adoption package, board pack, rollout playbooks, evidence binder, procurement gates, reporting, sector tracks, training, registers, and workbook.
 - `examples`: example AI system reviews.
 - `implementation-guides`: 30/60/90-day implementation guidance and executive board charter.
 - `policies`: acceptable use, autonomous agent, human authority, sensitive data, and vendor AI policies.
