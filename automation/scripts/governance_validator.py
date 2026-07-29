@@ -21,6 +21,8 @@ from typing import Dict, List
 
 
 HIGH_TIERS = {"High", "Critical", "Frontier"}
+SEVERITY_LEVELS = {"HIGH": 1, "CRITICAL": 2}
+FAIL_THRESHOLDS = {"high": 1, "critical": 2}
 
 
 def is_yes(value: str) -> bool:
@@ -38,51 +40,132 @@ def validate_row(row: Dict[str, str]) -> List[str]:
     risk_tier = row.get("calculated_risk_tier") or row.get("risk_tier") or ""
 
     if is_blank(row.get("owner", "")):
-        findings.append(f"{system_name}: CRITICAL - Missing named owner. No owner, no deployment.")
+        findings.append(
+            f"{system_name}: CRITICAL - Missing named owner. "
+            "No owner, no deployment."
+        )
 
     if not is_yes(row.get("monitoring_active", "")):
-        findings.append(f"{system_name}: HIGH - Monitoring is not active.")
+        findings.append(
+            f"{system_name}: HIGH - Monitoring is not active."
+        )
 
     if not is_yes(row.get("shutdown_path_exists", "")):
-        findings.append(f"{system_name}: CRITICAL - Shutdown path is missing.")
+        findings.append(
+            f"{system_name}: CRITICAL - Shutdown path is missing."
+        )
 
-    if risk_tier in HIGH_TIERS and not is_yes(row.get("evidence_complete", "")):
-        findings.append(f"{system_name}: HIGH - Evidence incomplete for {risk_tier} system.")
+    if (
+        risk_tier in HIGH_TIERS
+        and not is_yes(row.get("evidence_complete", ""))
+    ):
+        findings.append(
+            f"{system_name}: HIGH - Evidence incomplete "
+            f"for {risk_tier} system."
+        )
 
-    if row.get("autonomy_level", "").strip() == "Full" and risk_tier not in {"Critical", "Frontier"}:
-        findings.append(f"{system_name}: HIGH - Full autonomy requires Critical or Frontier review.")
+    if (
+        row.get("autonomy_level", "").strip() == "Full"
+        and risk_tier not in {"Critical", "Frontier"}
+    ):
+        findings.append(
+            f"{system_name}: HIGH - Full autonomy requires "
+            "Critical or Frontier review."
+        )
 
     return findings
 
 
-def validate_csv(input_path: Path, report_path: Path) -> None:
-    with input_path.open("r", encoding="utf-8-sig", newline="") as f:
-        reader = csv.DictReader(f)
+def finding_severity(finding: str) -> int:
+    for label, level in SEVERITY_LEVELS.items():
+        if f": {label} -" in finding:
+            return level
+    return 0
+
+
+def should_fail(findings: List[str], fail_on: str) -> bool:
+    if fail_on == "none":
+        return False
+
+    threshold = FAIL_THRESHOLDS[fail_on]
+    return any(
+        finding_severity(finding) >= threshold
+        for finding in findings
+    )
+
+
+def validate_csv(input_path: Path, report_path: Path) -> List[str]:
+    with input_path.open(
+        "r",
+        encoding="utf-8-sig",
+        newline="",
+    ) as file_handle:
+        reader = csv.DictReader(file_handle)
         rows = list(reader)
 
     findings: List[str] = []
+
     for row in rows:
         findings.extend(validate_row(row))
 
     if not findings:
-        report = "# Governance Validation Report\n\nNo governance gaps found.\n"
+        report = (
+            "# Governance Validation Report\n\n"
+            "No governance gaps found.\n"
+        )
     else:
         report = "# Governance Validation Report\n\n"
         report += "## Findings\n\n"
+
         for finding in findings:
             report += f"- {finding}\n"
 
-    report_path.write_text(report, encoding="utf-8")
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(report, encoding="utf-8", newline="\n")
+
     print(f"Governance validation complete: {report_path}")
+
+    return findings
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Validate AI inventory records against core governance rules.")
-    parser.add_argument("input_csv", type=Path, help="Path to AI inventory CSV.")
-    parser.add_argument("--report", "-r", type=Path, default=Path("governance-validation-report.md"), help="Output report path.")
-    args = parser.parse_args()
+    parser = argparse.ArgumentParser(
+        description=(
+            "Validate AI inventory records against "
+            "core governance rules."
+        )
+    )
+    parser.add_argument(
+        "input_csv",
+        type=Path,
+        help="Path to AI inventory CSV.",
+    )
+    parser.add_argument(
+        "--report",
+        "-r",
+        type=Path,
+        default=Path("governance-validation-report.md"),
+        help="Output report path.",
+    )
+    parser.add_argument(
+        "--fail-on",
+        choices=("none", "high", "critical"),
+        default="none",
+        help=(
+            "Return exit code 1 when findings meet or exceed "
+            "the selected severity."
+        ),
+    )
 
-    validate_csv(args.input_csv, args.report)
+    args = parser.parse_args()
+    findings = validate_csv(args.input_csv, args.report)
+
+    if should_fail(findings, args.fail_on):
+        print(
+            "Governance validation blocked by "
+            f"{args.fail_on.upper()} findings."
+        )
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
