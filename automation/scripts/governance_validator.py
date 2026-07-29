@@ -150,7 +150,7 @@ def main() -> None:
     parser.add_argument(
         "--fail-on",
         choices=("none", "high", "critical"),
-        default="none",
+        default="critical",
         help=(
             "Return exit code 1 when findings meet or exceed "
             "the selected severity."
