@@ -23,23 +23,19 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Verify valid inventory passes
+      - name: Verify valid inventory passes by default
         run: |
           python automation/scripts/run_governance_checks.py \
             automation/fixtures/valid-ai-inventory.csv \
-            --outdir "${{ runner.temp }}/governance-reports/valid" \
-            --fail-on critical
+            --outdir "${{ runner.temp }}/governance-reports/valid"
 
-      - name: Verify critical inventory is blocked
+      - name: Verify critical inventory is blocked by default
         shell: bash
         run: |
           set +e
-
           python automation/scripts/run_governance_checks.py \
             automation/fixtures/critical-ai-inventory.csv \
-            --outdir "${{ runner.temp }}/governance-reports/critical" \
-            --fail-on critical
-
+            --outdir "${{ runner.temp }}/governance-reports/critical"
           status=$?
           set -e
 
@@ -49,12 +45,21 @@ jobs:
           fi
 
           report="${{ runner.temp }}/governance-reports/critical/governance-validation-report.md"
-
           test -f "$report"
           grep -q "CRITICAL - Missing named owner" "$report"
           grep -q "CRITICAL - Shutdown path is missing" "$report"
 
-          echo "PASS: Critical governance findings were blocked."
+      - name: Verify explicit report-only mode
+        run: |
+          python automation/scripts/run_governance_checks.py \
+            automation/fixtures/critical-ai-inventory.csv \
+            --outdir "${{ runner.temp }}/governance-reports/report-only" \
+            --fail-on none
+
+          report="${{ runner.temp }}/governance-reports/report-only/governance-validation-report.md"
+          test -f "$report"
+          grep -q "CRITICAL - Missing named owner" "$report"
+          grep -q "CRITICAL - Shutdown path is missing" "$report"
 
       - name: Upload governance reports
         if: always()
