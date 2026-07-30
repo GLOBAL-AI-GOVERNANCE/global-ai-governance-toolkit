@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Global AI Governance Solutions v1.2
-Run Governance Checks
+Run governance checks.
 
 Pipeline:
-1. Calculate risk tiers
-2. Validate governance gaps
-3. Generate executive report
+1. Validate inventory against the checked-in schema.
+2. Calculate preliminary risk tiers.
+3. Evaluate checked-in governance policy.
+4. Generate an executive report.
 """
 
 from __future__ import annotations
@@ -29,8 +29,11 @@ def run(command: Sequence[object]) -> None:
 
 
 def main() -> None:
+    script_dir = Path(__file__).resolve().parent
+    automation_dir = script_dir.parent
+
     parser = argparse.ArgumentParser(
-        description="Run the v1.2 governance automation pipeline."
+        description="Run the governance automation pipeline."
     )
     parser.add_argument(
         "input_csv",
@@ -42,6 +45,26 @@ def main() -> None:
         type=Path,
         default=Path("automation/reports"),
         help="Output directory.",
+    )
+    parser.add_argument(
+        "--schema",
+        type=Path,
+        default=(
+            automation_dir
+            / "schemas"
+            / "ai-system-inventory.schema.json"
+        ),
+        help="Path to the runtime inventory schema.",
+    )
+    parser.add_argument(
+        "--policy",
+        type=Path,
+        default=(
+            automation_dir
+            / "policy-as-code"
+            / "governance-rules.yaml"
+        ),
+        help="Path to the runtime governance policy.",
     )
     parser.add_argument(
         "--fail-on",
@@ -56,15 +79,28 @@ def main() -> None:
     args = parser.parse_args()
     args.outdir.mkdir(parents=True, exist_ok=True)
 
+    schema_report = (
+        args.outdir / "schema-validation-report.md"
+    )
     tiered_csv = args.outdir / "risk-tier-output.csv"
-    validation_report = (
+    governance_report = (
         args.outdir / "governance-validation-report.md"
     )
     executive_report = (
         args.outdir / "executive-ai-governance-report.md"
     )
 
-    script_dir = Path(__file__).resolve().parent
+    run(
+        [
+            sys.executable,
+            script_dir / "schema_validator.py",
+            args.input_csv,
+            "--schema",
+            args.schema,
+            "--report",
+            schema_report,
+        ]
+    )
 
     run(
         [
@@ -82,7 +118,9 @@ def main() -> None:
             script_dir / "governance_validator.py",
             tiered_csv,
             "--report",
-            validation_report,
+            governance_report,
+            "--policy",
+            args.policy,
             "--fail-on",
             args.fail_on,
         ]
@@ -99,8 +137,9 @@ def main() -> None:
     )
 
     print("\nGovernance automation complete.")
+    print(f"- {schema_report}")
     print(f"- {tiered_csv}")
-    print(f"- {validation_report}")
+    print(f"- {governance_report}")
     print(f"- {executive_report}")
 
 

@@ -23,19 +23,28 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Verify schema-policy-runtime alignment
+        run: |
+          python -B -m unittest discover \
+            -s automation/tests \
+            -p "test_*.py" \
+            -v
+
       - name: Verify valid inventory passes by default
         run: |
-          python automation/scripts/run_governance_checks.py \
+          python -B automation/scripts/run_governance_checks.py \
             automation/fixtures/valid-ai-inventory.csv \
             --outdir "${{ runner.temp }}/governance-reports/valid"
 
-      - name: Verify critical inventory is blocked by default
+      - name: Verify critical policy findings are blocked
         shell: bash
         run: |
           set +e
-          python automation/scripts/run_governance_checks.py \
+
+          python -B automation/scripts/run_governance_checks.py \
             automation/fixtures/critical-ai-inventory.csv \
             --outdir "${{ runner.temp }}/governance-reports/critical"
+
           status=$?
           set -e
 
@@ -45,21 +54,25 @@ jobs:
           fi
 
           report="${{ runner.temp }}/governance-reports/critical/governance-validation-report.md"
+
           test -f "$report"
+          grep -q "\[GAI-AUTO-001\]" "$report"
+          grep -q "\[GAI-AUTO-003\]" "$report"
           grep -q "CRITICAL - Missing named owner" "$report"
           grep -q "CRITICAL - Shutdown path is missing" "$report"
 
       - name: Verify explicit report-only mode
         run: |
-          python automation/scripts/run_governance_checks.py \
+          python -B automation/scripts/run_governance_checks.py \
             automation/fixtures/critical-ai-inventory.csv \
             --outdir "${{ runner.temp }}/governance-reports/report-only" \
             --fail-on none
 
           report="${{ runner.temp }}/governance-reports/report-only/governance-validation-report.md"
+
           test -f "$report"
+          grep -q "\[GAI-AUTO-001\]" "$report"
           grep -q "CRITICAL - Missing named owner" "$report"
-          grep -q "CRITICAL - Shutdown path is missing" "$report"
 
       - name: Upload governance reports
         if: always()
