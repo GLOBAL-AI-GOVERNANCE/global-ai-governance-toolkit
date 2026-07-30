@@ -1,41 +1,91 @@
-rules:
-  - id: GAI-AUTO-001
-    name: Owner Required
-    description: Every AI system must have a named human owner.
-    fail_when:
-      owner_empty: true
-    severity: critical
-
-  - id: GAI-AUTO-002
-    name: Monitoring Required
-    description: Every deployed AI system must have active monitoring.
-    fail_when:
-      monitoring_active: "No"
-    severity: high
-
-  - id: GAI-AUTO-003
-    name: Shutdown Path Required
-    description: No AI system may deploy without a shutdown path.
-    fail_when:
-      shutdown_path_exists: "No"
-    severity: critical
-
-  - id: GAI-AUTO-004
-    name: Evidence Required For High Impact
-    description: High, Critical, and Frontier systems require complete evidence.
-    fail_when:
-      evidence_complete: "No"
-      risk_tier_in:
-        - High
-        - Critical
-        - Frontier
-    severity: high
-
-  - id: GAI-AUTO-005
-    name: Full Autonomy Escalates Risk
-    description: Full autonomy should trigger at least Critical review, and often Frontier review.
-    fail_when:
-      autonomy_level: "Full"
-      risk_tier_below:
-        - Critical
-    severity: high
+{
+  "schema_version": "1.0",
+  "rules": [
+    {
+      "id": "GAI-AUTO-001",
+      "name": "Owner Required",
+      "description": "Every AI system must have a named human owner.",
+      "severity": "critical",
+      "message": "Missing named owner. No owner, no deployment.",
+      "all": [
+        {
+          "field": "owner",
+          "operator": "blank"
+        }
+      ]
+    },
+    {
+      "id": "GAI-AUTO-002",
+      "name": "Monitoring Required",
+      "description": "Every deployed AI system must have active monitoring.",
+      "severity": "high",
+      "message": "Monitoring is not active.",
+      "all": [
+        {
+          "field": "monitoring_active",
+          "operator": "equals",
+          "value": "No"
+        }
+      ]
+    },
+    {
+      "id": "GAI-AUTO-003",
+      "name": "Shutdown Path Required",
+      "description": "No AI system may deploy without a shutdown path.",
+      "severity": "critical",
+      "message": "Shutdown path is missing.",
+      "all": [
+        {
+          "field": "shutdown_path_exists",
+          "operator": "equals",
+          "value": "No"
+        }
+      ]
+    },
+    {
+      "id": "GAI-AUTO-004",
+      "name": "Evidence Required for High Impact",
+      "description": "High, Critical, and Frontier systems require complete evidence.",
+      "severity": "high",
+      "message": "Evidence is incomplete for a high-impact system.",
+      "all": [
+        {
+          "field": "evidence_complete",
+          "operator": "equals",
+          "value": "No"
+        },
+        {
+          "field": "calculated_risk_tier",
+          "operator": "in",
+          "values": [
+            "High",
+            "Critical",
+            "Frontier"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "GAI-AUTO-005",
+      "name": "Full Autonomy Escalates Risk",
+      "description": "Full autonomy requires Critical or Frontier review.",
+      "severity": "high",
+      "message": "Full autonomy requires Critical or Frontier review.",
+      "all": [
+        {
+          "field": "autonomy_level",
+          "operator": "equals",
+          "value": "Full"
+        },
+        {
+          "field": "calculated_risk_tier",
+          "operator": "not_in",
+          "values": [
+            "Critical",
+            "Frontier"
+          ]
+        }
+      ]
+    }
+  ]
+}

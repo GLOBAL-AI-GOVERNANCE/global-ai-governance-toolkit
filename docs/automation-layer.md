@@ -51,21 +51,24 @@ The command blocks `CRITICAL` findings by default.
 ## Generated Artifacts
 
 ```text
+schema-validation-report.md
 risk-tier-output.csv
 governance-validation-report.md
 executive-ai-governance-report.md
 ```
 
-## Reference Boundary
+## Runtime Boundary
 
-The included JSON schema and policy-as-code file are not yet consumed by the Python runtime:
+The active runtime consumes:
 
 ```text
 automation/schemas/ai-system-inventory.schema.json
 automation/policy-as-code/governance-rules.yaml
 ```
 
-They should not be described as runtime-enforced until schema-policy-runtime integration is completed and verified.
+The schema validates the inventory before risk calculation. The policy file drives governance findings, severities, messages, and rule identifiers. Missing or malformed runtime sources fail safely with exit code `2`.
+
+The current schema validator supports the flat schema keywords used by this repository and fails closed when unsupported keywords appear. Risk-tier calculation remains built-in logic.
 
 ## What Automation Does Not Replace
 
