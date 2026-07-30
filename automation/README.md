@@ -1,6 +1,6 @@
 # Automation Layer
 
-The automation layer provides a repeatable path from an AI system inventory CSV to preliminary risk classification, governance findings, and an executive report.
+The automation layer provides a repeatable path from an AI system inventory CSV to preliminary risk classification, policy-driven findings, an executive report, and a human-review Decision Pack.
 
 ## Quick Start
 
@@ -22,7 +22,8 @@ python automation/scripts/run_governance_checks.py \
 2. Checks required governance conditions.
 3. Writes a governance validation report.
 4. Writes an executive governance report.
-5. Blocks the process when findings meet the selected threshold.
+5. Generates a deterministic Decision Pack when the gate permits.
+6. Blocks the process when findings meet the selected threshold.
 
 Current checks include:
 
@@ -39,6 +40,7 @@ schema-validation-report.md
 risk-tier-output.csv
 governance-validation-report.md
 executive-ai-governance-report.md
+decision-pack/
 ```
 
 Schema or policy configuration errors return exit code `2`. Governance findings that meet the selected threshold return exit code `1`.
@@ -73,3 +75,31 @@ These tools support governance review. They do not replace human judgment, legal
 ## Operating Law
 
 > No AI system moves faster than ownership, evidence, authority, and control.
+
+## Decision Pack
+
+The generated `decision-pack/` directory contains:
+
+```text
+executive-summary.md
+system-profile.md
+risk-and-findings.md
+evidence-and-ownership.md
+decision-record.md
+action-plan.md
+manifest.json
+```
+
+The pack is deterministic and records a pending human decision. It does not approve deployment, certify compliance, or accept risk.
+
+Rebuild the checked-in reference:
+
+```bash
+python automation/scripts/build_decision_pack_example.py
+```
+
+Verify that it has not drifted:
+
+```bash
+python automation/scripts/build_decision_pack_example.py --check
+```

@@ -30,6 +30,10 @@ jobs:
             -p "test_*.py" \
             -v
 
+      - name: Verify checked-in Decision Pack is reproducible
+        run: |
+          python -B automation/scripts/build_decision_pack_example.py --check
+
       - name: Verify valid inventory passes by default
         run: |
           python -B automation/scripts/run_governance_checks.py \

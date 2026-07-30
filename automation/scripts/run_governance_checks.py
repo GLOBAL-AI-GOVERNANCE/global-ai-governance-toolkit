@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-Run governance checks.
+Run governance checks and generate a human-review Decision Pack.
 
 Pipeline:
 1. Validate inventory against the checked-in schema.
 2. Calculate preliminary risk tiers.
 3. Evaluate checked-in governance policy.
 4. Generate an executive report.
+5. Generate a deterministic Decision Pack.
 """
 
 from __future__ import annotations
@@ -33,7 +34,10 @@ def main() -> None:
     automation_dir = script_dir.parent
 
     parser = argparse.ArgumentParser(
-        description="Run the governance automation pipeline."
+        description=(
+            "Run governance checks and generate a human-review "
+            "Decision Pack."
+        )
     )
     parser.add_argument(
         "input_csv",
@@ -67,6 +71,14 @@ def main() -> None:
         help="Path to the runtime governance policy.",
     )
     parser.add_argument(
+        "--decision-pack-dir",
+        type=Path,
+        help=(
+            "Decision Pack directory. Default: "
+            "<outdir>/decision-pack."
+        ),
+    )
+    parser.add_argument(
         "--fail-on",
         choices=("none", "high", "critical"),
         default="critical",
@@ -88,6 +100,11 @@ def main() -> None:
     )
     executive_report = (
         args.outdir / "executive-ai-governance-report.md"
+    )
+    decision_pack_dir = (
+        args.decision_pack_dir
+        if args.decision_pack_dir is not None
+        else args.outdir / "decision-pack"
     )
 
     run(
@@ -136,11 +153,33 @@ def main() -> None:
         ]
     )
 
+    run(
+        [
+            sys.executable,
+            script_dir / "generate_decision_pack.py",
+            "--risk-csv",
+            tiered_csv,
+            "--schema-report",
+            schema_report,
+            "--governance-report",
+            governance_report,
+            "--executive-report",
+            executive_report,
+            "--schema",
+            args.schema,
+            "--policy",
+            args.policy,
+            "--output-dir",
+            decision_pack_dir,
+        ]
+    )
+
     print("\nGovernance automation complete.")
     print(f"- {schema_report}")
     print(f"- {tiered_csv}")
     print(f"- {governance_report}")
     print(f"- {executive_report}")
+    print(f"- {decision_pack_dir}")
 
 
 if __name__ == "__main__":
