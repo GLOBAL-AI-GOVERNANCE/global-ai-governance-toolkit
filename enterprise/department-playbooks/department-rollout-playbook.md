@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This playbook helps each department implement Global AI Governance Solutions.
+This playbook helps each department implement the Global AI Governance Toolkit's governance practices and enterprise adoption materials.
 
 ## Department Lead Responsibilities
 

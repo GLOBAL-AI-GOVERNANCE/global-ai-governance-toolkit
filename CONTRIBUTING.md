@@ -1,6 +1,6 @@
 # Contributing
 
-Global AI Governance Solutions welcomes contributions that make AI governance more practical, evidence-based, and usable.
+The Global AI Governance Toolkit welcomes contributions that make AI governance more practical, evidence-based, verifiable, and usable.
 
 ## Contribution Principles
 

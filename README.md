@@ -1,109 +1,201 @@
-# Global AI Governance Solutions v2.0 — Enterprise Adoption Package
+# Global AI Governance Toolkit
 
-Global AI Governance Solutions is an open AI governance framework for transforming AI chaos into aligned order through visibility, ownership, risk classification, evidence, controls, monitoring, correction, and shutdown authority.
+Turn one AI system record into a risk-tiered, human-reviewed governance report with explicit ownership, evidence, monitoring, and shutdown expectations.
 
-## Version Path
+**Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
-v1.0 = Governance OS  
-v1.1 = Practical Toolkit  
-v1.2 = Automation Layer  
-v2.0 = Enterprise Adoption Package
+## Start Here
 
-## Operating Law
+The current automation pipeline:
 
-No AI system moves faster than ownership, evidence, authority, and control.
+1. Reads an AI system inventory CSV.
+2. Calculates a preliminary risk tier.
+3. Checks ownership, monitoring, shutdown readiness, evidence, and autonomy conditions.
+4. Produces a governance validation report.
+5. Produces an executive governance report.
+6. Returns a failing exit code when critical findings are present.
 
-## Root Command
+### Quick Start
 
-SEE IT.  
-OWN IT.  
-CLASSIFY IT.  
-TEST IT.  
-GOVERN IT.  
-MONITOR IT.  
-CORRECT IT.  
-SHUT IT DOWN IF NECESSARY.
-
-## What v2.0 Adds
-
-v2.0 adds the enterprise adoption layer for scaling AI governance across real organizations.
-
-The enterprise adoption package is located in `/enterprise`.
-
-Included:
-
-- Board and executive reporting pack
-- Executive AI Governance Board Charter
-- Quarterly AI Risk Report Template
-- Executive AI Governance Decision Memo Template
-- Enterprise 30/60/90/180-day rollout plan
-- Department rollout playbook
-- Audit-ready evidence binder
-- Vendor onboarding package
-- Procurement AI review gate
-- Role-based training materials
-- Sector adoption tracks
-- Executive dashboard metrics
-- Sample department adoption register
-- Enterprise AI risk register
-- Enterprise adoption workbook
-
-## v1.2 Automation Layer Preserved
-
-v1.2 remains included through `/automation`.
-
-Included:
-
-- AI risk tier calculator
-- Governance validator
-- Executive governance report generator
-- One-command governance check pipeline
-- JSON schema for AI system inventory records
-- Policy-as-code starter rules
-- Sample AI inventory data
-- GitHub Actions workflow scaffold
-- Sample generated governance reports
-
-Example command:
+**Prerequisite:** Python 3.11 is used in hosted CI.
 
 ```bash
-python automation/scripts/run_governance_checks.py automation/sample-data/sample-ai-inventory.csv --outdir automation/reports
+python automation/scripts/run_governance_checks.py \
+  automation/sample-data/sample-ai-inventory.csv \
+  --outdir automation/reports
 ```
 
-## v1.1 Practical Toolkit Preserved
+Default behavior is fail-closed for `CRITICAL` findings:
 
-v1.1 remains included through:
+- No flag: block `CRITICAL` findings and return exit code `1`.
+- `--fail-on high`: block `HIGH` and `CRITICAL` findings.
+- `--fail-on none`: explicit report-only mode; retain findings but return exit code `0`.
 
-- `/tools`
-- `/checklists`
-- `/spreadsheets`
-- `/sample-registers`
-- `/implementation-guides`
+## Current Outputs
 
-## Core Doctrine
+The pipeline writes three artifacts to the selected output directory:
 
-No owner, no deployment.  
-No inventory, no governance.  
-No evidence, no approval.  
-No shutdown path, no frontier release.  
-No trust without verification.
+```text
+risk-tier-output.csv
+governance-validation-report.md
+executive-ai-governance-report.md
+```
+
+These outputs support review and decision preparation. They do not replace final human judgment or required legal, security, privacy, compliance, procurement, or executive review.
+
+## Governance Gate
+
+The current validator checks for conditions including:
+
+- Missing named owner
+- Inactive monitoring
+- Missing shutdown path
+- Incomplete evidence for high-impact systems
+- Full autonomy without Critical or Frontier review
+
+The governing rule is:
+
+> No AI system moves faster than ownership, evidence, authority, and control.
+
+Supporting doctrine:
+
+- No owner, no deployment.
+- No inventory, no governance.
+- No evidence, no approval.
+- No shutdown path, no frontier release.
+- No trust without verification.
+
+## Active Verification
+
+The active workflow is located at:
+
+```text
+.github/workflows/ai-governance-checks.yml
+```
+
+It runs on:
+
+- Pull requests
+- Pushes to `main`
+- Manual dispatch
+
+Hosted verification proves:
+
+- Valid input exits `0` under the default threshold.
+- Critical input exits `1` under the default threshold.
+- Explicit report-only mode exits `0` while preserving critical findings.
+- External GitHub Actions are pinned to immutable commit SHAs.
+
+## Current Scope
+
+### Automation
+
+The `/automation` directory contains:
+
+- Risk tier calculator
+- Governance validator
+- Executive report generator
+- One-command governance pipeline
+- Passing and intentionally blocked fixtures
+- Sample inventory data
+- Sample generated reports
+- JSON schema reference
+- Starter policy-as-code reference
+- Active GitHub Actions workflow
+
+### Practical Governance Materials
+
+The repository also includes:
+
+- Governance checklists
+- Policies
+- Templates
+- Implementation guides
+- Sample registers
+- Spreadsheet tools
+- Example system reviews
+- Enterprise adoption resources
+
+### Enterprise Adoption Resources
+
+The `/enterprise` directory includes materials for:
+
+- Board and executive reporting
+- Governance charters
+- Decision memos
+- 30/60/90/180-day rollout planning
+- Department rollout
+- Evidence binders
+- Vendor onboarding and procurement review
+- Role-based training
+- Sector adoption
+- Metrics, registers, and workbooks
+
+## Evidence Boundary and Current Limitations
+
+The current Python runtime uses CSV input and built-in validation logic.
+
+The following files are included as reference material but are **not yet consumed by the Python runtime**:
+
+```text
+automation/schemas/ai-system-inventory.schema.json
+automation/policy-as-code/governance-rules.yaml
+```
+
+Therefore:
+
+- The JSON schema is not yet the runtime input gate.
+- The policy-as-code file is not yet the runtime source of truth.
+- Schema, policy, and runtime alignment remains a separate engineering milestone.
+- The current pipeline produces governance reports, not a complete generated AI Governance Decision Pack.
+
+The legacy `governance-os.yaml` file remains a machine-readable configuration reference and is not presented as the active runtime policy source.
+
+## Human Authority
+
+AI and automation may assist with classification, comparison, validation, and first-pass reporting.
+
+Humans remain responsible for:
+
+- Confirming system ownership
+- Reviewing evidence quality
+- Interpreting context
+- Accepting or rejecting risk
+- Approving deployment or expansion
+- Defining monitoring and escalation
+- Exercising restriction, suspension, rollback, or shutdown authority
 
 ## Repository Map
 
-- `.github`: issue templates and workflow scaffolding.
-- `automation`: v1.2 automation scripts, sample data, reports, schemas, policy-as-code, and workflow scaffold.
+- `.github/workflows`: active hosted verification.
+- `automation`: scripts, fixtures, sample data, reports, reference schema, and starter policy material.
 - `checklists`: deployment and review checklists.
-- `docs`: doctrine, risk tiers, approval gates, monitoring, shutdown protocol, automation documentation, enterprise adoption documentation, and release notes.
-- `enterprise`: v2.0 enterprise adoption package, board pack, rollout playbooks, evidence binder, procurement gates, reporting, sector tracks, training, registers, and workbook.
+- `docs`: doctrine, risk tiers, approval gates, monitoring, shutdown, automation, adoption, and release documentation.
+- `enterprise`: enterprise rollout, reporting, evidence, procurement, training, sector, and workbook materials.
 - `examples`: example AI system reviews.
-- `implementation-guides`: 30/60/90-day implementation guidance and executive board charter.
-- `policies`: acceptable use, autonomous agent, human authority, sensitive data, and vendor AI policies.
+- `implementation-guides`: implementation sequencing and governance-board guidance.
+- `policies`: acceptable use, autonomous-agent, human-authority, sensitive-data, and vendor policies.
 - `sample-registers`: sample AI system register.
-- `spreadsheets`: CSV templates and practical governance workbook.
+- `spreadsheets`: CSV templates and governance workbook materials.
 - `templates`: operational governance templates.
 - `tools`: practical governance tools.
-- `governance-os.yaml`: machine-readable governance kernel.
+- `governance-os.yaml`: legacy machine-readable configuration reference.
 
-## License
+## Version Lineage
 
-MIT License.
+The repository preserves the following development lineage:
+
+- v1.0: Governance OS
+- v1.1: Practical Toolkit
+- v1.2: Automation Layer
+- v2.0: Enterprise Adoption Package
+- Current public identity: Global AI Governance Toolkit
+
+Historical version names remain in version-specific release records where appropriate.
+
+## Security, Contributions, and License
+
+- Review [SECURITY.md](SECURITY.md) before reporting a vulnerability.
+- Review [CONTRIBUTING.md](CONTRIBUTING.md) before proposing changes.
+- Review [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for participation expectations.
+- Licensed under the [MIT License](LICENSE).

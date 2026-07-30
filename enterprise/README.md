@@ -1,6 +1,6 @@
 # v2.0 Enterprise Adoption Package
 
-Global AI Governance Solutions v2.0 turns the framework into an enterprise rollout package.
+The Global AI Governance Toolkit preserves the v2.0 Enterprise Adoption Package as a set of rollout, reporting, evidence, procurement, training, and governance-program resources.
 
 v1.0 established the Governance OS.  
 v1.1 added the Practical Toolkit.  
