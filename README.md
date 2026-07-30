@@ -1,6 +1,6 @@
 # Global AI Governance Toolkit
 
-Turn one AI system record into a risk-tiered, human-reviewed governance report with explicit ownership, evidence, monitoring, and shutdown expectations.
+Turn an AI system inventory record into policy-driven findings and a reproducible, human-reviewed AI Governance Decision Pack.
 
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
@@ -13,7 +13,8 @@ The current automation pipeline:
 3. Checks ownership, monitoring, shutdown readiness, evidence, and autonomy conditions.
 4. Produces a governance validation report.
 5. Produces an executive governance report.
-6. Returns a failing exit code when critical findings are present.
+6. Generates a deterministic AI Governance Decision Pack when the selected gate permits continuation.
+7. Returns a failing exit code when critical findings are present.
 
 ### Quick Start
 
@@ -33,13 +34,14 @@ Default behavior is fail-closed for `CRITICAL` findings:
 
 ## Current Outputs
 
-The pipeline writes four artifacts to the selected output directory:
+The pipeline writes four source artifacts and one Decision Pack directory to the selected output directory:
 
 ```text
 schema-validation-report.md
 risk-tier-output.csv
 governance-validation-report.md
 executive-ai-governance-report.md
+decision-pack/
 ```
 
 Schema or policy configuration errors return exit code `2`. Governance findings that meet the selected threshold return exit code `1`.
@@ -98,6 +100,7 @@ The `/automation` directory contains:
 - Risk tier calculator
 - Governance validator
 - Executive report generator
+- Deterministic Decision Pack generator and drift checker
 - One-command governance pipeline
 - Passing and intentionally blocked fixtures
 - Sample inventory data
@@ -158,7 +161,7 @@ Current limitations:
 
 - The runtime supports the flat inventory-schema keywords used by this repository and fails closed on unsupported keywords.
 - Risk-tier calculation remains built-in logic and is not yet externalized as policy.
-- The current pipeline produces governance reports, not the complete future AI Governance Decision Pack.
+- The current Decision Pack prepares evidence for human review; it does not approve deployment, certify compliance, or accept risk.
 - The legacy `governance-os.yaml` file remains a configuration reference and is not the runtime policy source.
 
 ## Human Authority
@@ -182,7 +185,7 @@ Humans remain responsible for:
 - `checklists`: deployment and review checklists.
 - `docs`: doctrine, risk tiers, approval gates, monitoring, shutdown, automation, adoption, and release documentation.
 - `enterprise`: enterprise rollout, reporting, evidence, procurement, training, sector, and workbook materials.
-- `examples`: example AI system reviews.
+- `examples`: example AI system reviews and a reproducible Decision Pack reference.
 - `implementation-guides`: implementation sequencing and governance-board guidance.
 - `policies`: acceptable use, autonomous-agent, human-authority, sensitive-data, and vendor policies.
 - `sample-registers`: sample AI system register.

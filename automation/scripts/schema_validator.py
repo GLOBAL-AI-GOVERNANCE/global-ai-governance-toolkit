@@ -243,8 +243,8 @@ def write_report(
     lines = [
         "# Inventory Schema Validation Report",
         "",
-        f"- Schema: `{schema_path.as_posix()}`",
-        f"- Inventory: `{input_path.as_posix()}`",
+        f"- Schema: `{schema_path.name}`",
+        f"- Inventory: `{input_path.name}`",
         "",
     ]
 

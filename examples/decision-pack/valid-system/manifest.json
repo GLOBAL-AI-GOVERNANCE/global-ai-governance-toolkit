@@ -1,0 +1,69 @@
+{
+  "decision_status": "pending_human_decision",
+  "generated_files": [
+    {
+      "path": "action-plan.md",
+      "sha256": "6b9d672266071d4394673f258ee284f6e335bd4da35bcccc50d91493b795f12f"
+    },
+    {
+      "path": "decision-record.md",
+      "sha256": "2fd06405734b622f0d1af588db6503f9287e08b4712ac4275de2e2e52cb7562f"
+    },
+    {
+      "path": "evidence-and-ownership.md",
+      "sha256": "9f41bb2b0b556e4ca3415526fc9b4a58dab24e410a011545c7de1ddb953cad07"
+    },
+    {
+      "path": "executive-summary.md",
+      "sha256": "73b5a32527bd2ad7d6a542e9e21116061f427aac0740d5c295dd44936e5bd1b4"
+    },
+    {
+      "path": "risk-and-findings.md",
+      "sha256": "c127ddd8e52a59baa7fa8ee256e5117aebe9ff978996bc85ce691eb9a7360b96"
+    },
+    {
+      "path": "system-profile.md",
+      "sha256": "40286de00be137df8c8f9bd0317f0e6f97e57c31e95e91b35d282129002358bb"
+    }
+  ],
+  "generator": "automation/scripts/generate_decision_pack.py",
+  "governance_gate_result": "PASSED CURRENT AUTOMATED CHECKS",
+  "hash_mode": "sha256-text-lf",
+  "schema_version": "1.0",
+  "source_artifacts": [
+    {
+      "path": "schema-validation-report.md",
+      "role": "Schema validation report",
+      "sha256": "3f23cfd20c59e13a5e1d85a25aed9ad0e63dcc8c82d3368557a74a1afd05fe77"
+    },
+    {
+      "path": "risk-tier-output.csv",
+      "role": "Risk-tier inventory",
+      "sha256": "a027a7d2fee88b8f182e5821aaa358df1b382ac818fab8a1fd03b85071d39004"
+    },
+    {
+      "path": "governance-validation-report.md",
+      "role": "Governance validation report",
+      "sha256": "d59dcb1d855c429b78910c890e66978560d3af953dfce4beb6f9acac1769b575"
+    },
+    {
+      "path": "executive-ai-governance-report.md",
+      "role": "Executive governance report",
+      "sha256": "350e3fc24d05025b9307fb7402d1e52dfe299f82a893690f2a7fa164d208fcfd"
+    },
+    {
+      "path": "ai-system-inventory.schema.json",
+      "role": "Runtime inventory schema",
+      "sha256": "e3f5339a5073e676ac349e0a05481888237d3beee3d56929d7316234b000cacb"
+    },
+    {
+      "path": "governance-rules.yaml",
+      "role": "Runtime governance policy",
+      "sha256": "0c23bc3add62ea3fadd1ce665b9f2b6c2baf84b96d0fb16ef7a9629e9b133fed"
+    }
+  ],
+  "system_count": 1,
+  "system_ids": [
+    "TEST-VALID-001"
+  ]
+}

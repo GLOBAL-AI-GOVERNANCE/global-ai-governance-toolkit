@@ -282,7 +282,7 @@ def write_report(
     lines = [
         "# Governance Validation Report",
         "",
-        f"- Policy source: `{policy_path.as_posix()}`",
+        f"- Policy source: `{policy_path.name}`",
         f"- Rules evaluated: **{rule_count}**",
         "",
     ]
