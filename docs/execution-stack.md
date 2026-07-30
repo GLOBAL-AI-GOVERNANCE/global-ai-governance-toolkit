@@ -1,6 +1,6 @@
 # Execution Stack
 
-The Global AI Governance Solutions execution stack translates doctrine into practical governance action.
+The Global AI Governance Toolkit execution stack translates doctrine into practical governance action.
 
 ## Layer 1: Discovery
 
