@@ -33,13 +33,16 @@ Default behavior is fail-closed for `CRITICAL` findings:
 
 ## Current Outputs
 
-The pipeline writes three artifacts to the selected output directory:
+The pipeline writes four artifacts to the selected output directory:
 
 ```text
+schema-validation-report.md
 risk-tier-output.csv
 governance-validation-report.md
 executive-ai-governance-report.md
 ```
+
+Schema or policy configuration errors return exit code `2`. Governance findings that meet the selected threshold return exit code `1`.
 
 These outputs support review and decision preparation. They do not replace final human judgment or required legal, security, privacy, compliance, procurement, or executive review.
 
@@ -99,8 +102,8 @@ The `/automation` directory contains:
 - Passing and intentionally blocked fixtures
 - Sample inventory data
 - Sample generated reports
-- JSON schema reference
-- Starter policy-as-code reference
+- Runtime-enforced JSON inventory schema
+- Runtime-enforced governance policy with stable rule identifiers
 - Active GitHub Actions workflow
 
 ### Practical Governance Materials
@@ -131,25 +134,32 @@ The `/enterprise` directory includes materials for:
 - Sector adoption
 - Metrics, registers, and workbooks
 
-## Evidence Boundary and Current Limitations
+## Schema-Policy-Runtime Alignment
 
-The current Python runtime uses CSV input and built-in validation logic.
-
-The following files are included as reference material but are **not yet consumed by the Python runtime**:
+The one-command pipeline now consumes:
 
 ```text
 automation/schemas/ai-system-inventory.schema.json
 automation/policy-as-code/governance-rules.yaml
 ```
 
-Therefore:
+Runtime order:
 
-- The JSON schema is not yet the runtime input gate.
-- The policy-as-code file is not yet the runtime source of truth.
-- Schema, policy, and runtime alignment remains a separate engineering milestone.
-- The current pipeline produces governance reports, not a complete generated AI Governance Decision Pack.
+1. Validate CSV structure and values against the checked-in inventory schema.
+2. Calculate the preliminary risk tier.
+3. Evaluate the risk-tiered record against the checked-in governance policy.
+4. Write findings with stable rule identifiers.
+5. Apply the selected failure threshold.
+6. Generate the executive report when the gate permits continuation.
 
-The legacy `governance-os.yaml` file remains a machine-readable configuration reference and is not presented as the active runtime policy source.
+The policy file is JSON-compatible YAML so the runtime can parse it with the Python standard library. Unsupported schema keywords, malformed policy, missing source files, invalid required fields, and invalid enumerated values fail safely.
+
+Current limitations:
+
+- The runtime supports the flat inventory-schema keywords used by this repository and fails closed on unsupported keywords.
+- Risk-tier calculation remains built-in logic and is not yet externalized as policy.
+- The current pipeline produces governance reports, not the complete future AI Governance Decision Pack.
+- The legacy `governance-os.yaml` file remains a configuration reference and is not the runtime policy source.
 
 ## Human Authority
 
@@ -168,7 +178,7 @@ Humans remain responsible for:
 ## Repository Map
 
 - `.github/workflows`: active hosted verification.
-- `automation`: scripts, fixtures, sample data, reports, reference schema, and starter policy material.
+- `automation`: scripts, tests, fixtures, sample data, reports, runtime schema, and runtime governance policy.
 - `checklists`: deployment and review checklists.
 - `docs`: doctrine, risk tiers, approval gates, monitoring, shutdown, automation, adoption, and release documentation.
 - `enterprise`: enterprise rollout, reporting, evidence, procurement, training, sector, and workbook materials.

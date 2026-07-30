@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "AI System Inventory Record",
   "type": "object",
+  "additionalProperties": false,
   "required": [
     "system_id",
     "system_name",
@@ -10,24 +11,32 @@
     "vendor_internal",
     "use_case",
     "data_sensitivity",
+    "impact_people",
+    "impact_money",
+    "impact_security",
+    "impact_rights",
+    "impact_safety",
     "autonomy_level",
+    "public_facing",
     "monitoring_active",
     "shutdown_path_exists",
     "evidence_complete"
   ],
   "properties": {
     "system_id": {
-      "type": "string"
-    },
-    "system_name": {
-      "type": "string"
-    },
-    "owner": {
       "type": "string",
       "minLength": 1
     },
-    "business_unit": {
+    "system_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner": {
       "type": "string"
+    },
+    "business_unit": {
+      "type": "string",
+      "minLength": 1
     },
     "vendor_internal": {
       "type": "string",
@@ -38,7 +47,8 @@
       ]
     },
     "use_case": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "data_sensitivity": {
       "type": "string",

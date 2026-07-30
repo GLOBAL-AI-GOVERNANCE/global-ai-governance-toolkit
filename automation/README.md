@@ -35,10 +35,13 @@ Current checks include:
 ## Outputs
 
 ```text
+schema-validation-report.md
 risk-tier-output.csv
 governance-validation-report.md
 executive-ai-governance-report.md
 ```
+
+Schema or policy configuration errors return exit code `2`. Governance findings that meet the selected threshold return exit code `1`.
 
 ## Hosted Verification
 
@@ -50,16 +53,18 @@ The active workflow is:
 
 It verifies the default valid path, the default blocked path, and explicit report-only behavior.
 
-## Reference Files Not Yet Enforced by Runtime
+## Runtime Sources of Truth
 
-The repository includes:
+The pipeline consumes:
 
 ```text
 automation/schemas/ai-system-inventory.schema.json
 automation/policy-as-code/governance-rules.yaml
 ```
 
-These files are reference materials at the current maturity level. The Python runtime does not yet load them. Schema-policy-runtime alignment remains separate engineering work.
+The schema validates required fields and enumerated values before risk calculation. The policy file drives governance findings and stable rule identifiers. Missing or malformed runtime sources fail safely.
+
+Risk-tier logic remains implemented in `risk_tier_calculator.py` and is not yet externalized as policy.
 
 ## Human Review Boundary
 
