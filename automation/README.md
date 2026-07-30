@@ -7,8 +7,11 @@ The automation layer provides a repeatable path from an AI system inventory CSV 
 ```bash
 python automation/scripts/run_governance_checks.py \
   automation/sample-data/sample-ai-inventory.csv \
-  --outdir automation/reports
+  --outdir automation/reports \
+  --fail-on none
 ```
+
+The bundled sample contains intentionally blocked systems. Explicit report-only mode generates a blocked-state Decision Pack while preserving every critical finding. Remove `--fail-on none` to exercise the default fail-closed gate.
 
 ## Failure Thresholds
 

@@ -23,7 +23,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Verify schema-policy-runtime alignment
+      - name: Validate repository integrity
+        run: |
+          python -B automation/scripts/validate_repository.py
+
+      - name: Verify schema-policy-runtime and Decision Pack behavior
         run: |
           python -B -m unittest discover \
             -s automation/tests \
@@ -33,6 +37,18 @@ jobs:
       - name: Verify checked-in Decision Pack is reproducible
         run: |
           python -B automation/scripts/build_decision_pack_example.py --check
+
+      - name: Verify documented quick start
+        run: |
+          python -B automation/scripts/run_governance_checks.py \
+            automation/sample-data/sample-ai-inventory.csv \
+            --outdir "${{ runner.temp }}/governance-reports/quick-start" \
+            --fail-on none
+
+          summary="${{ runner.temp }}/governance-reports/quick-start/decision-pack/executive-summary.md"
+
+          test -f "$summary"
+          grep -q "BLOCKED BY CRITICAL FINDINGS" "$summary"
 
       - name: Verify valid inventory passes by default
         run: |
@@ -60,6 +76,7 @@ jobs:
           report="${{ runner.temp }}/governance-reports/critical/governance-validation-report.md"
 
           test -f "$report"
+          test ! -d "${{ runner.temp }}/governance-reports/critical/decision-pack"
           grep -q "\[GAI-AUTO-001\]" "$report"
           grep -q "\[GAI-AUTO-003\]" "$report"
           grep -q "CRITICAL - Missing named owner" "$report"
@@ -73,10 +90,13 @@ jobs:
             --fail-on none
 
           report="${{ runner.temp }}/governance-reports/report-only/governance-validation-report.md"
+          summary="${{ runner.temp }}/governance-reports/report-only/decision-pack/executive-summary.md"
 
           test -f "$report"
+          test -f "$summary"
           grep -q "\[GAI-AUTO-001\]" "$report"
           grep -q "CRITICAL - Missing named owner" "$report"
+          grep -q "BLOCKED BY CRITICAL FINDINGS" "$summary"
 
       - name: Upload governance reports
         if: always()

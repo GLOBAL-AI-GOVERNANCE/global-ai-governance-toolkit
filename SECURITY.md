@@ -1,22 +1,38 @@
 # Security Policy
 
-## Reporting Security Issues
+## Report a Vulnerability Privately
 
-Do not open public issues for security vulnerabilities.
+Do not open a public issue for a suspected vulnerability.
 
-Report security concerns privately to the repository maintainer.
+Use GitHub's private vulnerability reporting flow from the repository's **Security** area. Include:
 
-## Scope
+- Affected file, workflow, or governance behavior
+- Reproduction steps
+- Expected and observed behavior
+- Potential safety, security, privacy, or governance impact
+- Suggested remediation, when available
 
-Security issues may include:
+Do not include secrets, personal data, regulated data, customer information, or live exploit material beyond what is necessary for responsible review.
+
+## Security Scope
+
+Relevant issues may include:
 
 - Unsafe governance defaults
-- Missing controls for high-risk AI systems
-- Weak vendor accountability language
-- Insufficient sensitive data protections
-- Inadequate shutdown protocol
+- Schema, policy, and runtime divergence
+- Incorrect failure thresholds
+- Missing or bypassable ownership controls
+- Missing monitoring or shutdown controls
+- Decision Pack integrity or drift failures
 - Dangerous autonomous-agent permissions
+- Sensitive-data exposure
+- Workflow supply-chain risk
+- Misleading approval, compliance, or certification behavior
+
+## Response Boundary
+
+A private report is not automatically accepted as a confirmed vulnerability. Maintainers will review the evidence, assess scope and severity, and document remediation or closure.
 
 ## Principle
 
-No trust without verification.
+> No trust without verification.
