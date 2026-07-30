@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.0] - 2026-07-29 — Decision-Ready Governance
+
+- Made critical governance findings fail closed by default.
+- Connected the checked-in inventory schema to runtime validation.
+- Connected the checked-in governance policy to runtime findings.
+- Added stable governance rule identifiers.
+- Added safe exit code `2` for schema, policy, input, and configuration failures.
+- Added deterministic AI Governance Decision Pack generation.
+- Added checked-in reference output and drift checking.
+- Added repository integrity validation and release-readiness evidence.
+- Preserved final approval, risk acceptance, and deployment decisions as human-owned.
+
+
 ## [2.0] - 2026-06-01 — Enterprise Adoption Package
 
 - Added `/enterprise` directory.

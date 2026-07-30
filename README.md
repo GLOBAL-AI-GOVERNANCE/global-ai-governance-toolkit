@@ -4,6 +4,8 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
+**Current release line:** v2.1.0 — Decision-Ready Governance.
+
 ## Start Here
 
 The current automation pipeline:
@@ -23,8 +25,11 @@ The current automation pipeline:
 ```bash
 python automation/scripts/run_governance_checks.py \
   automation/sample-data/sample-ai-inventory.csv \
-  --outdir automation/reports
+  --outdir automation/reports \
+  --fail-on none
 ```
+
+The bundled sample intentionally includes systems with critical control gaps. The quick start therefore uses explicit report-only mode so the toolkit can generate a blocked-state Decision Pack for review. Remove `--fail-on none` to exercise the default fail-closed gate.
 
 Default behavior is fail-closed for `CRITICAL` findings:
 
@@ -202,9 +207,17 @@ The repository preserves the following development lineage:
 - v1.1: Practical Toolkit
 - v1.2: Automation Layer
 - v2.0: Enterprise Adoption Package
+- v2.1.0: Decision-Ready Governance
 - Current public identity: Global AI Governance Toolkit
 
 Historical version names remain in version-specific release records where appropriate.
+
+## Release Verification
+
+- Review [v2.1.0 release readiness](docs/release-readiness-v2.1.0.md).
+- Review the [v2.1.0 release notes](release-notes/v2.1.0-decision-ready-governance.md).
+- Run `python -B automation/scripts/validate_repository.py`.
+- Run `python -B automation/scripts/build_decision_pack_example.py --check`.
 
 ## Security, Contributions, and License
 
