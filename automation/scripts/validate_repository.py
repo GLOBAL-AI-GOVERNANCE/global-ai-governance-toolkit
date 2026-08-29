@@ -26,6 +26,8 @@ from urllib.parse import unquote, urlsplit
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+if str(REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPOSITORY_ROOT))
 MARKDOWN_LINK = re.compile(
     r"!?\[[^\]]*\]\((?P<destination>[^)\n]+)\)"
 )
@@ -43,6 +45,7 @@ REQUIRED_FILES = (
     "CONTRIBUTING.md",
     "CODE_OF_CONDUCT.md",
     "LICENSE",
+    "pyproject.toml",
     ".github/workflows/ai-governance-checks.yml",
     "automation/scripts/run_governance_checks.py",
     "automation/scripts/schema_validator.py",
@@ -51,6 +54,15 @@ REQUIRED_FILES = (
     "automation/scripts/build_decision_pack_example.py",
     "automation/schemas/ai-system-inventory.schema.json",
     "automation/policy-as-code/governance-rules.yaml",
+    "automation/contracts/v1/canonical-inventory-record.schema.json",
+    "automation/contracts/v1/normalized-inventory.schema.json",
+    "automation/contracts/v1/governance-findings.schema.json",
+    "automation/contracts/v1/governance-result.schema.json",
+    "automation/contracts/v1/decision-pack-manifest.schema.json",
+    "automation/scripts/inventory_normalizer.py",
+    "automation/scripts/contract_verifier.py",
+    "automation/scripts/machine_contracts.py",
+    "gag_toolkit/cli.py",
     "examples/decision-pack/valid-system/manifest.json",
 )
 CURRENT_ENTRY_DOCS = (
@@ -76,6 +88,8 @@ def tracked_files() -> list[Path]:
     completed = subprocess.run(
         [
             "git",
+            "-c",
+            f"safe.directory={REPOSITORY_ROOT}",
             "ls-files",
             "-z",
             "--cached",
@@ -306,6 +320,13 @@ def validate_decision_pack_manifest(errors: list[str]) -> None:
             "Decision Pack manifest has an unexpected hash mode."
         )
 
+    for key, expected in (
+        ("manifest_schema_version", "1.0.0"),
+        ("generator_version", "1.0.0"),
+        ("normalization_version", "1.0.0"),
+    ):
+        if manifest.get(key) != expected:
+            errors.append(f"Decision Pack manifest has invalid {key}.")
     generated = manifest.get("generated_files")
     if not isinstance(generated, list) or not generated:
         errors.append(
@@ -358,6 +379,33 @@ def validate_decision_pack_manifest(errors: list[str]) -> None:
             "Decision Pack manifest file list does not match "
             "the generated Markdown files."
         )
+
+
+def validate_generated_templates(errors: list[str]) -> None:
+    from automation.scripts.generate_inventory_templates import render
+
+    for path, expected in render().items():
+        try:
+            actual = path.read_text(encoding="utf-8-sig").replace("\r\n", "\n")
+        except OSError as exc:
+            errors.append(f"Cannot read generated template: {exc}")
+            continue
+        if actual != expected:
+            errors.append(f"Generated template drift: {path.relative_to(REPOSITORY_ROOT)}")
+
+
+def validate_network_free_runtime(errors: list[str]) -> None:
+    forbidden = ("import socket", "import requests", "urllib.request", "http.client")
+    names = (
+        "run_governance_checks.py", "inventory_normalizer.py", "machine_contracts.py",
+        "schema_validator.py", "risk_tier_calculator.py", "governance_validator.py",
+        "generate_governance_report.py", "generate_decision_pack.py",
+    )
+    for name in names:
+        text = (REPOSITORY_ROOT / "automation" / "scripts" / name).read_text(encoding="utf-8")
+        for token in forbidden:
+            if token in text:
+                errors.append(f"Core runtime network import found in {name}: {token}")
 
 
 def validate_hygiene(files: Iterable[Path], errors: list[str]) -> None:
@@ -432,6 +480,8 @@ def main() -> None:
     validate_markdown_links(files, errors)
     validate_action_pins(errors)
     validate_decision_pack_manifest(errors)
+    validate_generated_templates(errors)
+    validate_network_free_runtime(errors)
     validate_hygiene(files, errors)
     validate_current_documentation(errors)
 

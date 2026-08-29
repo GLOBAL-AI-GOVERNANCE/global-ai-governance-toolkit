@@ -4,7 +4,7 @@ This repository remains independently useful as the Global AI Governance Toolkit
 
 The optional `automation/contracts/governance-decision-handoff.schema.json` contract provides a bounded reference envelope for carrying a Decision Pack reference into another GLOBAL AI GOVERNANCE repository without turning the handoff into an approval, certification, or deployment authorization.
 
-The current toolkit runtime does **not** automatically emit this envelope. It is an interoperability contract for authorized adapters and future integrations.
+The Wave A runtime automatically emits this envelope after successful Decision Pack generation. The default target is `agentic-ai-governance` and may be explicitly changed for an authorized consumer. Emission records a reference; it does not transfer authority or trust.
 
 ## Contract boundary
 

@@ -30,7 +30,7 @@ class PortfolioHandoffTests(unittest.TestCase):
     def test_interop_document_does_not_claim_authority(self) -> None:
         text = (ROOT / "PORTFOLIO_INTEROP.md").read_text(encoding="utf-8")
         self.assertIn("authority_effect: NONE", text)
-        self.assertIn("does **not** automatically emit", text)
+        self.assertIn("automatically emits", text)
         self.assertNotIn("automatically approves deployment", text.lower())
 
 

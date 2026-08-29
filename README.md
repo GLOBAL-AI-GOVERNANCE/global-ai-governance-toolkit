@@ -8,15 +8,27 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 ## Start Here
 
+Install from a reviewed checkout in an isolated Python 3.11 environment:
+
+```bash
+python -m pip install .
+gag check automation/fixtures/valid-ai-inventory.csv \
+  --outdir /tmp/gag-output \
+  --evaluation-time 2026-08-29T12:00:00Z
+gag verify /tmp/gag-output
+```
+
+The installed CLI and the repository-relative compatibility script use the same local, network-free reference runtime. See [Machine Interfaces](docs/MACHINE_INTERFACES.md), [Compatibility Policy](docs/COMPATIBILITY.md), and [Local Data Handling](docs/LOCAL_DATA_HANDLING.md).
+
 The current automation pipeline:
 
-1. Reads an AI system inventory CSV.
-2. Calculates a preliminary risk tier.
+1. Normalizes a supported canonical, generated-human, or safely mapped legacy CSV.
+2. Validates versioned canonical records and calculates a preliminary risk tier.
 3. Checks ownership, monitoring, shutdown readiness, evidence, and autonomy conditions.
-4. Produces a governance validation report.
-5. Produces an executive governance report.
-6. Generates a deterministic AI Governance Decision Pack when the selected gate permits continuation.
-7. Returns a failing exit code when critical findings are present.
+4. Produces versioned JSON findings and an aggregate governance result.
+5. Produces the existing human reports and deterministic Decision Pack.
+6. Verifies the integrity manifest and emits a non-authorizing handoff.
+7. Returns a failing exit code when findings meet the selected threshold.
 
 ### Quick Start
 
@@ -39,14 +51,19 @@ Default behavior is fail-closed for `CRITICAL` findings:
 
 ## Current Outputs
 
-The pipeline writes four source artifacts and one Decision Pack directory to the selected output directory:
+The pipeline writes canonical and machine-readable artifacts alongside the existing human reports and Decision Pack:
 
 ```text
+normalized-inventory.json
+canonical-inventory.csv
 schema-validation-report.md
 risk-tier-output.csv
 governance-validation-report.md
+governance-findings.json
+governance-result.json
 executive-ai-governance-report.md
 decision-pack/
+governance-handoff.json
 ```
 
 Schema or policy configuration errors return exit code `2`. Governance findings that meet the selected threshold return exit code `1`.
