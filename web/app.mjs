@@ -61,7 +61,7 @@ async function loadCsv(text, name) {
   state.csv = text; state.sourceName = name; byId("source-name").textContent = name; byId("workspace").hidden = false; await run(); byId("workspace").scrollIntoView({ behavior: "smooth" });
 }
 
-byId("try-sample").addEventListener("click", () => loadCsv(contracts.sampleCsv, "safe-sample.csv"));
+byId("run-sample").addEventListener("click", () => loadCsv(contracts.sampleCsv, "safe-sample.csv"));
 byId("csv-file").addEventListener("change", async (event) => { const [file] = event.target.files; if (file) await loadCsv(await file.text(), file.name); });
 byId("run-checks").addEventListener("click", run);
 document.querySelectorAll(".tab").forEach((button) => button.addEventListener("click", () => showPanel(button.dataset.panel)));

@@ -8,7 +8,7 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 ## Start Here
 
-Try the local browser experience with no backend, login, telemetry, or file upload:
+Use the local browser experience with no backend, login, telemetry, or file upload:
 
 ```bash
 python -m http.server 8000

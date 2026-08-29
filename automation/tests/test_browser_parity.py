@@ -72,7 +72,7 @@ class BrowserParityTests(unittest.TestCase):
 
     def test_static_surface_is_local_only_and_complete(self) -> None:
         combined = "\n".join((ROOT / "web" / name).read_text(encoding="utf-8") for name in ("index.html", "app.mjs", "governance-engine.mjs"))
-        for phrase in ("Try the safe sample", "Load your CSV", "Normalization preview", "Governance results", "Machine outputs", "Decision Pack", "authority_effect"):
+        for phrase in ("Run sample", "Load your CSV", "Normalization preview", "Governance results", "Machine outputs", "Decision Pack", "authority_effect"):
             self.assertIn(phrase, combined)
         for forbidden in ("fetch(", "XMLHttpRequest", "WebSocket", "sendBeacon", "https://", "http://"):
             self.assertNotIn(forbidden, combined)
