@@ -607,6 +607,12 @@ def build_manifest(
     findings: Sequence[Finding],
     sources: Sequence[SourceArtifact],
     documents: Mapping[str, str],
+    *,
+    policy_id: str = "legacy-unspecified",
+    policy_version: str = "legacy-unspecified",
+    normalization_version: str = "legacy-unspecified",
+    canonical_inventory_digest: str = "sha256:" + "0" * 64,
+    evaluation_time: str | None = None,
 ) -> str:
     generated_files = []
     for name in sorted(documents):
@@ -619,11 +625,18 @@ def build_manifest(
         )
 
     manifest = {
+        "canonical_inventory_digest": canonical_inventory_digest,
         "decision_status": "pending_human_decision",
+        "evaluation_time": evaluation_time,
         "generator": "automation/scripts/generate_decision_pack.py",
+        "generator_version": "1.0.0",
         "generated_files": generated_files,
         "governance_gate_result": gate_state(findings),
         "hash_mode": "sha256-text-lf",
+        "manifest_schema_version": "1.0.0",
+        "normalization_version": normalization_version,
+        "policy_id": policy_id,
+        "policy_version": policy_version,
         "schema_version": "1.0",
         "source_artifacts": [
             {
@@ -652,15 +665,27 @@ def prepare_pack(
     executive_report: Path,
     schema: Path,
     policy: Path,
+    normalized_inventory: Path | None = None,
+    findings_json: Path | None = None,
+    result_json: Path | None = None,
+    evaluation_time: str | None = None,
 ) -> Dict[str, str]:
-    sources = (
+    source_items = [
         SourceArtifact("Schema validation report", schema_report),
         SourceArtifact("Risk-tier inventory", risk_csv),
         SourceArtifact("Governance validation report", governance_report),
         SourceArtifact("Executive governance report", executive_report),
         SourceArtifact("Runtime inventory schema", schema),
         SourceArtifact("Runtime governance policy", policy),
-    )
+    ]
+    for role, path in (
+        ("Normalized canonical inventory", normalized_inventory),
+        ("Machine-readable governance findings", findings_json),
+        ("Machine-readable governance result", result_json),
+    ):
+        if path is not None:
+            source_items.append(SourceArtifact(role, path))
+    sources = tuple(source_items)
 
     for source in sources:
         if not source.path.is_file():
@@ -709,11 +734,29 @@ def prepare_pack(
         findings,
         sources,
     )
+    policy_value = json.loads(policy.read_text(encoding="utf-8"))
+    normalized_value = (
+        json.loads(normalized_inventory.read_text(encoding="utf-8"))
+        if normalized_inventory is not None
+        else None
+    )
+    canonical_digest = "sha256:" + sha256_bytes(
+        json.dumps(
+            normalized_value["records"] if normalized_value else rows,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    )
     documents["manifest.json"] = build_manifest(
         rows,
         findings,
         sources,
         documents,
+        policy_id=policy_value.get("policy_id", "legacy-unspecified"),
+        policy_version=policy_value.get("policy_version", "legacy-unspecified"),
+        normalization_version=(normalized_value or {}).get("normalization_version", "legacy-unspecified"),
+        canonical_inventory_digest=canonical_digest,
+        evaluation_time=evaluation_time,
     )
     return documents
 
@@ -851,6 +894,10 @@ def main() -> None:
         required=True,
         help="Decision Pack output directory.",
     )
+    parser.add_argument("--normalized-inventory", type=Path)
+    parser.add_argument("--findings-json", type=Path)
+    parser.add_argument("--result-json", type=Path)
+    parser.add_argument("--evaluation-time")
     parser.add_argument(
         "--check",
         action="store_true",
@@ -869,6 +916,10 @@ def main() -> None:
             args.executive_report,
             args.schema,
             args.policy,
+            args.normalized_inventory,
+            args.findings_json,
+            args.result_json,
+            args.evaluation_time,
         )
         generate_or_check(
             args.output_dir,

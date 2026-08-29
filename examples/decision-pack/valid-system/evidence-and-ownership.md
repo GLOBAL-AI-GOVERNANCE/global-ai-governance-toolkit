@@ -20,3 +20,6 @@
 - Executive governance report: `executive-ai-governance-report.md`
 - Runtime inventory schema: `ai-system-inventory.schema.json`
 - Runtime governance policy: `governance-rules.yaml`
+- Normalized canonical inventory: `normalized-inventory.json`
+- Machine-readable governance findings: `governance-findings.json`
+- Machine-readable governance result: `governance-result.json`

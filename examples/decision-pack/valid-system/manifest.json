@@ -1,40 +1,47 @@
 {
+  "canonical_inventory_digest": "sha256:0d9f2dd95eca79318ad207ab339884294bf09d4562846e9fa604a46875e9fc7c",
   "decision_status": "pending_human_decision",
+  "evaluation_time": null,
   "generated_files": [
     {
       "path": "action-plan.md",
-      "sha256": "6b9d672266071d4394673f258ee284f6e335bd4da35bcccc50d91493b795f12f"
+      "sha256": "5bd41adddbebf909a7903e1e5d2ac11fdf00e380e906835a22b9446a0c1c828a"
     },
     {
       "path": "decision-record.md",
-      "sha256": "2fd06405734b622f0d1af588db6503f9287e08b4712ac4275de2e2e52cb7562f"
+      "sha256": "b0bebb6706a5816858d21eeb3c9e7b867ddc90ca2fbbd0b7a31031ba6ef7fc7c"
     },
     {
       "path": "evidence-and-ownership.md",
-      "sha256": "9f41bb2b0b556e4ca3415526fc9b4a58dab24e410a011545c7de1ddb953cad07"
+      "sha256": "6c7760cd404cf47b4789a820d7d41075be8602f885ca39293f180bd9b44ed0ee"
     },
     {
       "path": "executive-summary.md",
-      "sha256": "73b5a32527bd2ad7d6a542e9e21116061f427aac0740d5c295dd44936e5bd1b4"
+      "sha256": "9b7779a2098c94f50726fa919d602b2469a2776ca7eaead21d4456ccb594b88f"
     },
     {
       "path": "risk-and-findings.md",
-      "sha256": "c127ddd8e52a59baa7fa8ee256e5117aebe9ff978996bc85ce691eb9a7360b96"
+      "sha256": "0e645d13b824fd545f4bd54d414ed824dd3c658789cb0f0e6d42e510a6b5c735"
     },
     {
       "path": "system-profile.md",
-      "sha256": "40286de00be137df8c8f9bd0317f0e6f97e57c31e95e91b35d282129002358bb"
+      "sha256": "8c8078460b93906d35fc0deb62e4cb0b0ca5d6291c4a71eaa589659726d7bff6"
     }
   ],
   "generator": "automation/scripts/generate_decision_pack.py",
+  "generator_version": "1.0.0",
   "governance_gate_result": "PASSED CURRENT AUTOMATED CHECKS",
   "hash_mode": "sha256-text-lf",
+  "manifest_schema_version": "1.0.0",
+  "normalization_version": "1.0.0",
+  "policy_id": "global-ai-governance-toolkit.default-governance-rules",
+  "policy_version": "1.0.0",
   "schema_version": "1.0",
   "source_artifacts": [
     {
       "path": "schema-validation-report.md",
       "role": "Schema validation report",
-      "sha256": "3f23cfd20c59e13a5e1d85a25aed9ad0e63dcc8c82d3368557a74a1afd05fe77"
+      "sha256": "cfe705a2c5f6ff441449698882c9ee8b928da2fd01ccd8b6872dda4c33c745f3"
     },
     {
       "path": "risk-tier-output.csv",
@@ -59,7 +66,22 @@
     {
       "path": "governance-rules.yaml",
       "role": "Runtime governance policy",
-      "sha256": "0c23bc3add62ea3fadd1ce665b9f2b6c2baf84b96d0fb16ef7a9629e9b133fed"
+      "sha256": "090ec2d15989e678a1ab07cff8569a075c0df037cb26f370b78e569491a0d912"
+    },
+    {
+      "path": "normalized-inventory.json",
+      "role": "Normalized canonical inventory",
+      "sha256": "a1fa37fefd28bddac24e28093c6537032be7172790ae8b119f5ca77ec667c226"
+    },
+    {
+      "path": "governance-findings.json",
+      "role": "Machine-readable governance findings",
+      "sha256": "8c05198fa7a4f54cfde0a5d52b5db51f6f48c112ec651bbeafc5271d0621ee76"
+    },
+    {
+      "path": "governance-result.json",
+      "role": "Machine-readable governance result",
+      "sha256": "6d61c97e470d9fac3771e6cafec2d3413b5d5136f463f9b2a112714fa884748b"
     }
   ],
   "system_count": 1,
