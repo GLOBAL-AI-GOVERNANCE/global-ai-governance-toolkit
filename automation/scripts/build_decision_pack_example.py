@@ -114,6 +114,12 @@ def main() -> None:
                     / "policy-as-code"
                     / "governance-rules.yaml"
                 ),
+                "--normalized-inventory",
+                outdir / "normalized-inventory.json",
+                "--findings-json",
+                outdir / "governance-findings.json",
+                "--result-json",
+                outdir / "governance-result.json",
                 "--output-dir",
                 expected_dir,
                 "--check",

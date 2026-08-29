@@ -4,9 +4,12 @@ The Global AI Governance Toolkit includes lightweight automation for repeatable 
 
 ## Current Capabilities
 
+- Versioned canonical inventory and deterministic normalization
 - Risk tier calculation
 - Governance validation
+- Versioned machine findings and result contracts
 - Executive report generation
+- Deterministic Decision Pack, integrity manifest, and reference-only handoff
 - Passing and intentionally blocked fixtures
 - Active GitHub Actions verification
 - Fail-closed handling of critical findings
@@ -37,6 +40,15 @@ The current pipeline helps identify:
 
 ## Command
 
+Installed:
+
+```bash
+gag check automation/sample-data/sample-ai-inventory.csv \
+  --outdir automation/reports
+```
+
+Repository compatibility entry point:
+
 ```bash
 python automation/scripts/run_governance_checks.py \
   automation/sample-data/sample-ai-inventory.csv \
@@ -51,10 +63,16 @@ The command blocks `CRITICAL` findings by default.
 ## Generated Artifacts
 
 ```text
+normalized-inventory.json
+canonical-inventory.csv
 schema-validation-report.md
 risk-tier-output.csv
 governance-validation-report.md
+governance-findings.json
+governance-result.json
 executive-ai-governance-report.md
+decision-pack/
+governance-handoff.json
 ```
 
 ## Runtime Boundary
@@ -66,7 +84,7 @@ automation/schemas/ai-system-inventory.schema.json
 automation/policy-as-code/governance-rules.yaml
 ```
 
-The schema validates the inventory before risk calculation. The policy file drives governance findings, severities, messages, and rule identifiers. Missing or malformed runtime sources fail safely with exit code `2`.
+The canonical record contract is `automation/contracts/v1/canonical-inventory-record.schema.json`. Normalization produces the compatibility CSV consumed by the existing flat runtime schema before risk calculation. The policy file drives governance findings, severities, messages, and rule identifiers. Missing or malformed runtime sources fail safely with exit code `2`.
 
 The current schema validator supports the flat schema keywords used by this repository and fails closed when unsupported keywords appear. Risk-tier calculation remains built-in logic.
 

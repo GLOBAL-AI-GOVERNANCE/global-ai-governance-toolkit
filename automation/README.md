@@ -4,6 +4,16 @@ The automation layer provides a repeatable path from an AI system inventory CSV 
 
 ## Quick Start
 
+Installed command:
+
+```bash
+gag check automation/sample-data/sample-ai-inventory.csv \
+  --outdir automation/reports \
+  --fail-on none
+```
+
+The historical script path remains a supported compatibility entry point:
+
 ```bash
 python automation/scripts/run_governance_checks.py \
   automation/sample-data/sample-ai-inventory.csv \
@@ -21,12 +31,13 @@ The bundled sample contains intentionally blocked systems. Explicit report-only 
 
 ## What the Pipeline Does
 
-1. Calculates a preliminary risk tier.
-2. Checks required governance conditions.
-3. Writes a governance validation report.
-4. Writes an executive governance report.
-5. Generates a deterministic Decision Pack when the gate permits.
-6. Blocks the process when findings meet the selected threshold.
+1. Normalizes supported CSV inputs into canonical v1 JSON and CSV.
+2. Validates the canonical CSV and calculates a preliminary risk tier.
+3. Checks required governance conditions.
+4. Writes versioned findings and aggregate-result JSON.
+5. Writes the existing human reports and Decision Pack when the gate permits.
+6. Verifies pack digests and emits a reference-only handoff.
+7. Blocks the process when findings meet the selected threshold.
 
 Current checks include:
 
@@ -39,12 +50,19 @@ Current checks include:
 ## Outputs
 
 ```text
+normalized-inventory.json
+canonical-inventory.csv
 schema-validation-report.md
 risk-tier-output.csv
 governance-validation-report.md
+governance-findings.json
+governance-result.json
 executive-ai-governance-report.md
 decision-pack/
+governance-handoff.json
 ```
+
+Use `gag normalize` when only canonical normalization is needed and `gag verify` to revalidate machine contracts and pack integrity.
 
 Schema or policy configuration errors return exit code `2`. Governance findings that meet the selected threshold return exit code `1`.
 

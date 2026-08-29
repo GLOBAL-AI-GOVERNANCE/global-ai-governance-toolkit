@@ -1,185 +1,140 @@
 #!/usr/bin/env python3
-"""
-Run governance checks and generate a human-review Decision Pack.
-
-Pipeline:
-1. Validate inventory against the checked-in schema.
-2. Calculate preliminary risk tiers.
-3. Evaluate checked-in governance policy.
-4. Generate an executive report.
-5. Generate a deterministic Decision Pack.
-"""
+"""Run the backwards-compatible Wave A governance contract pipeline."""
 
 from __future__ import annotations
 
 import argparse
-import subprocess
 import sys
 from pathlib import Path
-from typing import Sequence
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from automation.scripts.contract_verifier import verify_output_directory
+from automation.scripts.generate_decision_pack import prepare_pack, write_pack
+from automation.scripts.generate_governance_report import generate_report
+from automation.scripts.governance_validator import load_policy, read_rows, evaluate_row, should_fail, write_report
+from automation.scripts.inventory_normalizer import NormalizationError, normalize_file
+from automation.scripts.machine_contracts import build_findings, build_handoff, build_result, write_json
+from automation.scripts.risk_tier_calculator import process_csv
+from automation.scripts.schema_validator import validate_csv
 
 
-def run(command: Sequence[object]) -> None:
-    rendered = [str(item) for item in command]
-    print("+ " + " ".join(rendered), flush=True)
+AUTOMATION = Path(__file__).resolve().parents[1]
+DEFAULT_SCHEMA = AUTOMATION / "schemas" / "ai-system-inventory.schema.json"
+DEFAULT_POLICY = AUTOMATION / "policy-as-code" / "governance-rules.yaml"
 
-    completed = subprocess.run(rendered, check=False)
 
-    if completed.returncode != 0:
-        raise SystemExit(completed.returncode)
+def run_pipeline(
+    input_csv: Path,
+    outdir: Path,
+    *,
+    schema: Path = DEFAULT_SCHEMA,
+    policy: Path = DEFAULT_POLICY,
+    decision_pack_dir: Path | None = None,
+    fail_on: str = "critical",
+    evaluation_time: str | None = None,
+    target_repository: str = "agentic-ai-governance",
+) -> None:
+    outdir.mkdir(parents=True, exist_ok=True)
+    normalized_json = outdir / "normalized-inventory.json"
+    canonical_csv = outdir / "canonical-inventory.csv"
+    schema_report = outdir / "schema-validation-report.md"
+    tiered_csv = outdir / "risk-tier-output.csv"
+    governance_report = outdir / "governance-validation-report.md"
+    findings_path = outdir / "governance-findings.json"
+    result_path = outdir / "governance-result.json"
+    executive_report = outdir / "executive-ai-governance-report.md"
+    pack_dir = decision_pack_dir or outdir / "decision-pack"
+    handoff_path = outdir / "governance-handoff.json"
+
+    try:
+        normalized = normalize_file(input_csv, normalized_json, canonical_csv)
+    except NormalizationError as exc:
+        issue = exc.issue
+        if issue.code == "MISSING_REQUIRED_COLUMN":
+            details = "\n".join(f"- Header: missing required field '{field}'." for field in issue.expected)
+        elif issue.code == "INVALID_ENUM_VALUE":
+            details = f"- Field '{issue.source_column}': value '{issue.supplied_value}' is not allowed."
+        else:
+            details = f"- [{issue.code}] {issue.remediation}"
+        schema_report.write_text(
+            "# Inventory Schema Validation Report\n\n## Errors\n\n" + details + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        raise
+    schema_errors = validate_csv(canonical_csv, schema, schema_report)
+    if schema_errors:
+        raise ValueError(f"Inventory schema validation failed with {len(schema_errors)} error(s).")
+    process_csv(canonical_csv, tiered_csv)
+
+    policy_value = load_policy(policy)
+    rows = read_rows(tiered_csv)
+    findings = []
+    for row in rows:
+        findings.extend(evaluate_row(row, policy_value["rules"]))
+    write_report(governance_report, policy, findings, len(policy_value["rules"]))
+
+    findings_doc = build_findings(normalized, policy_value, findings)
+    result_doc = build_result(normalized, policy_value, findings, fail_on=fail_on, evaluation_time=evaluation_time)
+    write_json(findings_path, findings_doc)
+    write_json(result_path, result_doc)
+
+    if should_fail(findings, fail_on):
+        print(f"Governance validation blocked by {fail_on.upper()} findings.")
+        raise SystemExit(1)
+
+    generate_report(tiered_csv, executive_report)
+    documents = prepare_pack(
+        tiered_csv, schema_report, governance_report, executive_report,
+        schema, policy, normalized_json, findings_path, result_path, evaluation_time,
+    )
+    write_pack(pack_dir, documents)
+    handoff = build_handoff(
+        manifest_path=pack_dir / "manifest.json",
+        result=result_doc,
+        findings_doc=findings_doc,
+        target_repository=target_repository,
+    )
+    write_json(handoff_path, handoff)
+    if pack_dir == outdir / "decision-pack":
+        verify_output_directory(outdir)
+
+    print("\nGovernance automation complete.")
+    for path in (
+        normalized_json, canonical_csv, schema_report, tiered_csv,
+        governance_report, findings_path, result_path, executive_report,
+        pack_dir, handoff_path,
+    ):
+        print(f"- {path}")
 
 
 def main() -> None:
-    script_dir = Path(__file__).resolve().parent
-    automation_dir = script_dir.parent
-
     parser = argparse.ArgumentParser(
-        description=(
-            "Run governance checks and generate a human-review "
-            "Decision Pack."
-        )
+        description="Normalize inventory, run governance checks, and produce a human-review Decision Pack."
     )
-    parser.add_argument(
-        "input_csv",
-        type=Path,
-        help="Path to AI inventory CSV.",
-    )
-    parser.add_argument(
-        "--outdir",
-        type=Path,
-        default=Path("automation/reports"),
-        help="Output directory.",
-    )
-    parser.add_argument(
-        "--schema",
-        type=Path,
-        default=(
-            automation_dir
-            / "schemas"
-            / "ai-system-inventory.schema.json"
-        ),
-        help="Path to the runtime inventory schema.",
-    )
-    parser.add_argument(
-        "--policy",
-        type=Path,
-        default=(
-            automation_dir
-            / "policy-as-code"
-            / "governance-rules.yaml"
-        ),
-        help="Path to the runtime governance policy.",
-    )
-    parser.add_argument(
-        "--decision-pack-dir",
-        type=Path,
-        help=(
-            "Decision Pack directory. Default: "
-            "<outdir>/decision-pack."
-        ),
-    )
-    parser.add_argument(
-        "--fail-on",
-        choices=("none", "high", "critical"),
-        default="critical",
-        help=(
-            "Return exit code 1 when governance findings meet "
-            "or exceed the selected severity."
-        ),
-    )
-
+    parser.add_argument("input_csv", type=Path)
+    parser.add_argument("--outdir", type=Path, default=Path("automation/reports"))
+    parser.add_argument("--schema", type=Path, default=DEFAULT_SCHEMA)
+    parser.add_argument("--policy", type=Path, default=DEFAULT_POLICY)
+    parser.add_argument("--decision-pack-dir", type=Path)
+    parser.add_argument("--fail-on", choices=("none", "high", "critical"), default="critical")
+    parser.add_argument("--evaluation-time")
+    parser.add_argument("--target-repository", default="agentic-ai-governance")
     args = parser.parse_args()
-    args.outdir.mkdir(parents=True, exist_ok=True)
-
-    schema_report = (
-        args.outdir / "schema-validation-report.md"
-    )
-    tiered_csv = args.outdir / "risk-tier-output.csv"
-    governance_report = (
-        args.outdir / "governance-validation-report.md"
-    )
-    executive_report = (
-        args.outdir / "executive-ai-governance-report.md"
-    )
-    decision_pack_dir = (
-        args.decision_pack_dir
-        if args.decision_pack_dir is not None
-        else args.outdir / "decision-pack"
-    )
-
-    run(
-        [
-            sys.executable,
-            script_dir / "schema_validator.py",
-            args.input_csv,
-            "--schema",
-            args.schema,
-            "--report",
-            schema_report,
-        ]
-    )
-
-    run(
-        [
-            sys.executable,
-            script_dir / "risk_tier_calculator.py",
-            args.input_csv,
-            "--output",
-            tiered_csv,
-        ]
-    )
-
-    run(
-        [
-            sys.executable,
-            script_dir / "governance_validator.py",
-            tiered_csv,
-            "--report",
-            governance_report,
-            "--policy",
-            args.policy,
-            "--fail-on",
-            args.fail_on,
-        ]
-    )
-
-    run(
-        [
-            sys.executable,
-            script_dir / "generate_governance_report.py",
-            tiered_csv,
-            "--output",
-            executive_report,
-        ]
-    )
-
-    run(
-        [
-            sys.executable,
-            script_dir / "generate_decision_pack.py",
-            "--risk-csv",
-            tiered_csv,
-            "--schema-report",
-            schema_report,
-            "--governance-report",
-            governance_report,
-            "--executive-report",
-            executive_report,
-            "--schema",
-            args.schema,
-            "--policy",
-            args.policy,
-            "--output-dir",
-            decision_pack_dir,
-        ]
-    )
-
-    print("\nGovernance automation complete.")
-    print(f"- {schema_report}")
-    print(f"- {tiered_csv}")
-    print(f"- {governance_report}")
-    print(f"- {executive_report}")
-    print(f"- {decision_pack_dir}")
+    try:
+        run_pipeline(
+            args.input_csv, args.outdir, schema=args.schema, policy=args.policy,
+            decision_pack_dir=args.decision_pack_dir, fail_on=args.fail_on,
+            evaluation_time=args.evaluation_time, target_repository=args.target_repository,
+        )
+    except SystemExit:
+        raise
+    except (OSError, ValueError) as exc:
+        print(f"Governance automation failed: {exc}")
+        raise SystemExit(2) from exc
 
 
 if __name__ == "__main__":
