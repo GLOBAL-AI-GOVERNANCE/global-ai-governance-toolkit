@@ -12,7 +12,7 @@
     "evaluation_time": {"pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$", "type": ["string", "null"]},
     "canonical_inventory_digest": {"pattern": "^sha256:[0-9a-f]{64}$", "type": "string"},
     "decision_status": {"const": "pending_human_decision"},
-    "generator": {"const": "automation/scripts/generate_decision_pack.py"},
+    "generator": {"enum": ["automation/scripts/generate_decision_pack.py", "web/governance-engine.mjs"]},
     "governance_gate_result": {"enum": ["PASSED CURRENT AUTOMATED CHECKS", "HUMAN REVIEW REQUIRED", "BLOCKED BY CRITICAL FINDINGS"]},
     "hash_mode": {"const": "sha256-text-lf"},
     "generated_files": {

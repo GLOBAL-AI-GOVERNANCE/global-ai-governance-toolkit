@@ -63,6 +63,9 @@ REQUIRED_FILES = (
     "automation/scripts/contract_verifier.py",
     "automation/scripts/machine_contracts.py",
     "gag_toolkit/cli.py",
+    "web/index.html",
+    "web/governance-engine.mjs",
+    "web/contracts.generated.mjs",
     "examples/decision-pack/valid-system/manifest.json",
 )
 CURRENT_ENTRY_DOCS = (
@@ -392,6 +395,12 @@ def validate_generated_templates(errors: list[str]) -> None:
             continue
         if actual != expected:
             errors.append(f"Generated template drift: {path.relative_to(REPOSITORY_ROOT)}")
+
+    from automation.scripts.generate_browser_contract_bundle import build
+
+    browser_bundle = REPOSITORY_ROOT / "web" / "contracts.generated.mjs"
+    if not browser_bundle.is_file() or browser_bundle.read_text(encoding="utf-8") != build():
+        errors.append("Generated browser contract bundle drift: web/contracts.generated.mjs")
 
 
 def validate_network_free_runtime(errors: list[str]) -> None:

@@ -32,6 +32,7 @@ jobs:
           python -m pip install --disable-pip-version-check --no-deps .
           gag --version
           python -B automation/scripts/generate_inventory_templates.py --check
+          python -B automation/scripts/generate_browser_contract_bundle.py --check
 
       - name: Verify schema-policy-runtime and Decision Pack behavior
         run: |

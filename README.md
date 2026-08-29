@@ -8,6 +8,14 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 ## Start Here
 
+Try the local browser experience with no backend, login, telemetry, or file upload:
+
+```bash
+python -m http.server 8000
+```
+
+Then open `http://127.0.0.1:8000/web/`. The browser and CLI use the same generated Wave A contract and policy bundle; parity tests protect normalization, findings, result states, and the non-authorizing handoff boundary.
+
 Install from a reviewed checkout in an isolated Python 3.11 environment:
 
 ```bash

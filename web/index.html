@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Local-first browser experience for the Global AI Governance Toolkit.">
+  <title>Govern an AI system locally</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="shell masthead">
+    <a class="brand" href="#top" aria-label="Global AI Governance Toolkit home">GLOBAL AI GOVERNANCE <span>TOOLKIT</span></a>
+    <p class="local-badge">LOCAL · NO UPLOAD · NO LOGIN</p>
+  </header>
+  <main id="top">
+    <section class="hero shell">
+      <div>
+        <p class="eyebrow">Reference governance runtime · Browser edition</p>
+        <h1>Turn an AI inventory into a review-ready decision record.</h1>
+        <p class="lede">Load a CSV in your browser. The file stays on this device while the toolkit normalizes it, applies the same five governance rules as the CLI, and prepares inspectable machine and human artifacts.</p>
+        <div class="actions">
+          <button id="try-sample" class="primary">Try the safe sample</button>
+          <label class="file-button">Load your CSV<input id="csv-file" type="file" accept=".csv,text/csv"></label>
+        </div>
+        <p class="fineprint">Automated checks support human review. They do not approve deployment, certify compliance, or accept risk.</p>
+      </div>
+      <aside class="contract-card" aria-label="Processing contract">
+        <p class="card-kicker">THE CONTRACT SPINE</p>
+        <ol>
+          <li><span>01</span> Normalize</li><li><span>02</span> Validate</li><li><span>03</span> Evaluate</li><li><span>04</span> Review</li><li><span>05</span> Handoff</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section id="workspace" class="workspace shell" hidden>
+      <div class="workspace-head">
+        <div><p class="eyebrow">Current evaluation</p><h2 id="source-name">Inventory</h2></div>
+        <label>Evaluation time <input id="evaluation-time" type="text" placeholder="2026-08-29T12:00:00Z" aria-describedby="time-help"></label>
+        <p id="time-help" class="visually-hidden">Optional UTC time for reproducible output.</p>
+        <button id="run-checks" class="primary">Run governance checks</button>
+      </div>
+      <div id="error" class="error" role="alert" hidden></div>
+      <nav class="tabs" aria-label="Evaluation views">
+        <button class="tab active" data-panel="preview">Normalization preview</button>
+        <button class="tab" data-panel="results">Governance results</button>
+        <button class="tab" data-panel="outputs">Machine outputs</button>
+        <button class="tab" data-panel="downloads">Decision Pack</button>
+      </nav>
+      <section id="preview" class="panel active"><div id="normalization-summary" class="summary-grid"></div><div class="table-wrap"><table><thead id="preview-head"></thead><tbody id="preview-body"></tbody></table></div></section>
+      <section id="results" class="panel"><div id="gate" class="gate"></div><div id="finding-list"></div></section>
+      <section id="outputs" class="panel"><div class="output-switch" role="tablist"><button data-output="normalized" class="active">Normalized</button><button data-output="findings">Findings</button><button data-output="result">Result</button><button data-output="handoff">Handoff</button></div><pre id="machine-json" tabindex="0"></pre></section>
+      <section id="downloads" class="panel"><p>Download the versioned machine contracts, manifest, non-authorizing handoff, or each human review document. Every Decision Pack file is digest-listed in the manifest.</p><div id="download-grid" class="download-grid"></div></section>
+    </section>
+  </main>
+  <footer class="shell"><p>Reference implementation · Runs in this browser · Human decision remains pending</p></footer>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>
