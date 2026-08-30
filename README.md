@@ -4,7 +4,7 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
-**Current release line:** v2.1.0 — Decision-Ready Governance.
+**Current release line:** v2.2.0 - AI Sovereignty Control Layer.
 
 ## Start Here
 
@@ -12,7 +12,7 @@ Open the live local-first browser:
 
 **[https://global-ai-governance.github.io/global-ai-governance-toolkit/](https://global-ai-governance.github.io/global-ai-governance-toolkit/)**
 
-The hosted browser reflects current `main` and remains distinct from the tagged `v2.1.0` release line.
+v2.2.0 is the first tagged release to include the local-first browser and machine-interface improvements that accumulated on `main` after v2.1.0. Future `main` development may again move ahead of the tagged release.
 
 Primary browser actions are:
 
@@ -79,6 +79,22 @@ Default behavior is fail-closed for `CRITICAL` findings:
 - `--fail-on high`: block `HIGH` and `CRITICAL` findings.
 - `--fail-on none`: explicit report-only mode; retain findings but return exit code `0`.
 
+## AI Sovereignty Control Layer
+
+v2.2.0 adds an additive, local-first sovereignty assessment path for organizations reviewing whether strategic AI use preserves institutional control.
+
+The sovereignty checker evaluates declared controls for data retention and training use, model/provider dependency, compute assurance, permissions, auditability, rollback, human oversight, shutdown, and owned context. It does not attest provider behavior, certify compliance, authorize deployment, or replace legal, privacy, security, procurement, executive, or board review.
+
+Run the passing reference assessment:
+
+```bash
+python automation/scripts/sovereignty_check.py \
+  automation/sample-data/sample-sovereignty-assessment-pass.csv \
+  --outdir automation/reports
+```
+
+The sovereignty checker is additive to the primary Decision Pack runtime. `governance-os.yaml` remains a legacy configuration reference and is not promoted back into runtime policy by this release.
+
 ## Current Outputs
 
 The pipeline writes canonical and machine-readable artifacts alongside the existing human reports and Decision Pack:
@@ -121,6 +137,7 @@ Supporting doctrine:
 - No evidence, no approval.
 - No shutdown path, no frontier release.
 - No trust without verification.
+- No sovereignty, no strategic AI.
 
 ## Active Verification
 
@@ -255,14 +272,15 @@ The repository preserves the following development lineage:
 - v1.2: Automation Layer
 - v2.0: Enterprise Adoption Package
 - v2.1.0: Decision-Ready Governance
+- v2.2.0: AI Sovereignty Control Layer
 - Current public identity: Global AI Governance Toolkit
 
 Historical version names remain in version-specific release records where appropriate.
 
 ## Release Verification
 
-- Review [v2.1.0 release readiness](docs/release-readiness-v2.1.0.md).
-- Review the [v2.1.0 release notes](release-notes/v2.1.0-decision-ready-governance.md).
+- Review [v2.2.0 release readiness](docs/release-readiness-v2.2.0.md).
+- Review the [v2.2.0 release notes](release-notes/v2.2.0-ai-sovereignty-control-layer.md).
 - Run `python -B automation/scripts/validate_repository.py`.
 - Run `python -B automation/scripts/build_decision_pack_example.py --check`.
 

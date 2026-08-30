@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.2.0] - 2026-08-29 - AI Sovereignty Control Layer
+
+- Released the local-first browser, machine interface, contract-generated templates, and first-time-use improvements that accumulated on `main` after v2.1.0.
+- Added the bounded AI Sovereignty Control Layer, including the sovereignty checker, S0-S4 assessment tiers, hard and advisory controls, ZDR review, model liquidity, compute assurance, permissions, audit, rollback, and owned-context materials.
+- Added dedicated sovereignty CI while preserving the primary Decision Pack runtime, human authority, and existing evidence boundary.
+
 ## [2.1.0] - 2026-07-29 — Decision-Ready Governance
 
 - Made critical governance findings fail closed by default.
