@@ -261,7 +261,7 @@ def normalize_file(input_path: Path, output_json: Path, output_csv: Path | None 
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Normalize a supported AI inventory CSV.")
+    parser = argparse.ArgumentParser(description="Normalize a supported AI inventory CSV.", allow_abbrev=False)
     parser.add_argument("input_csv", type=Path)
     parser.add_argument("--output-json", type=Path, required=True)
     parser.add_argument("--output-csv", type=Path)

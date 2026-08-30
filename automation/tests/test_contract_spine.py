@@ -124,6 +124,27 @@ class ContractSpineTests(unittest.TestCase):
         self.assertIn("UNSUPPORTED_SCHEMA_VERSION", self.normalize(unsupported, "u.json").stdout)
 
     def test_machine_outputs_validate_and_never_approve(self) -> None:
+        bare = self.command(
+            NORMALIZER, VALID,
+            "--output-json", self.work / "exact.json",
+            "--output", self.work / "bare.json",
+        )
+        self.assertEqual(bare.returncode, 2)
+        self.assertIn("unrecognized arguments: --output", bare.stderr)
+
+        json_only = self.command(NORMALIZER, VALID, "--output-json", self.work / "exact.json")
+        self.assertEqual(json_only.returncode, 0, json_only.stderr)
+        self.assertTrue((self.work / "exact.json").is_file())
+
+        both = self.command(
+            NORMALIZER, VALID,
+            "--output-json", self.work / "both.json",
+            "--output-csv", self.work / "both.csv",
+        )
+        self.assertEqual(both.returncode, 0, both.stderr)
+        self.assertTrue((self.work / "both.json").is_file())
+        self.assertTrue((self.work / "both.csv").is_file())
+
         outdir = self.work / "out"
         result = self.command(PIPELINE, VALID, "--outdir", outdir, "--evaluation-time", "2026-08-29T12:00:00Z")
         self.assertEqual(result.returncode, 0, result.stderr)

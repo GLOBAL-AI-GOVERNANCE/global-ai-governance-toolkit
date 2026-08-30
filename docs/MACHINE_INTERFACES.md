@@ -18,6 +18,8 @@ gag check INPUT --outdir DIRECTORY [--fail-on none|high|critical]
 gag verify OUTPUT_DIRECTORY
 ```
 
+Normalizer output options are exact: `--output-json` is required, `--output-csv` is optional, and bare `--output` is rejected.
+
 Exit codes remain:
 
 - `0`: successful execution, including explicit report-only operation;
