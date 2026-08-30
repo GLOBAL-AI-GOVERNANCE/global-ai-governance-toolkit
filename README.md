@@ -16,6 +16,12 @@ python -m http.server 8000
 
 Then open `http://127.0.0.1:8000/web/`. The browser and CLI use the same generated Wave A contract and policy bundle; parity tests protect normalization, findings, result states, and the non-authorizing handoff boundary.
 
+### Static hosting boundary
+
+The browser is ready for GitHub Pages through the repository-native [static deployment workflow](.github/workflows/pages.yml). A repository administrator must select **GitHub Actions** as the Pages source before the first deployment can succeed; that final GitHub setting is intentionally not changed by repository code.
+
+Static hosting does not change the data boundary: CSV content is read by the browser on the user's device, processing occurs in browser memory, and downloads are generated locally. The site has no backend, upload path, login, telemetry, service worker, or runtime network request. Organizations should still serve a reviewed commit and apply their own browser, device, and data-handling controls.
+
 Install from a reviewed checkout in an isolated Python 3.11 environment:
 
 ```bash
