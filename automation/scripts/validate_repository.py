@@ -66,7 +66,11 @@ REQUIRED_FILES = (
     "gag_toolkit/cli.py",
     "web/index.html",
     "web/governance-engine.mjs",
+    "web/finding-guidance.mjs",
     "web/contracts.generated.mjs",
+    "web/machine-interface.json",
+    "web/ai-system-inventory-template.csv",
+    "web/sample-ai-inventory.csv",
     "examples/decision-pack/valid-system/manifest.json",
 )
 CURRENT_ENTRY_DOCS = (
