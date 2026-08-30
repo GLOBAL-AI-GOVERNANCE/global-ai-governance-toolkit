@@ -4,6 +4,8 @@
 
 `gag profile PROFILE_ID INPUT --outdir DIRECTORY` runs a profile from [`profiles/registry.json`](profiles/registry.json) and writes deterministic `profile-result.json`. Optional `--decision-pack-manifest` verifies and records its digest without rewriting the Decision Pack. `--evaluation-time` enables reproducible expiry checks. Exit codes are `0` for PASS/CONDITIONAL, `1` for FAIL, and `2` for input or configuration error. Every result has `authority_effect: NONE`.
 
+New profile authors can start from the additive [Profile Development Kit](PROFILE_DEVELOPMENT_KIT.md). Its deterministic scaffold is intentionally not registered or runnable until a separate contract and registry review.
+
 The automation layer provides a repeatable path from an AI system inventory CSV to preliminary risk classification, policy-driven findings, an executive report, and a human-review Decision Pack.
 
 ## Quick Start

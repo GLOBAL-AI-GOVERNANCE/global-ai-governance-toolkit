@@ -16,6 +16,7 @@ from automation.profiles.common import canonical_bytes, sha256_bytes
 ROOT = Path(__file__).resolve().parents[2]
 AA_PASS = ROOT / "automation/assurance/auditable-ai/fixtures/pass.json"
 AA_FAIL = ROOT / "automation/assurance/auditable-ai/fixtures/fail.json"
+AA_ADVERSARIAL = ROOT / "automation/assurance/auditable-ai/fixtures/adversarial.json"
 Q_PASS = ROOT / "automation/assurance/quantum-ai/fixtures/pass.json"
 C_PASS = ROOT / "automation/profiles/fixtures/ciso-pass.json"
 C_FAIL = ROOT / "automation/profiles/fixtures/ciso-fail.json"
@@ -57,6 +58,18 @@ class ProfileTests(unittest.TestCase):
         self.assertEqual(code, 1); self.assertEqual(output["status"], "FAIL")
         ids = {item["id"].split(":", 1)[1] for item in output["findings"]}
         for expected in ("MISSING_EVIDENCE", "POLICY_MODEL_MISMATCH", "PROHIBITED_USE_TEST_FAILED", "CRITICAL_FALSE_NEGATIVE", "UNRESOLVED_CRITICAL_BYPASS", "MISSING_APPROVING_REVIEW", "INAPPROPRIATE_ADVANCEMENT"):
+            self.assertIn(expected, ids)
+
+    def test_auditable_frozen_acceptance_and_adversarial_fixture(self):
+        acceptance = json.loads((ROOT / "automation/assurance/auditable-ai/stable-acceptance-v1.json").read_text())
+        self.assertTrue(acceptance["frozen"])
+        self.assertFalse(acceptance["stable_release_declared"])
+        self.assertEqual(acceptance["authority_effect"], "NONE")
+        self.assertEqual(set(acceptance["external_gates_not_established"]), {"INDEPENDENT_REVIEW", "FINAL_STABLE_RELEASE_DECISION"})
+        code, output, _ = self.evaluate_profile("auditable-ai-v1", AA_ADVERSARIAL)
+        self.assertEqual(code, 1)
+        ids = {item["id"].split(":", 1)[1] for item in output["findings"]}
+        for expected in ("CONTROL_CLAIM_LINK_MISMATCH", "IMPLEMENTATION_CONTROL_LINK_MISMATCH", "TEST_IMPLEMENTATION_LINK_MISMATCH", "DUPLICATE_EVIDENCE_REFERENCE", "MALFORMED_EVIDENCE", "INVALID_BOUNDED_DECISION"):
             self.assertIn(expected, ids)
 
     def test_auditable_missing_control(self): self.assertIn("auditable-ai-v1:MISSING_CONTROL", {x["id"] for x in self.mutate_assurance(lambda d: d.pop("control"))["findings"]})

@@ -1,6 +1,6 @@
 import { contracts, evaluateCsv, GovernanceInputError, pretty } from "./governance-engine.mjs";
 import { guidanceFor } from "./finding-guidance.mjs";
-import { renderProfileResult } from "./profile-viewer.mjs";
+import { renderProfileResult, SYNTHETIC_CISO_PROFILE_RESULT } from "./profile-viewer.mjs";
 
 const state = { csv: "", sourceName: "", output: null, selectedOutput: "normalized" };
 const byId = (id) => document.getElementById(id);
@@ -84,3 +84,4 @@ byId("profile-file").addEventListener("change", async (event) => {
   try { renderProfileResult(JSON.parse(await file.text()), document); }
   catch (error) { byId("profile-error").textContent = error.message; byId("profile-error").hidden = false; }
 });
+byId("run-profile-sample").addEventListener("click", () => renderProfileResult(SYNTHETIC_CISO_PROFILE_RESULT, document));
