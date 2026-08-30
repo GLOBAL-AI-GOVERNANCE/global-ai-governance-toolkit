@@ -47,7 +47,6 @@ jobs:
   enforcement-demo:
     name: Enforcement demo (intentional failures, non-blocking)
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -57,11 +56,27 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run demo showing hard gates blocking non-compliant systems
+      - name: Prove hard gates block the intentional demo
+        shell: bash
         run: |
+          set +e
+
           python -B automation/scripts/sovereignty_check.py \
             automation/sample-data/sample-sovereignty-assessment.csv \
             --outdir "${{ runner.temp }}/sovereignty-reports/demo"
+
+          status=$?
+          set -e
+
+          if [[ "$status" -ne 1 ]]; then
+            echo "Expected sovereignty enforcement demo to exit 1; received $status."
+            exit 1
+          fi
+
+          test -f "${{ runner.temp }}/sovereignty-reports/demo/sovereignty-report.md"
+          test -f "${{ runner.temp }}/sovereignty-reports/demo/sovereignty-report.json"
+
+          echo "Intentional enforcement demo blocked as expected."
 
       - name: Upload demo report
         if: always()
