@@ -47,6 +47,7 @@ REQUIRED_FILES = (
     "LICENSE",
     "pyproject.toml",
     ".github/workflows/ai-governance-checks.yml",
+    ".github/workflows/pages.yml",
     "automation/scripts/run_governance_checks.py",
     "automation/scripts/schema_validator.py",
     "automation/scripts/governance_validator.py",
@@ -415,6 +416,18 @@ def validate_network_free_runtime(errors: list[str]) -> None:
         for token in forbidden:
             if token in text:
                 errors.append(f"Core runtime network import found in {name}: {token}")
+
+    browser_tokens = (
+        "fetch(", "XMLHttpRequest", "WebSocket", "sendBeacon",
+        "navigator.serviceWorker",
+    )
+    for path in sorted((REPOSITORY_ROOT / "web").glob("*.mjs")):
+        text = path.read_text(encoding="utf-8")
+        for token in browser_tokens:
+            if token in text:
+                errors.append(
+                    f"Static browser network capability found in {path.name}: {token}"
+                )
 
 
 def validate_hygiene(files: Iterable[Path], errors: list[str]) -> None:
