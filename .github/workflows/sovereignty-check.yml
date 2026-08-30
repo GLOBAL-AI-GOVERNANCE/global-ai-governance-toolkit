@@ -1,0 +1,72 @@
+name: AI Sovereignty Check
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "automation/scripts/sovereignty_check.py"
+      - "automation/sample-data/**"
+      - "automation/schemas/sovereignty-assessment.schema.json"
+      - "policies/**"
+      - "enterprise/sovereignty/**"
+      - ".github/workflows/sovereignty-check.yml"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sovereignty-gate:
+    name: Sovereignty gate (blocking)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.11"
+
+      - name: Run blocking sovereignty check
+        run: |
+          python -B automation/scripts/sovereignty_check.py \
+            automation/sample-data/sample-sovereignty-assessment-pass.csv \
+            --outdir "${{ runner.temp }}/sovereignty-reports/gate"
+
+      - name: Upload gate report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sovereignty-gate-report
+          path: ${{ runner.temp }}/sovereignty-reports/gate/
+          if-no-files-found: error
+
+  enforcement-demo:
+    name: Enforcement demo (intentional failures, non-blocking)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.11"
+
+      - name: Run demo showing hard gates blocking non-compliant systems
+        run: |
+          python -B automation/scripts/sovereignty_check.py \
+            automation/sample-data/sample-sovereignty-assessment.csv \
+            --outdir "${{ runner.temp }}/sovereignty-reports/demo"
+
+      - name: Upload demo report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sovereignty-demo-report
+          path: ${{ runner.temp }}/sovereignty-reports/demo/
+          if-no-files-found: error
