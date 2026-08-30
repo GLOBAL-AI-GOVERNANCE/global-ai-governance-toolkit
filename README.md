@@ -8,19 +8,33 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 ## Start Here
 
-Use the local browser experience with no backend, login, telemetry, or file upload:
+Open the live local-first browser:
+
+**[https://global-ai-governance.github.io/global-ai-governance-toolkit/](https://global-ai-governance.github.io/global-ai-governance-toolkit/)**
+
+The hosted browser reflects current `main` and remains distinct from the tagged `v2.1.0` release line.
+
+Primary browser actions are:
+
+- **Run sample**
+- **Load CSV**
+- **Review and download the Decision Pack**
+
+The browser uses the same generated contract and policy bundle as the CLI. Parity tests protect normalization, findings, result states, and the non-authorizing handoff boundary.
+
+For a reviewed local copy:
 
 ```bash
 python -m http.server 8000
 ```
 
-Then open `http://127.0.0.1:8000/web/`. The browser and CLI use the same generated Wave A contract and policy bundle; parity tests protect normalization, findings, result states, and the non-authorizing handoff boundary.
+Then open `http://127.0.0.1:8000/web/`.
 
 ### Static hosting boundary
 
-The browser is ready for GitHub Pages through the repository-native [static deployment workflow](.github/workflows/pages.yml). A repository administrator must select **GitHub Actions** as the Pages source before the first deployment can succeed; that final GitHub setting is intentionally not changed by repository code.
+The browser is deployed through the repository-native [GitHub Pages workflow](.github/workflows/pages.yml), with GitHub Actions as the Pages source.
 
-Static hosting does not change the data boundary: CSV content is read by the browser on the user's device, processing occurs in browser memory, and downloads are generated locally. The site has no backend, upload path, login, telemetry, service worker, or runtime network request. Organizations should still serve a reviewed commit and apply their own browser, device, and data-handling controls.
+Static hosting does not change the data boundary: CSV content is read by the browser on the local device, processing occurs in browser memory, and downloads are generated locally. The site has no backend, upload path, application login, telemetry, service worker, or runtime network request. Organizations should still serve a reviewed commit and apply their own browser, device, and data-handling controls.
 
 Install from a reviewed checkout in an isolated Python 3.11 environment:
 
