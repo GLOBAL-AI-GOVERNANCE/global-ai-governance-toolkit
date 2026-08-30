@@ -1,0 +1,41 @@
+{
+  "authority_effect": "NONE",
+  "cli": {
+    "check": "gag check INPUT --outdir DIRECTORY [--fail-on none|high|critical] [--evaluation-time YYYY-MM-DDTHH:MM:SSZ]",
+    "normalize": "gag normalize INPUT --output-json FILE [--output-csv FILE]",
+    "verify": "gag verify OUTPUT_DIRECTORY"
+  },
+  "decision_pack_manifest": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/decision-pack-manifest.schema.json",
+  "governance_handoff": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/governance-decision-handoff.schema.json",
+  "input": {
+    "canonical_schema": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/canonical-inventory-record.schema.json",
+    "mapping": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/inventory-mapping.json",
+    "sample": "./sample-ai-inventory.csv",
+    "template": "./ai-system-inventory-template.csv"
+  },
+  "machine_interface_version": "1.0.0",
+  "outputs": [
+    "normalized-inventory.json",
+    "canonical-inventory.csv",
+    "governance-findings.json",
+    "governance-result.json",
+    "decision-pack/manifest.json",
+    "governance-handoff.json"
+  ],
+  "product_name": "Global AI Governance Toolkit",
+  "purpose": "Normalize an AI-system inventory, apply the bounded governance policy, surface review findings, and prepare a Decision Pack for an accountable human.",
+  "repository": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit",
+  "review_boundary": "Automated evaluation is not deployment approval, certification, compliance determination, proof of safety, risk acceptance, or a transfer of operating authority.",
+  "runtime": {
+    "backend_required": false,
+    "login_required": false,
+    "network_requests": false,
+    "telemetry": false,
+    "upload": false
+  },
+  "schemas": {
+    "findings": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/governance-findings.schema.json",
+    "normalized_inventory": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/normalized-inventory.schema.json",
+    "result": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/governance-result.schema.json"
+  }
+}

@@ -18,6 +18,8 @@ from automation.scripts.inventory_normalizer import CONTRACT_ROOT, canonical_fie
 ROOT = REPO_ROOT
 CSV_TARGET = ROOT / "spreadsheets" / "ai-system-inventory-template.csv"
 MD_TARGET = ROOT / "templates" / "ai-system-inventory.md"
+WEB_CSV_TARGET = ROOT / "web" / "ai-system-inventory-template.csv"
+WEB_SAMPLE_TARGET = ROOT / "web" / "sample-ai-inventory.csv"
 
 
 def render() -> dict[Path, str]:
@@ -39,7 +41,15 @@ def render() -> dict[Path, str]:
         allowed = " / ".join(definition.get("enum", [])) or "Text"
         lines.append(f"| {mapping['fields'][field]['human_label']} | `{field}` | {allowed} |")
     lines.extend(["", "Canonical schema version: `1.0.0`", ""])
-    return {CSV_TARGET: csv_text, MD_TARGET: "\n".join(lines)}
+    sample_text = (
+        ROOT / "automation" / "fixtures" / "valid-ai-inventory.csv"
+    ).read_text(encoding="utf-8")
+    return {
+        CSV_TARGET: csv_text,
+        MD_TARGET: "\n".join(lines),
+        WEB_CSV_TARGET: csv_text,
+        WEB_SAMPLE_TARGET: sample_text,
+    }
 
 
 def main() -> None:

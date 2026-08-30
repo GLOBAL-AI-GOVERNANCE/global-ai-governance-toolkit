@@ -22,6 +22,8 @@ Primary browser actions are:
 
 The browser uses the same generated contract and policy bundle as the CLI. Parity tests protect normalization, findings, result states, and the non-authorizing handoff boundary.
 
+First-time users can run the sample, download the contract-generated blank CSV template, load a completed inventory, review plain-language guidance alongside stable technical rule IDs, and download the Decision Pack. Agents and technical integrations can begin with [`web/machine-interface.json`](web/machine-interface.json) instead of scraping prose.
+
 For a reviewed local copy:
 
 ```bash
