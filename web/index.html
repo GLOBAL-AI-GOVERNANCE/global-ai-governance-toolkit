@@ -62,7 +62,8 @@
       <p class="eyebrow">Optional advanced evidence</p>
       <h2 id="profile-heading">Profile Result viewer</h2>
       <p>Render an existing common <code>profile-result.json</code> locally. This view does not evaluate, upload, approve, or alter the result.</p>
-      <label class="file-button">Load profile-result.json<input id="profile-file" type="file" accept=".json,application/json"></label>
+      <div class="actions"><button id="run-profile-sample" class="primary" type="button" aria-describedby="profile-sample-boundary">Run bounded synthetic example</button><label class="file-button">Load profile-result.json<input id="profile-file" type="file" accept=".json,application/json"></label></div>
+      <p id="profile-sample-boundary" class="fineprint">Synthetic machine example only. It establishes no real decision, approval, attestation, certification, or risk acceptance.</p>
       <div id="profile-error" class="error" role="alert" hidden></div>
       <div id="profile-result" class="profile-result"></div>
     </section>

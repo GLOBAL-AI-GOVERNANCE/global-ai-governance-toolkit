@@ -17,6 +17,7 @@ CRITICAL = ROOT / "automation/fixtures/critical-ai-inventory.csv"
 PIPELINE = ROOT / "automation/scripts/run_governance_checks.py"
 RUNNER = ROOT / "web/tests/parity-runner.mjs"
 UX_RUNNER = ROOT / "web/tests/ux-runner.mjs"
+PROFILE_SURFACE_RUNNER = ROOT / "web/tests/profile-decision-surface-runner.mjs"
 EVALUATION_TIME = "2026-08-29T12:00:00Z"
 
 
@@ -129,6 +130,23 @@ class BrowserParityTests(unittest.TestCase):
     def test_mobile_keeps_local_trust_statement_visible(self) -> None:
         css = (ROOT / "web/styles.css").read_text(encoding="utf-8")
         self.assertNotRegex(css, r"\.local-badge\s*\{[^}]*display\s*:\s*none")
+
+    def test_profile_decision_surface_order_and_accessibility_semantics(self) -> None:
+        completed = subprocess.run(["node", str(PROFILE_SURFACE_RUNNER)], cwd=ROOT, text=True, capture_output=True, check=True)
+        payload = json.loads(completed.stdout)
+        html = payload["html"]
+        sequence = ["Decision:", "Consequence", "Remaining risk", "Next action", "Timeline", "Technical evidence"]
+        positions = [html.index(label) for label in sequence]
+        self.assertEqual(positions, sorted(positions))
+        self.assertEqual(payload["attributes"]["role"], "region")
+        self.assertEqual(payload["attributes"]["aria-labelledby"], "profile-decision-heading")
+        self.assertTrue(payload["attributes"]["focused"])
+        for semantic in ('role="status"', 'aria-live="polite"', '<ol class="decision-surface"', '<time>', '<details>', '<summary>Technical evidence</summary>'):
+            self.assertIn(semantic, html)
+        self.assertEqual(payload["view"]["authorityEffect"], "NONE")
+        index = (ROOT / "web/index.html").read_text(encoding="utf-8")
+        self.assertIn("Run bounded synthetic example", index)
+        self.assertIn('aria-describedby="profile-sample-boundary"', index)
 
 
 if __name__ == "__main__":
