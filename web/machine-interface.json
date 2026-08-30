@@ -3,10 +3,18 @@
   "cli": {
     "check": "gag check INPUT --outdir DIRECTORY [--fail-on none|high|critical] [--evaluation-time YYYY-MM-DDTHH:MM:SSZ]",
     "normalize": "gag normalize INPUT --output-json FILE [--output-csv FILE]",
+    "profile": "gag profile PROFILE_ID INPUT --outdir DIRECTORY [--decision-pack-manifest FILE] [--evaluation-time YYYY-MM-DDTHH:MM:SSZ]",
     "verify": "gag verify OUTPUT_DIRECTORY"
   },
   "decision_pack_manifest": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/decision-pack-manifest.schema.json",
   "governance_handoff": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/governance-decision-handoff.schema.json",
+  "profiles": {
+    "result_contract": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/profile-result.schema.json",
+    "registry": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/profiles/registry.json",
+    "viewer": "./profile-viewer.mjs",
+    "authority_effect": "NONE",
+    "supported": ["auditable-ai-v1", "quantum-ai-convergence-v0.1", "ciso-ai-risk-v0.1"]
+  },
   "input": {
     "canonical_schema": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/canonical-inventory-record.schema.json",
     "mapping": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/inventory-mapping.json",
@@ -20,7 +28,8 @@
     "governance-findings.json",
     "governance-result.json",
     "decision-pack/manifest.json",
-    "governance-handoff.json"
+    "governance-handoff.json",
+    "profile-result.json"
   ],
   "product_name": "Global AI Governance Toolkit",
   "purpose": "Normalize an AI-system inventory, apply the bounded governance policy, surface review findings, and prepare a Decision Pack for an accountable human.",

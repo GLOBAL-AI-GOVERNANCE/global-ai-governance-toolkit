@@ -1,5 +1,9 @@
 # Portfolio Interoperability
 
+## Optional profile evidence
+
+Toolkit v2.3.0 profile results are additive evidence artifacts. A portfolio handoff may reference `profile-result.json` and its SHA-256 through the existing `evidence_refs` array. This does not change `authority_effect: NONE`, transfer authority, or imply that a declared future dependency such as Stateful Revocation is operational.
+
 This repository remains independently useful as the Global AI Governance Toolkit. Portfolio interoperability is additive.
 
 The optional `automation/contracts/governance-decision-handoff.schema.json` contract provides a bounded reference envelope for carrying a Decision Pack reference into another GLOBAL AI GOVERNANCE repository without turning the handoff into an approval, certification, or deployment authorization.

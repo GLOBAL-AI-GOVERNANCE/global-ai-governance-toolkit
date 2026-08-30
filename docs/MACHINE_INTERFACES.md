@@ -1,5 +1,9 @@
 # Machine Interfaces
 
+## Optional profile result
+
+The additive [`profile-result.schema.json`](../automation/contracts/v1/profile-result.schema.json) is shared by every registered profile. Discovery is available through [`registry.json`](../automation/profiles/registry.json) and the browser machine interface. The local browser renders this result; it does not evaluate profiles. A Decision Pack handoff may include a profile-result path/digest string in `evidence_refs`, while both artifacts preserve `authority_effect: NONE`.
+
 Wave A provides a local contract spine without changing the five existing governance rules or built-in risk semantics.
 
 The static browser publishes `web/machine-interface.json` as its versioned machine front door. It points to the generated browser template and sample, canonical repository contracts, CLI commands, outputs, Decision Pack manifest, governance handoff, and the non-authorizing boundary.

@@ -1,5 +1,9 @@
 # v2.0 Enterprise Adoption Package
 
+## Optional accountability profile
+
+The experimental [CISO AI Risk & Accountability profile](ciso-ai-risk/README.md) adds a referenced decision/accountability record without changing Inventory Contract v1 or creating a separate engine. The primary Decision Pack remains the governance product and all authority remains with named people.
+
 The Global AI Governance Toolkit preserves the v2.0 Enterprise Adoption Package as a set of rollout, reporting, evidence, procurement, training, and governance-program resources.
 
 v1.0 established the Governance OS.  

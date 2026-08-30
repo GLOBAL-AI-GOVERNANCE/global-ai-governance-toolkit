@@ -1,5 +1,6 @@
 import { contracts, evaluateCsv, GovernanceInputError, pretty } from "./governance-engine.mjs";
 import { guidanceFor } from "./finding-guidance.mjs";
+import { renderProfileResult } from "./profile-viewer.mjs";
 
 const state = { csv: "", sourceName: "", output: null, selectedOutput: "normalized" };
 const byId = (id) => document.getElementById(id);
@@ -76,3 +77,10 @@ byId("csv-file").addEventListener("change", async (event) => { const [file] = ev
 byId("run-checks").addEventListener("click", run);
 document.querySelectorAll(".tab").forEach((button) => button.addEventListener("click", () => showPanel(button.dataset.panel)));
 document.querySelectorAll("[data-output]").forEach((button) => button.addEventListener("click", () => { state.selectedOutput = button.dataset.output; renderMachine(); }));
+byId("profile-file").addEventListener("change", async (event) => {
+  const [file] = event.target.files;
+  if (!file) return;
+  byId("profile-error").hidden = true;
+  try { renderProfileResult(JSON.parse(await file.text()), document); }
+  catch (error) { byId("profile-error").textContent = error.message; byId("profile-error").hidden = false; }
+});

@@ -1,5 +1,9 @@
 # Automation Layer
 
+## Optional profiles (v2.3.0)
+
+`gag profile PROFILE_ID INPUT --outdir DIRECTORY` runs a profile from [`profiles/registry.json`](profiles/registry.json) and writes deterministic `profile-result.json`. Optional `--decision-pack-manifest` verifies and records its digest without rewriting the Decision Pack. `--evaluation-time` enables reproducible expiry checks. Exit codes are `0` for PASS/CONDITIONAL, `1` for FAIL, and `2` for input or configuration error. Every result has `authority_effect: NONE`.
+
 The automation layer provides a repeatable path from an AI system inventory CSV to preliminary risk classification, policy-driven findings, an executive report, and a human-review Decision Pack.
 
 ## Quick Start
