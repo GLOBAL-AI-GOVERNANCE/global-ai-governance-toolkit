@@ -281,14 +281,15 @@ The repository preserves the following development lineage:
 - v2.0: Enterprise Adoption Package
 - v2.1.0: Decision-Ready Governance
 - v2.2.0: AI Sovereignty Control Layer
+- v2.3.0: Assurance & Accountability Profiles
 - Current public identity: Global AI Governance Toolkit
 
 Historical version names remain in version-specific release records where appropriate.
 
 ## Release Verification
 
-- Review [v2.2.0 release readiness](docs/release-readiness-v2.2.0.md).
-- Review the [v2.2.0 release notes](release-notes/v2.2.0-ai-sovereignty-control-layer.md).
+- Review [v2.3.0 release readiness](docs/release-readiness-v2.3.0.md).
+- Review the [v2.3.0 release notes](release-notes/v2.3.0-assurance-accountability-profiles.md).
 - Run `python -B automation/scripts/validate_repository.py`.
 - Run `python -B automation/scripts/build_decision_pack_example.py --check`.
 
