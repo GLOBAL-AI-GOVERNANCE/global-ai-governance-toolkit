@@ -29,12 +29,17 @@ jobs:
           test -f web/index.html
           test -f web/app.mjs
           test -f web/governance-engine.mjs
+          test -f web/finding-guidance.mjs
           test -f web/contracts.generated.mjs
           test -f web/styles.css
+          test -f web/machine-interface.json
+          test -f web/ai-system-inventory-template.csv
+          test -f web/sample-ai-inventory.csv
           ! grep -RIE '(fetch\(|XMLHttpRequest|WebSocket|sendBeacon|navigator\.serviceWorker)' web --include='*.mjs' --include='*.js'
           python -B automation/scripts/generate_browser_contract_bundle.py --check
           node --check web/app.mjs
           node --check web/governance-engine.mjs
+          node --check web/finding-guidance.mjs
 
       - name: Stage static site
         shell: bash

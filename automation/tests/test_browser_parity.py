@@ -16,6 +16,7 @@ VALID = ROOT / "automation/fixtures/valid-ai-inventory.csv"
 CRITICAL = ROOT / "automation/fixtures/critical-ai-inventory.csv"
 PIPELINE = ROOT / "automation/scripts/run_governance_checks.py"
 RUNNER = ROOT / "web/tests/parity-runner.mjs"
+UX_RUNNER = ROOT / "web/tests/ux-runner.mjs"
 EVALUATION_TIME = "2026-08-29T12:00:00Z"
 
 
@@ -71,8 +72,8 @@ class BrowserParityTests(unittest.TestCase):
         self.assert_parity(CRITICAL)
 
     def test_static_surface_is_local_only_and_complete(self) -> None:
-        combined = "\n".join((ROOT / "web" / name).read_text(encoding="utf-8") for name in ("index.html", "app.mjs", "governance-engine.mjs"))
-        for phrase in ("Run sample", "Load your CSV", "Normalization preview", "Governance results", "Machine outputs", "Decision Pack", "authority_effect"):
+        combined = "\n".join((ROOT / "web" / name).read_text(encoding="utf-8") for name in ("index.html", "app.mjs", "governance-engine.mjs", "finding-guidance.mjs"))
+        for phrase in ("Run sample", "Download blank template", "Load your CSV", "Normalization preview", "Governance results", "Machine outputs", "Decision Pack", "authority_effect", "What this means", "What to do next"):
             self.assertIn(phrase, combined)
         for forbidden in ("fetch(", "XMLHttpRequest", "WebSocket", "sendBeacon", "https://", "http://"):
             self.assertNotIn(forbidden, combined)
@@ -83,6 +84,51 @@ class BrowserParityTests(unittest.TestCase):
             cwd=ROOT, text=True, capture_output=True, check=False,
         )
         self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr)
+
+    def test_blank_template_is_generated_and_a_completed_copy_loads(self) -> None:
+        blank = (ROOT / "web/ai-system-inventory-template.csv").read_text(encoding="utf-8-sig")
+        canonical_blank = (ROOT / "spreadsheets/ai-system-inventory-template.csv").read_text(encoding="utf-8-sig")
+        self.assertEqual(blank, canonical_blank)
+        row = "1.0.0,TEST-BEGINNER-001,Beginner Example,Casey Owner,Operations,Internal,Document search,Internal,No,No,No,No,No,None,No,Yes,Yes,Yes\n"
+        with tempfile.TemporaryDirectory() as temporary:
+            completed_template = Path(temporary) / "completed-template.csv"
+            completed_template.write_text(blank + row, encoding="utf-8")
+            browser = self.browser(completed_template)
+        self.assertEqual(browser["normalized"]["records"][0]["system_id"], "TEST-BEGINNER-001")
+        self.assertEqual(browser["result"]["governance_gate_state"], "PASSED_CURRENT_AUTOMATED_CHECKS")
+
+    def test_machine_front_door_is_versioned_and_non_authorizing(self) -> None:
+        interface = json.loads((ROOT / "web/machine-interface.json").read_text(encoding="utf-8"))
+        self.assertEqual(interface["machine_interface_version"], "1.0.0")
+        self.assertEqual(interface["authority_effect"], "NONE")
+        self.assertFalse(interface["runtime"]["upload"])
+        self.assertFalse(interface["runtime"]["network_requests"])
+        self.assertIn("not deployment approval", interface["review_boundary"])
+        for relative in (interface["input"]["template"], interface["input"]["sample"]):
+            self.assertTrue((ROOT / "web" / relative.removeprefix("./")).is_file())
+
+    def test_plain_language_guidance_covers_exact_policy_rules(self) -> None:
+        completed = subprocess.run(
+            ["node", str(UX_RUNNER), str(CRITICAL), EVALUATION_TIME],
+            cwd=ROOT, text=True, capture_output=True, check=True,
+        )
+        payload = json.loads(completed.stdout)
+        policy_ids = {
+            rule["id"]
+            for rule in json.loads((ROOT / "automation/policy-as-code/governance-rules.yaml").read_text(encoding="utf-8"))["rules"]
+        }
+        self.assertEqual(set(payload["findingGuidance"]), policy_ids)
+        for guidance in payload["findingGuidance"].values():
+            self.assertTrue(guidance["title"] and guidance["meaning"] and guidance["next"])
+        for finding in payload["findings"]:
+            self.assertIn(finding["rule_id"], payload["findingGuidance"])
+            self.assertIn(finding["severity"], {"HIGH", "CRITICAL"})
+        self.assertEqual(payload["result"]["evaluation_time"], EVALUATION_TIME)
+        self.assertEqual(payload["handoff"]["authority_effect"], "NONE")
+
+    def test_mobile_keeps_local_trust_statement_visible(self) -> None:
+        css = (ROOT / "web/styles.css").read_text(encoding="utf-8")
+        self.assertNotRegex(css, r"\.local-badge\s*\{[^}]*display\s*:\s*none")
 
 
 if __name__ == "__main__":

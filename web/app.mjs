@@ -1,4 +1,5 @@
 import { contracts, evaluateCsv, GovernanceInputError, pretty } from "./governance-engine.mjs";
+import { guidanceFor } from "./finding-guidance.mjs";
 
 const state = { csv: "", sourceName: "", output: null, selectedOutput: "normalized" };
 const byId = (id) => document.getElementById(id);
@@ -26,9 +27,18 @@ function escapeHtml(value) { const span = document.createElement("span"); span.t
 function renderResults() {
   const { result, findings, tiers } = state.output;
   byId("gate").className = `gate ${result.governance_gate_state.toLowerCase()}`;
-  byId("gate").innerHTML = `<p>Automated gate</p><h3>${result.governance_gate_state.replaceAll("_", " ")}</h3><span>Human decision: ${result.human_decision_state.replaceAll("_", " ")}</span>`;
+  const resultCopy = result.governance_gate_state === "BLOCKED"
+    ? { result: "Critical gaps need attention", meaning: "The current automated checks found at least one critical governance gap.", next: "Resolve the critical gaps, rerun the review, and keep the final decision with an accountable human." }
+    : result.governance_gate_state === "REVIEW_REQUIRED"
+      ? { result: "Human review is required", meaning: "The current automated checks found governance gaps that need review.", next: "Review each gap, add the missing controls or evidence, and document the accountable human decision." }
+      : { result: "Current automated checks passed", meaning: "No gap was found by the five bounded rules in this toolkit.", next: "Review the evidence and Decision Pack. An accountable human must still make the decision." };
+  byId("gate").innerHTML = `<p>Result</p><h3>${resultCopy.result}</h3><span>Human decision remains pending</span>`;
+  byId("result-explanation").innerHTML = `<article><h3>What this means</h3><p>${resultCopy.meaning}</p></article><article><h3>What to do next</h3><p>${resultCopy.next}</p></article>`;
   const tierCards = Object.entries(tiers).map(([id, tier]) => `<article class="finding"><span class="severity tier">${tier} risk</span><h3>${escapeHtml(id)}</h3><p>Preliminary risk tier from the Wave A calculator.</p></article>`);
-  const findingCards = findings.findings.map((item) => `<article class="finding"><span class="severity ${item.severity.toLowerCase()}">${item.severity}</span><h3>${escapeHtml(item.rule_id)} · ${escapeHtml(item.system_name)}</h3><p>${escapeHtml(item.message)}</p></article>`);
+  const findingCards = findings.findings.map((item) => {
+    const guidance = guidanceFor(item.rule_id);
+    return `<article class="finding"><span class="severity ${item.severity.toLowerCase()}">${item.severity} · ${escapeHtml(item.rule_id)}</span><h3>${guidance.title}</h3><h4>What this means</h4><p>${guidance.meaning}</p><h4>What to do next</h4><p>${guidance.next}</p><details><summary>Technical detail</summary><p>System: ${escapeHtml(item.system_name)} (${escapeHtml(item.system_id)})</p><p>Policy message: ${escapeHtml(item.message)}</p><p>Finding ID: <code>${escapeHtml(item.finding_id)}</code></p></details></article>`;
+  });
   byId("finding-list").innerHTML = [...tierCards, ...(findingCards.length ? findingCards : ['<article class="finding clear"><span class="severity">No gaps</span><h3>Passed current automated checks</h3><p>A human decision is still required.</p></article>'])].join("");
 }
 function renderMachine() {

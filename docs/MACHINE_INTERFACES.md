@@ -2,6 +2,8 @@
 
 Wave A provides a local contract spine without changing the five existing governance rules or built-in risk semantics.
 
+The static browser publishes `web/machine-interface.json` as its versioned machine front door. It points to the generated browser template and sample, canonical repository contracts, CLI commands, outputs, Decision Pack manifest, governance handoff, and the non-authorizing boundary.
+
 ## Commands
 
 ```text
