@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.3.0] - 2026-08-29 - Assurance & Accountability Profiles
+
+- Added one common deterministic, non-authorizing profile result spine and registry-driven `gag profile` CLI.
+- Added Auditable AI release-candidate, synthetic Quantum-AI convergence research, and experimental CISO accountability profiles.
+- Added a local-only browser Profile Result viewer, machine discovery, synthetic fixtures, and bounded verification coverage while preserving Contract v1 and the primary Decision Pack runtime.
+
 ## [2.2.0] - 2026-08-29 - AI Sovereignty Control Layer
 
 - Released the local-first browser, machine interface, contract-generated templates, and first-time-use improvements that accumulated on `main` after v2.1.0.

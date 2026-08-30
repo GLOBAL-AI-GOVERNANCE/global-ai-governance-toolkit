@@ -9,6 +9,7 @@ from pathlib import Path
 from automation.scripts.contract_verifier import verify_output_directory
 from automation.scripts.inventory_normalizer import normalize_file
 from automation.scripts.run_governance_checks import run_pipeline
+from automation.scripts.run_profile import run_profile
 
 from . import __version__
 
@@ -51,6 +52,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Verify machine contracts and Decision Pack integrity.",
     )
     verify.add_argument("output_directory", type=Path)
+    profile = commands.add_parser("profile", help="Run an optional non-authorizing assurance/accountability profile.")
+    profile.add_argument("profile_id")
+    profile.add_argument("input", type=Path)
+    profile.add_argument("--outdir", type=Path, required=True)
+    profile.add_argument("--decision-pack-manifest", type=Path)
+    profile.add_argument("--evaluation-time")
     return parser
 
 
@@ -71,6 +78,9 @@ def main() -> None:
                 evaluation_time=args.evaluation_time,
                 target_repository=args.target_repository,
             )
+        elif args.command == "profile":
+            code, _ = run_profile(args.profile_id, args.input, args.outdir, args.decision_pack_manifest, args.evaluation_time)
+            raise SystemExit(code)
         else:
             verify_output_directory(args.output_directory)
     except (OSError, ValueError) as exc:

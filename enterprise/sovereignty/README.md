@@ -2,7 +2,7 @@
 
 Part of Global AI Governance Toolkit — v2.2.0 AI Sovereignty Control Layer.
 
-This module turns AI sovereignty from strategy language into deployable controls. It answers one question for every AI system: **who ends up owning the value this system creates?**
+This module turns AI sovereignty from strategy language into implementable governance controls. It answers one question for every AI system: **who ends up owning the value this system creates?**
 
 ## Contents
 

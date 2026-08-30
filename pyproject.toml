@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "global-ai-governance-toolkit"
-version = "2.2.0"
+version = "2.3.0"
 description = "Local-first AI governance reference tooling"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -21,6 +21,7 @@ include = ["gag_toolkit*", "automation*"]
 [tool.setuptools.package-data]
 automation = [
   "contracts/**/*.json",
+  "profiles/**/*.json",
   "policy-as-code/*.yaml",
   "schemas/*.json",
 ]
