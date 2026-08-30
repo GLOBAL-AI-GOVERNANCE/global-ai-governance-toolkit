@@ -11,6 +11,7 @@ from pathlib import Path
 
 from automation.scripts.contract_verifier import validate_instance
 from automation.scripts.run_profile import run_profile
+from automation.profiles.common import canonical_bytes, sha256_bytes
 
 ROOT = Path(__file__).resolve().parents[2]
 AA_PASS = ROOT / "automation/assurance/auditable-ai/fixtures/pass.json"
@@ -36,6 +37,14 @@ class ProfileTests(unittest.TestCase):
         path = Path(temporary.name) / "case.json"; path.write_text(json.dumps(data), encoding="utf-8")
         return self.evaluate_profile("auditable-ai-v1", path)[1]
 
+    def mutate_quantum(self, mutation):
+        data = json.loads(Q_PASS.read_text(encoding="utf-8")); mutation(data)
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "q.json"; path.write_text(json.dumps(data), encoding="utf-8")
+            code, output = run_profile("quantum-ai-convergence-v0.1", path, Path(td) / "out", evaluation_time=EVAL)
+        self.assertEqual(code, 1)
+        return {item["id"].split(":", 1)[1] for item in output["findings"]}
+
     def test_common_contract_and_deterministic_output(self):
         code, output, first = self.evaluate_profile("auditable-ai-v1", AA_PASS)
         _, _, second = self.evaluate_profile("auditable-ai-v1", AA_PASS)
@@ -60,14 +69,41 @@ class ProfileTests(unittest.TestCase):
         code, output, first = self.evaluate_profile("quantum-ai-convergence-v0.1", Q_PASS)
         _, _, second = self.evaluate_profile("quantum-ai-convergence-v0.1", Q_PASS)
         self.assertEqual(code, 0); self.assertEqual(first, second)
-        self.assertEqual([x["matched_label"] for x in output["details"]["estimates"]], ["A", "B", "C"])
+        self.assertEqual([x["matched_label"] for x in output["details"]["estimates"]], ["A", "B", "C", "D"])
         self.assertIn("not an operational safety threshold", output["details"]["threshold_boundary"])
+        self.assertEqual(output["authority_effect"], "NONE")
+        self.assertEqual(output["details"]["certification_semantics"], "NONE")
+        self.assertEqual(set(output["details"]["evidence_dimensions"]), {"basis", "provenance", "publication_status", "replication_status"})
+        self.assertEqual(output["details"]["replay_taxonomy"], {"deterministic_artifact_replay":"VERIFIED", "statistical_repeatability":"NOT_ASSESSED", "independent_external_reproducibility":"NOT_REPORTED"})
+        validate_instance(output, json.loads(RESULT_SCHEMA.read_text()), base=RESULT_SCHEMA.parent)
 
     def test_quantum_prohibited_claim_fails(self):
         data = json.loads(Q_PASS.read_text()); data["claim"] = "quantum advantage"
         with tempfile.TemporaryDirectory() as td:
             path = Path(td)/"q.json"; path.write_text(json.dumps(data)); code, output = run_profile("quantum-ai-convergence-v0.1", path, Path(td)/"out", evaluation_time=EVAL)
-        self.assertEqual(code, 1); self.assertTrue(any("PROHIBITED_CLAIM" in x["id"] for x in output["findings"]))
+        self.assertEqual(code, 1); self.assertTrue(any("UNSUPPORTED_CLAIM" in x["id"] for x in output["findings"]))
+
+    def test_quantum_measurement_and_quality_hazards(self):
+        cases = [("MISSING_MEASUREMENTS",lambda d:d.update(measurements=[])),("MALFORMED_MEASUREMENT",lambda d:d["measurements"][0].update(value="bad")),("MISSING_MEASUREMENT_DECLARED",lambda d:d["quality"].update(missing_count=1)),("SATURATION",lambda d:d["quality"].update(saturation=True)),("CLOCK_DRIFT",lambda d:d["quality"].update(clock_drift=.01))]
+        for expected, mutation in cases:
+            with self.subTest(expected=expected): self.assertIn(expected, self.mutate_quantum(mutation))
+
+    def test_quantum_bias_hazards(self):
+        self.assertIn("CONSTANT_BIAS", self.mutate_quantum(lambda d:[x.update(value=r["value"]+.6) for x,r in zip(d["measurements"],d["reference_map"])]))
+        self.assertIn("STEP_BIAS", self.mutate_quantum(lambda d:[x.update(value=r["value"]+(-.6 if i<2 else .6)) for i,(x,r) in enumerate(zip(d["measurements"],d["reference_map"]))]))
+
+    def test_quantum_integrity_and_control_hazards(self):
+        def tamper(d):
+            d["run_evidence"]["input_snapshot"]["seed"] = 999
+            d["evidence_digest"] = sha256_bytes(canonical_bytes(d["run_evidence"]))
+        cases = [("CORRUPTED_REFERENCE_MAP",lambda d:d["reference_map"][0].update(value="bad")),("ALGORITHM_SUBSTITUTION",lambda d:d.update(algorithm="substituted")),("STALE_CALIBRATION",lambda d:d["calibration"].update(status="STALE")),("FALSE_HIGH_CONFIDENCE",lambda d:d["confidence"].update(level="HIGH")),("EVIDENCE_DIGEST_MISMATCH",lambda d:d.update(evidence_digest="sha256:"+"0"*64)),("RUN_EVIDENCE_TAMPERING",tamper),("MISSING_HUMAN_BOUNDARY",lambda d:d.pop("human_boundary")),("AUTHORITY_CHANGING_HANDOFF",lambda d:d["handoff"].update(authority_effect="APPROVAL")),("FALLBACK_UNAVAILABLE",lambda d:d["fallback"].update(available=False))]
+        for expected, mutation in cases:
+            with self.subTest(expected=expected): self.assertIn(expected, self.mutate_quantum(mutation))
+
+    def test_quantum_unsupported_claim_classes(self):
+        claims = {"UNSUPPORTED_CLAIM_OPERATIONAL":"operational deployment","UNSUPPORTED_CLAIM_AUTONOMOUS_ACTION":"autonomous action","UNSUPPORTED_CLAIM_COUNTER_DETECTION":"counter-detection","UNSUPPORTED_CLAIM_REAL_HARDWARE":"real quantum hardware","UNSUPPORTED_CLAIM_QUANTUM_ADVANTAGE":"quantum advantage","UNSUPPORTED_CLAIM_CERTIFICATION":"certification"}
+        for expected, claim in claims.items():
+            with self.subTest(expected=expected): self.assertIn(expected, self.mutate_quantum(lambda d,value=claim:d.update(claim=value)))
 
     def test_ciso_pass_fail_expiry_accountability_and_dependency(self):
         code, passed, _ = self.evaluate_profile("ciso-ai-risk-v0.1", C_PASS)
