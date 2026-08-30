@@ -58,6 +58,14 @@
       <section id="outputs" class="panel"><div class="output-switch" role="tablist"><button data-output="normalized" class="active">Normalized</button><button data-output="findings">Findings</button><button data-output="result">Result</button><button data-output="handoff">Handoff</button></div><pre id="machine-json" tabindex="0"></pre></section>
       <section id="downloads" class="panel"><p>Download the versioned machine contracts, manifest, non-authorizing handoff, or each human review document. Every Decision Pack file is digest-listed in the manifest.</p><div id="download-grid" class="download-grid"></div></section>
     </section>
+    <section class="shell profile-workspace" aria-labelledby="profile-heading">
+      <p class="eyebrow">Optional advanced evidence</p>
+      <h2 id="profile-heading">Profile Result viewer</h2>
+      <p>Render an existing common <code>profile-result.json</code> locally. This view does not evaluate, upload, approve, or alter the result.</p>
+      <label class="file-button">Load profile-result.json<input id="profile-file" type="file" accept=".json,application/json"></label>
+      <div id="profile-error" class="error" role="alert" hidden></div>
+      <div id="profile-result" class="profile-result"></div>
+    </section>
   </main>
   <footer class="shell"><p>Reference implementation · Runs in this browser · Human decision remains pending</p></footer>
   <script type="module" src="./app.mjs"></script>

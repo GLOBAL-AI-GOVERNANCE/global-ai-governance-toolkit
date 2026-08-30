@@ -4,7 +4,7 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
-**Current release line:** v2.2.0 - AI Sovereignty Control Layer.
+**Current release line:** v2.3.0 - Assurance & Accountability Profiles.
 
 ## Start Here
 
@@ -94,6 +94,14 @@ python automation/scripts/sovereignty_check.py \
 ```
 
 The sovereignty checker is additive to the primary Decision Pack runtime. `governance-os.yaml` remains a legacy configuration reference and is not promoted back into runtime policy by this release.
+
+## Advanced Profiles
+
+v2.3.0 adds three optional assurance/accountability profiles to the working public reference Toolkit: Auditable AI, a synthetic Quantum-AI convergence research exercise, and CISO AI risk/accountability. They follow one additive path:
+
+Decision Pack → optional advanced profile → profile result + evidence → accountable human review → optional non-authorizing handoff.
+
+Profiles emit the common deterministic `profile-result.json` with `authority_effect: NONE`. They may reference a Decision Pack but never rewrite it, approve deployment, accept risk, certify compliance, attest provider behavior, establish safety, or transfer authority. See [`automation/profiles/registry.json`](automation/profiles/registry.json).
 
 ## Current Outputs
 
