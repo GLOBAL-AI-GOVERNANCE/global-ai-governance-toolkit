@@ -23,6 +23,8 @@ APPROVED = {
     ("web-flow", "noreply" + "@" + "github.com"),
 }
 TRAILER = re.compile(r"(?im)^(co-authored-by|signed-off-by|reviewed-by|acked-by):\s*(.+)$")
+IDENTITY = re.compile(r"^\s*(.+?)\s*<([^<>]+)>\s*$")
+DEPENDABOT_SIGNOFF = ("dependabot[bot]", "support" + "@" + "github.com")
 LOCAL_PATH = re.compile(r"(?i)(?:[a-z]:[\\/]users[\\/][^\\/\s]+|/" r"users/[^/\s]+|/" r"home/[^/\s]+)")
 EMAIL = re.compile(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", re.I)
 
@@ -46,6 +48,17 @@ def private_hit(value: str, policy: dict) -> bool:
     hashes = set(policy.get("prohibited_sha256_lowercase", []))
     values = [value, *EMAIL.findall(value)]
     return any(hashlib.sha256(x.strip().lower().encode()).hexdigest() in hashes for x in values)
+
+
+def approved_trailer(kind: str, value: str) -> bool:
+    """Accept exact approved identities plus Dependabot's exact service signoff."""
+    match = IDENTITY.fullmatch(value)
+    if not match:
+        return False
+    identity = (match.group(1), match.group(2))
+    if kind.lower() == "signed-off-by" and identity == DEPENDABOT_SIGNOFF:
+        return True
+    return identity in APPROVED
 
 
 def blob_stream(object_ids: list[str]):
@@ -90,7 +103,7 @@ def main() -> int:
         if LOCAL_PATH.search(message):
             findings.add(("PERSONAL_PATH", oid))
         for trailer in TRAILER.finditer(message):
-            if not any(name in trailer.group(2) and email in trailer.group(2) for name, email in APPROVED):
+            if not approved_trailer(trailer.group(1), trailer.group(2)):
                 findings.add(("UNAPPROVED_TRAILER", oid))
     objects = []
     for line in git("rev-list", "--objects", "--all").splitlines():
