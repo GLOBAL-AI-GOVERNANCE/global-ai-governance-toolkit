@@ -10,12 +10,12 @@ import subprocess
 import urllib.request
 from pathlib import Path
 
-CANONICAL = ("Global AI Governance", "288799817+GLOBAL-AI-GOVERNANCE@users.noreply.github.com")
+CANONICAL = ("Global AI Governance", "288799817+GLOBAL-AI-GOVERNANCE@" + "users.noreply.github.com")
 APPROVED_SERVICES = {
-    ("GitHub", "noreply@github.com"),
-    ("web-flow", "noreply@github.com"),
-    ("GitHub Actions", "actions@github.com"),
-    ("github-actions[bot]", "41898282+github-actions[bot]@users.noreply.github.com"),
+    ("GitHub", "noreply@" + "github.com"),
+    ("web-flow", "noreply@" + "github.com"),
+    ("GitHub Actions", "actions@" + "github.com"),
+    ("github-actions[bot]", "41898282+github-actions[bot]@" + "users.noreply.github.com"),
 }
 TRAILER = re.compile(
     r"(?im)^(co-authored-by|signed-off-by|reviewed-by|acked-by|tested-by|reported-by|helped-by|suggested-by):\s*(.+)$"
