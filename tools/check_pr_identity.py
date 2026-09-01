@@ -17,6 +17,8 @@ APPROVED_SERVICES = {
     ("GitHub Actions", "actions@" + "github.com"),
     ("github-actions[bot]", "41898282+github-actions[bot]@" + "users.noreply.github.com"),
 }
+DEPENDABOT = ("dependabot[bot]", "49699333+dependabot[bot]@" + "users.noreply.github.com")
+DEPENDABOT_SIGNOFF = ("dependabot[bot]", "support@" + "github.com")
 TRAILER = re.compile(
     r"(?im)^(co-authored-by|signed-off-by|reviewed-by|acked-by|tested-by|reported-by|helped-by|suggested-by):\s*(.+)$"
 )
@@ -27,19 +29,26 @@ class GateFailure(RuntimeError):
     pass
 
 
-def authorized(name: str, email: str) -> bool:
-    return (name, email) == CANONICAL or (name, email) in APPROVED_SERVICES
+def authorized_commit_identity(name: str, email: str) -> bool:
+    return (name, email) == CANONICAL or (name, email) in APPROVED_SERVICES or (name, email) == DEPENDABOT
+
+
+def authorized_trailer(trailer: str, name: str, email: str) -> bool:
+    identity = (name, email)
+    return identity == CANONICAL or identity in APPROVED_SERVICES or (
+        trailer.lower() == "signed-off-by" and identity == DEPENDABOT_SIGNOFF
+    )
 
 
 def inspect_commit(record: dict[str, str]) -> list[str]:
     reasons = []
-    if not authorized(record["author_name"], record["author_email"]):
+    if not authorized_commit_identity(record["author_name"], record["author_email"]):
         reasons.append("AUTHOR_NOT_AUTHORIZED")
-    if not authorized(record["committer_name"], record["committer_email"]):
+    if not authorized_commit_identity(record["committer_name"], record["committer_email"]):
         reasons.append("COMMITTER_NOT_AUTHORIZED")
     for match in TRAILER.finditer(record["message"]):
         identity = IDENTITY.match(match.group(2))
-        if identity is None or not authorized(identity.group(1), identity.group(2)):
+        if identity is None or not authorized_trailer(match.group(1), identity.group(1), identity.group(2)):
             reasons.append("IDENTITY_TRAILER_NOT_AUTHORIZED")
             break
     return sorted(set(reasons))
