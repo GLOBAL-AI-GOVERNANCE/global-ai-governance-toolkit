@@ -12,8 +12,11 @@ class PublicIdentityGateTests(unittest.TestCase):
     def test_canonical_commit_passes(self):
         self.assertEqual([], gate.inspect_commit(record()))
 
-    def test_bridge_author_blocks(self):
-        self.assertIn("AUTHOR_NOT_AUTHORIZED", gate.inspect_commit(record(an="Bridge Node", ae="bridge@" + "example.invalid")))
+    def test_historical_bridge_identity_blocks_in_all_positions(self):
+        self.assertIn("AUTHOR_NOT_AUTHORIZED", gate.inspect_commit(record(an="Bridge-Node-7", ae="bridge@" + "example.invalid")))
+        self.assertIn("COMMITTER_NOT_AUTHORIZED", gate.inspect_commit(record(cn="Bridge-Node-7", ce="bridge@" + "example.invalid")))
+        value = record(message="Change\n\nCo-authored-by: Bridge-Node-7 <bridge@" + "example.invalid>")
+        self.assertIn("IDENTITY_TRAILER_NOT_AUTHORIZED", gate.inspect_commit(value))
 
     def test_canonical_looking_wrong_numeric_id_blocks(self):
         self.assertIn("AUTHOR_NOT_AUTHORIZED", gate.inspect_commit(record(ae="291729790+GLOBAL-AI-GOVERNANCE@" + "users.noreply.github.com")))
@@ -36,6 +39,28 @@ class PublicIdentityGateTests(unittest.TestCase):
     def test_approved_service_is_bounded(self):
         self.assertEqual([], gate.inspect_commit(record(cn="GitHub", ce="noreply@" + "github.com")))
         self.assertIn("COMMITTER_NOT_AUTHORIZED", gate.inspect_commit(record(cn="GitHub", ce="other@" + "noreply.github.com")))
+
+    def test_authoritative_dependabot_fixture_passes(self):
+        value = record(
+            an=gate.DEPENDABOT[0],
+            ae=gate.DEPENDABOT[1],
+            cn="GitHub",
+            ce="noreply@" + "github.com",
+            message="Bump dependency\n\nSigned-off-by: dependabot[bot] <support@" + "github.com>",
+        )
+        self.assertEqual([], gate.inspect_commit(value))
+
+    def test_dependabot_like_spoof_blocks(self):
+        value = record(an="dependabot[bot]", ae="1+dependabot[bot]@" + "users.noreply.github.com")
+        self.assertIn("AUTHOR_NOT_AUTHORIZED", gate.inspect_commit(value))
+
+    def test_dependabot_support_address_is_trailer_specific(self):
+        value = record(an="dependabot[bot]", ae="support@" + "github.com")
+        self.assertIn("AUTHOR_NOT_AUTHORIZED", gate.inspect_commit(value))
+
+    def test_unknown_service_and_malformed_trailer_block(self):
+        self.assertIn("AUTHOR_NOT_AUTHORIZED", gate.inspect_commit(record(an="unknown[bot]", ae="2+unknown[bot]@" + "users.noreply.github.com")))
+        self.assertIn("IDENTITY_TRAILER_NOT_AUTHORIZED", gate.inspect_commit(record(message="Change\n\nSigned-off-by: malformed")))
 
     def test_fetch_failure_fails_closed(self):
         event = {"number": 1, "repository": {"full_name": "o/r"}, "pull_request": {"base": {"sha": "a" * 40}, "head": {"sha": "b" * 40}}}
