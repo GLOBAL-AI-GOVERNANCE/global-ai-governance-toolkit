@@ -1,0 +1,39 @@
+{
+  "schema_version": "0.1.0",
+  "case_id": "synthetic-001",
+  "agent_id": "synthetic-agent",
+  "sdk": "claimed-provenance-statement",
+  "policy": {
+    "id": "policy-001",
+    "authorized_tools": [
+      "lookup",
+      "publish"
+    ],
+    "approval_required_for": [
+      "publish"
+    ],
+    "valid_from": "2026-10-01T00:00:00Z",
+    "valid_until": "2026-10-31T00:00:00Z",
+    "revoked_at": null
+  },
+  "monitor_status": "ACTIVE",
+  "observation_coverage": "COMPLETE_DECLARED",
+  "actions": [
+    {
+      "id": "a-001",
+      "tool": "lookup",
+      "policy_id": "policy-001",
+      "at": "2026-10-12T12:00:00Z",
+      "control_decision": "ALLOW",
+      "execution_observation": "EXECUTED",
+      "approval": "NOT_REQUIRED",
+      "evidence_ref": "evidence/synthetic-run.txt"
+    }
+  ],
+  "evidence": [
+    {
+      "reference": "evidence/synthetic-run.txt",
+      "sha256": "sha256:d1ccce003f4297ea2743e3a737c42fafc4d0b03d56b2885212f12661143b8f74"
+    }
+  ]
+}
