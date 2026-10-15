@@ -47,3 +47,12 @@ The existing hosted `AI Governance Checks` workflow discovers and runs `automati
 ## Mission Assurance Interoperability Profile
 
 `mission-assurance-v0.1` is an optional Toolkit profile. It assembles submitted evidence references into a staged review. It does not redefine Agent Trust Passport, verified-closure, resilience, administration, or Peace OS semantics. `authority_effect` remains `NONE`. A PASS is a bounded structural check for the selected stage only.
+
+## Machine learning assurance
+
+`machine-learning-assurance-v0.1` is an optional profile over referenced dataset, model, evaluation, drift, and context records. A PASS means those references are structurally consistent for one subject and configuration. It does not mean the model is safe, accurate in operation, approved for deployment, certified, or legally authorized. The profile does not retrain or promote a model.
+
+## Mission assurance challenge
+
+`automation/assurance/mission-assurance/challenge/` holds a synthetic golden thread and a pilot template. The thread exercises the existing mission-assurance profile. It does not add another gate profile. Metric examples are templates with no measured values.
+
