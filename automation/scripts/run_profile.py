@@ -15,6 +15,7 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from automation.profiles.common import canonical_bytes, result
+from automation.scripts.contract_verifier import validate_instance, ContractError
 
 MODULES = {
     "auditable-ai-v1": "automation.profiles.auditable_ai",
@@ -23,9 +24,25 @@ MODULES = {
     "independent-assurance-v0.1": "automation.profiles.independent_assurance",
 }
 
+REGISTRY_PATH = Path(__file__).resolve().parents[1] / "profiles" / "registry.json"
+
 
 def digest(raw: bytes) -> str:
     return "sha256:" + hashlib.sha256(raw).hexdigest()
+
+
+def load_registry() -> dict:
+    return json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
+
+
+def schema_for(profile_id: str) -> dict | None:
+    registry = load_registry()
+    for item in registry.get("profiles", []):
+        if item.get("id") == profile_id:
+            schema_path = Path(__file__).resolve().parents[1] / item.get("input_schema", "")
+            if schema_path.is_file():
+                return json.loads(schema_path.read_text(encoding="utf-8"))
+    return None
 
 
 def run_profile(profile_id: str, input_path: Path, outdir: Path, manifest_path: Path | None = None, evaluation_time: str | None = None) -> tuple[int, dict[str, object]]:
@@ -37,6 +54,14 @@ def run_profile(profile_id: str, input_path: Path, outdir: Path, manifest_path: 
     try: data = json.loads(raw)
     except json.JSONDecodeError as exc: raise ValueError(f"input is not valid JSON: {exc}") from exc
     if not isinstance(data, dict): raise ValueError("profile input root must be an object")
+
+    schema = schema_for(profile_id)
+    if schema is not None:
+        try:
+            validate_instance(data, schema, base=Path(__file__).resolve().parents[1] / "contracts" / "profiles")
+        except ContractError as exc:
+            raise ValueError(f"input fails registered schema: {exc}") from exc
+
     manifest = None
     if manifest_path:
         manifest_raw = manifest_path.read_bytes()
