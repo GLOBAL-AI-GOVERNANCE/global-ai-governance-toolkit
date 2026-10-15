@@ -16,7 +16,12 @@ if __package__ in (None, ""):
 
 from automation.profiles.common import canonical_bytes, result
 
-MODULES = {"auditable-ai-v1": "automation.profiles.auditable_ai", "quantum-ai-convergence-v0.1": "automation.profiles.quantum_ai", "ciso-ai-risk-v0.1": "automation.profiles.ciso_ai_risk"}
+MODULES = {
+    "auditable-ai-v1": "automation.profiles.auditable_ai",
+    "quantum-ai-convergence-v0.1": "automation.profiles.quantum_ai",
+    "ciso-ai-risk-v0.1": "automation.profiles.ciso_ai_risk",
+    "independent-assurance-v0.1": "automation.profiles.independent_assurance",
+}
 
 
 def digest(raw: bytes) -> str:
