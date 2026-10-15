@@ -1,9 +1,12 @@
 """Local, read-only consumer for an explicitly supplied Assurance Context Binding reference.
 
 Does not retrieve external artifacts, transfer authority, or establish operational validity.
+The trusted schema fingerprint is anchored to the pinned foundational commit and is not supplied by the caller.
 """
 from __future__ import annotations
 
+import hashlib
+import json
 from pathlib import Path
 from typing import Any
 
@@ -14,6 +17,8 @@ EXPECTED_SOURCE = "ai-governance-os"
 EXPECTED_TARGET = "global-ai-governance-toolkit"
 EXPECTED_COMMIT = "fad094618e723acec14a8cdc905d1cfcbdf58813"
 EXPECTED_ARTIFACT = "sample-data/assurance-context-binding.json"
+# Canonical JSON SHA-256 of the Assurance Context Binding schema at the pinned commit.
+TRUSTED_SCHEMA_FINGERPRINT = "aef003eb728314aca48ae8f40f813b181b7085f0af530f9f4faca60057050fbb"
 ALLOWED_REFERENCE_KEYS = {
     "schema_version",
     "handoff_id",
@@ -25,6 +30,11 @@ ALLOWED_REFERENCE_KEYS = {
     "reference_only",
     "authority_effect",
 }
+
+
+def _canonical_fingerprint(schema: dict[str, Any]) -> str:
+    canonical = json.dumps(schema, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
 def validate_assurance_context_binding(
@@ -39,6 +49,7 @@ def validate_assurance_context_binding(
     """Validate portfolio reference and binding fixture. Returns non-authorizing result.
 
     Expected subject, configuration digest, and context boundary are required.
+    The supplied schema must match the anchored fingerprint of the pinned foundational schema.
     """
     if not isinstance(portfolio_reference, dict):
         raise ContractError("portfolio reference must be an object")
@@ -64,10 +75,15 @@ def validate_assurance_context_binding(
     if portfolio_reference.get("schema_version") != "1.0.0":
         raise ContractError("portfolio reference schema_version mismatch")
 
+    if not isinstance(binding_schema, dict):
+        raise ContractError("binding schema must be an object")
+    if _canonical_fingerprint(binding_schema) != TRUSTED_SCHEMA_FINGERPRINT:
+        raise ContractError("binding schema does not match trusted pinned foundational schema")
+
     if not isinstance(binding_fixture, dict):
         raise ContractError("binding fixture must be an object")
 
-    # Reuse existing schema validator for the fixture
+    # Reuse existing schema validator for the fixture only after fingerprint match
     try:
         validate_instance(binding_fixture, binding_schema, base=Path("."))
     except ContractError as exc:
