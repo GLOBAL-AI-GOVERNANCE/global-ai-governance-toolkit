@@ -23,6 +23,8 @@
     "deployment_readiness_opinion": { "type": "string" },
     "validity_period": { "type": "string" },
     "revalidation_triggers": { "type": "array" },
+    "material_change": { "type": "boolean" },
+    "unresolved_concern": { "type": "boolean" },
     "authority_effect": {
       "type": "string",
       "const": "NONE"
