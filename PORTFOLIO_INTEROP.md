@@ -43,3 +43,7 @@ It reuses the source-locked Context Binding validator. It does not generate Deci
 ## Verification
 
 The existing hosted `AI Governance Checks` workflow discovers and runs `automation/tests/test_portfolio_handoff.py` with the rest of the automation test suite.
+
+## Mission Assurance Interoperability Profile
+
+`mission-assurance-v0.1` is an optional Toolkit profile. It assembles submitted evidence references into a staged review. It does not redefine Agent Trust Passport, verified-closure, resilience, administration, or Peace OS semantics. `authority_effect` remains `NONE`. A PASS is a bounded structural check for the selected stage only.

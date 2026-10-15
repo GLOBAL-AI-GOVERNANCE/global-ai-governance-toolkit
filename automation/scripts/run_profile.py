@@ -22,6 +22,7 @@ MODULES = {
     "quantum-ai-convergence-v0.1": "automation.profiles.quantum_ai",
     "ciso-ai-risk-v0.1": "automation.profiles.ciso_ai_risk",
     "independent-assurance-v0.1": "automation.profiles.independent_assurance",
+    "mission-assurance-v0.1": "automation.profiles.mission_assurance",
 }
 
 ROOT = Path(__file__).resolve().parents[2]
