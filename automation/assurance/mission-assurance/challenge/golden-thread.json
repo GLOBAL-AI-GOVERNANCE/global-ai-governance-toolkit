@@ -6,21 +6,88 @@
   "reference_only": true,
   "authority_effect": "NONE",
   "synthetic": true,
-  "steps": [
-    {"id": "normal", "kind": "mission-assurance", "expect": "PASS"},
-    {"id": "adversarial-failure", "kind": "mission-assurance", "drop": "adversarial_assurance_reference", "expect": "FAIL"},
-    {"id": "dependency-failure", "kind": "dependency-exit", "outcome": "FAILED", "expect": "NOT_CURRENT"},
-    {"id": "recovery-failure", "kind": "mission-assurance", "drop": "recovery_reference", "expect": "FAIL"},
-    {"id": "succession-failure", "kind": "mission-assurance", "drop": "succession_reference", "expect": "FAIL"},
-    {"id": "material-change", "kind": "mission-assurance", "material_change": true, "expect": "FAIL"},
-    {"id": "initial-result-after-material-change", "kind": "currency", "expect": "NOT_CURRENT"}
+  "automatic_requalification": false,
+  "scenarios": [
+    {"id": "normal", "expect": "PASS"},
+    {"id": "adversarial-failure", "expect": "FAIL", "drop": "adversarial_assurance_reference"},
+    {"id": "dependency-failure", "expect": "NOT_CURRENT", "native_reference": "dependency-exit-failed"},
+    {"id": "recovery-failure", "expect": "FAIL", "drop": "recovery_reference"},
+    {"id": "succession-failure", "expect": "NOT_CURRENT", "native_reference": "succession-evidence-failed"},
+    {"id": "material-change", "expect": "FAIL", "material_change": true},
+    {"id": "initial-result-after-material-change", "expect": "NOT_CURRENT"}
   ],
-  "references": {
-    "foundations": "dataset, model, evaluation, drift, unknown, and context records",
-    "agent_trust_passport": "agentic-ai-governance passport reference",
-    "verified_closure": "verified-vulnerability-governance closure reference",
-    "recovery_and_dependency_exit": "ai-cyber-resilience-framework recovery and dependency-exit references",
-    "peace_disposition": "peace-os operating-disposition reference"
-  },
-  "limitations": ["synthetic thread; referenced native artifacts are not copied or independently authenticated"]
+  "references": [
+    {
+      "reference_id": "succession-evidence-failed",
+      "source_repository": "ai-governance-os",
+      "source_commit": "e6e66af80d13eb014fd8ad96d97fb24873b856a4",
+      "artifact_path": "sample-data/succession-evidence-failed.json",
+      "artifact_type": "succession-evidence-record",
+      "artifact_digest": "sha256:5d0d6a48de070e1934e519886d82d8ee2836d31f1d42ec61b6b1a7fc21384a3d",
+      "subject_id": "synthetic-capability-alpha",
+      "configuration_digest": "sha256:2b1900cb48cdd75c750cad9cd03620fd34162af8fe45dbc2161ebbbb91e2c89d",
+      "expected_outcome": "FAILED",
+      "authority_effect": "NONE"
+    },
+    {
+      "reference_id": "dependency-exit-failed",
+      "source_repository": "ai-cyber-resilience-framework",
+      "source_commit": "e14e69d81a8078b42cd83df763c8087f6d6de478",
+      "artifact_path": "examples/dependency-exit/synthetic-exit-failed.json",
+      "artifact_type": "dependency-exit-evidence",
+      "artifact_digest": "sha256:eebf99ee7c4e77967e6a994bac4eddf408904dcdd9d7a2f4ceb04cb34eedc256",
+      "subject_id": "synthetic-subject-alpha",
+      "configuration_digest": "sha256:abababababababababababababababababababababababababababababababab",
+      "expected_outcome": "FAILED",
+      "authority_effect": "NONE"
+    },
+    {
+      "reference_id": "evidence-object",
+      "source_repository": "ai-governance-os",
+      "source_commit": "e6e66af80d13eb014fd8ad96d97fb24873b856a4",
+      "artifact_path": "sample-data/assurance-kernel/evidence-object.json",
+      "artifact_type": "evidence-object",
+      "artifact_digest": "sha256:c0281692c168a53c14535ebe8b84e70c0fc0cd891287e3b859c9510cfb4bcabc",
+      "subject_id": "synthetic-subject-alpha",
+      "configuration_digest": "sha256:abababababababababababababababababababababababababababababababab",
+      "authority_effect": "NONE"
+    },
+    {
+      "reference_id": "agent-trust-passport",
+      "source_repository": "agentic-ai-governance",
+      "source_commit": "2124aeaadf236303c584ac150a5ea61ca787d3f0",
+      "artifact_path": "examples/passports/unsigned-valid.json",
+      "artifact_type": "agent-trust-passport",
+      "artifact_digest": "sha256:c63be29f6cf63061b8791b22f12596b13b5e010c95fb791f4e02e018461d973d",
+      "authority_effect": "NONE"
+    },
+    {
+      "reference_id": "verified-closure",
+      "source_repository": "verified-vulnerability-governance",
+      "source_commit": "9eebbb3f316ef6feb42a8c270e4755420474a1be",
+      "artifact_path": "examples/governed-remediation/reference.json",
+      "artifact_type": "verified-closure",
+      "artifact_digest": "sha256:97445c8dd25680c1dbbb15b59e397eb6226fffd5632a1b7bd0f532e249b753f0",
+      "authority_effect": "NONE"
+    },
+    {
+      "reference_id": "peace-operating-disposition",
+      "source_repository": "peace-os",
+      "source_commit": "613e393c3b056d75847a267550e3b9b703ba0edf",
+      "artifact_path": "examples/portfolio/operating-disposition-reference.json",
+      "artifact_type": "operating-disposition-reference",
+      "artifact_digest": "sha256:dea4601e4532fbbca047e2f58029c28a918a63504e925740f0dea671fd607692",
+      "authority_effect": "NONE"
+    },
+    {
+      "reference_id": "administration-evidence-boundary",
+      "source_repository": "governed-systems-administration",
+      "source_commit": "1eaa85c415b35cac42ce186b2bb179fc856d0054",
+      "artifact_path": "schemas/administration-evidence-record.schema.json",
+      "artifact_type": "administration-evidence-record",
+      "artifact_digest": "sha256:93547eeffaa181c359d4532e226a0816bb558208e1e294debd0152b2c0f1b0a7",
+      "authority_effect": "NONE"
+    }
+  ],
+  "limitations": ["synthetic thread; native payloads are referenced, not copied or authenticated"]
 }

@@ -76,6 +76,8 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
         _bind(reference, data, findings, key.upper(), evaluation_time)
         evidence.append(_evidence(reference))
     drift = data.get("drift_reference")
+    if data.get("material_drift") is True and not isinstance(drift, dict):
+        _critical(findings, "MISSING_DRIFT_REFERENCE", "Material drift requires a drift reference.", "Supply the drift event reference. Do not invent one for a stable system.")
     if isinstance(drift, dict):
         _bind(drift, data, findings, "DRIFT", evaluation_time)
         evidence.append(_evidence(drift))
@@ -83,6 +85,7 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
     details = {
         "reference_only": True,
         "authority_effect": "NONE",
+        "requalification_required": data.get("material_drift") is True,
         "pass_means": "Structural, identity, configuration-binding, and integrity consistency of submitted references only.",
         "does_not_mean": [
             "the model is safe",

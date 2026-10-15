@@ -33,6 +33,7 @@ class MachineLearningAssuranceTests(unittest.TestCase):
         cases = {
             "stale evidence": {**data, "evidence_stale": True},
             "material drift": {**data, "material_drift": True},
+            "material drift without reference": {k: v for k, v in {**data, "material_drift": True}.items() if k != "drift_reference"},
             "blocking unknown": {**data, "blocking_unknowns": ["external authenticity"]},
             "subject mismatch": {**data, "dataset_reference": {**data["dataset_reference"], "subject_id": "other"}},
             "configuration mismatch": {**data, "model_reference": {**data["model_reference"], "configuration_digest": "sha256:" + "22" * 32}},
@@ -44,6 +45,18 @@ class MachineLearningAssuranceTests(unittest.TestCase):
                     code, result = _run(payload, outdir)
                 self.assertEqual(result["status"], "FAIL", label)
                 self.assertEqual(code, 1)
+                if label.startswith("material drift"):
+                    self.assertTrue(result["details"]["requalification_required"])
+
+    def test_stable_system_omits_drift_reference(self) -> None:
+        data = json.loads(FIXTURE.read_text(encoding="utf-8"))
+        data.pop("drift_reference")
+        data["material_drift"] = False
+        with tempfile.TemporaryDirectory() as outdir:
+            code, result = _run(data, outdir)
+        self.assertEqual(code, 0)
+        self.assertEqual(result["status"], "PASS")
+        self.assertFalse(result["details"]["requalification_required"])
 
     def test_schema_rejects_authority_and_automatic_promotion(self) -> None:
         data = json.loads(FIXTURE.read_text(encoding="utf-8"))
@@ -53,6 +66,7 @@ class MachineLearningAssuranceTests(unittest.TestCase):
             {**data, "automatic_promotion": True},
             {k: v for k, v in data.items() if k != "evaluation_reference"},
             {**data, "dataset_reference": {**data["dataset_reference"], "artifact_digest": "sha256:short"}},
+            {**data, "drift_reference": {**data["drift_reference"], "authority_effect": "AUTHORIZE"}},
         ]
         for payload in cases:
             with tempfile.TemporaryDirectory() as outdir:

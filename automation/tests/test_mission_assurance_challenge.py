@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from automation.scripts.validate_mission_challenge import ChallengeError, validate_thread
 from automation.scripts.run_profile import run_profile
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -26,14 +27,16 @@ class MissionAssuranceChallengeTests(unittest.TestCase):
         self.assertEqual(THREAD["configuration_digest"], MISSION["configuration_digest"])
         self.assertEqual(THREAD["authority_effect"], "NONE")
         self.assertTrue(THREAD["synthetic"])
+        self.assertEqual(validate_thread(THREAD)["authority_effect"], "NONE")
 
     def test_golden_thread_outcomes(self) -> None:
         normal_code, normal = _mission(MISSION)
         self.assertEqual(normal["status"], "PASS")
         self.assertEqual(normal_code, 0)
+        scenarios = {item["id"]: item for item in THREAD["scenarios"]}
         cases = {
-            "adversarial-failure": {k: v for k, v in MISSION.items() if k != "adversarial_assurance_reference"},
-            "recovery-failure": {k: v for k, v in MISSION.items() if k != "recovery_reference"},
+            "adversarial-failure": {k: v for k, v in MISSION.items() if k != scenarios["adversarial-failure"]["drop"]},
+            "recovery-failure": {k: v for k, v in MISSION.items() if k != scenarios["recovery-failure"]["drop"]},
             "succession-failure": {k: v for k, v in MISSION.items() if k != "succession_reference"},
             "material-change": {**MISSION, "material_change": True},
         }
@@ -45,9 +48,17 @@ class MissionAssuranceChallengeTests(unittest.TestCase):
         _code, after = _mission(changed)
         self.assertTrue(after["details"]["requalification_required"])
         self.assertNotEqual(after["status"], normal["status"])
-        dependency = next(step for step in THREAD["steps"] if step["id"] == "dependency-failure")
-        self.assertEqual(dependency["outcome"], "FAILED")
-        self.assertEqual(dependency["expect"], "NOT_CURRENT")
+        refs = {item["reference_id"]: item for item in THREAD["references"]}
+        dependency = refs[scenarios["dependency-failure"]["native_reference"]]
+        succession = refs[scenarios["succession-failure"]["native_reference"]]
+        self.assertEqual(dependency["expected_outcome"], "FAILED")
+        self.assertEqual(succession["expected_outcome"], "FAILED")
+        self.assertTrue(dependency["artifact_path"].endswith("synthetic-exit-failed.json"))
+        self.assertTrue(succession["artifact_path"].endswith("succession-evidence-failed.json"))
+        broken = json.loads(json.dumps(THREAD))
+        broken["references"][0]["authority_effect"] = "AUTHORIZE"
+        with self.assertRaises(ChallengeError):
+            validate_thread(broken)
 
     def test_hostile_cases_do_not_create_authority(self) -> None:
         mutations = {

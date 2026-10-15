@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "machine-learning-assurance.schema.json",
   "title": "Machine Learning Assurance Profile Input",
-  "description": "Optional non-authorizing review of submitted dataset, model, evaluation, drift, and context references. A PASS is structural consistency only. It does not approve deployment or establish real-world accuracy.",
+  "description": "Optional non-authorizing review of submitted dataset, model, evaluation, context, and optional drift references. drift_reference is omitted when material_drift is false. Material drift remains a semantic failure even when a drift reference is present. A PASS is structural consistency only. It does not approve deployment or establish real-world accuracy.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
@@ -322,7 +322,6 @@
     "dataset_reference",
     "model_reference",
     "evaluation_reference",
-    "context_binding_reference",
-    "drift_reference"
+    "context_binding_reference"
   ]
 }
