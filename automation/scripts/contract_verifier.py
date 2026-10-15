@@ -19,6 +19,8 @@ class ContractError(ValueError):
 
 
 def _type_matches(value: Any, expected: str) -> bool:
+    if expected == "number":
+        return isinstance(value, (int, float)) and not isinstance(value, bool)
     return {
         "object": isinstance(value, dict),
         "array": isinstance(value, list),
