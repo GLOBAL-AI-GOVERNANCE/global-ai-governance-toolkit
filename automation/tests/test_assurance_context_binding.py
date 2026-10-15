@@ -40,8 +40,12 @@ BINDING = {
     "reference_only": True,
     "authority_effect": "NONE",
 }
+# Exact schema content from ai-governance-os @ fad094618e723acec14a8cdc905d1cfcbdf58813
 SCHEMA = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "assurance-context-binding.schema.json",
+    "title": "Assurance Context Binding",
+    "description": "Reference-only binding of subject, configuration, and evidence context. Authority effect remains NONE. Material change invalidates prior binding. Does not implement runtime detection.",
     "type": "object",
     "properties": {
         "binding_id": {"type": "string", "minLength": 1},
