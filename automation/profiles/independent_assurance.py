@@ -43,5 +43,15 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
                                 "Evaluation scope is missing.",
                                 "State evaluation scope."))
 
-    details = {"reference_only": True}
+    if data.get("material_change"):
+        findings.append(finding(PROFILE_ID, "MATERIAL_CHANGE", "CRITICAL",
+                                "Prior assurance is stale after material change.",
+                                "Revalidate."))
+
+    if data.get("unresolved_concern"):
+        findings.append(finding(PROFILE_ID, "UNRESOLVED_CONCERN", "HIGH",
+                                "Unresolved material concern affects assurance basis.",
+                                "Investigate and revalidate."))
+
+    details = {"reference_only": True, "validity_firewall": True}
     return findings, evidence, details
