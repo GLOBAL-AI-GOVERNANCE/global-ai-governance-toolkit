@@ -137,6 +137,18 @@ class AssuranceContextBindingTests(unittest.TestCase):
                 with self.assertRaises(ContractError):
                     self._call(PORTFOLIO_REF, bad)
 
+    def test_negative_schema_fingerprint_cases(self) -> None:
+        cases = [
+            ({}, "empty schema"),
+            ({"type": "object"}, "minimal schema"),
+            (dict(SCHEMA, required=[k for k in SCHEMA["required"] if k != "evidence_provenance"]), "removed provenance requirement"),
+            (dict(SCHEMA, properties={**SCHEMA["properties"], "authority_effect": {"type": "string"}}), "weakened authority constant"),
+        ]
+        for bad_schema, label in cases:
+            with self.subTest(label=label):
+                with self.assertRaises(ContractError):
+                    self._call(PORTFOLIO_REF, BINDING, schema=bad_schema)
+
 
 if __name__ == "__main__":
     unittest.main()
