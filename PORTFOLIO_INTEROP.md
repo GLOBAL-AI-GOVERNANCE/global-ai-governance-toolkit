@@ -26,6 +26,14 @@ The handoff has `authority_effect: NONE`.
 
 Receiving repositories must validate the references they consume. They must not infer that the handoff itself approves deployment, closes a vulnerability, grants action authority, or proves a control effective.
 
+## Assurance Context Binding consumer
+
+`automation/interoperability/assurance_context_binding.py` provides a local, opt-in validator for an explicitly supplied portfolio reference and Assurance Context Binding fixture.
+
+It checks the canonical foundation-to-toolkit handoff, pinned source commit, artifact path, schema conformance, subject/configuration/context match, reference_only, and authority_effect NONE.
+
+It does not retrieve external artifacts, establish external authenticity, or confer operational validity. authority_effect remains NONE.
+
 ## Verification
 
 The existing hosted `AI Governance Checks` workflow discovers and runs `automation/tests/test_portfolio_handoff.py` with the rest of the automation test suite.
