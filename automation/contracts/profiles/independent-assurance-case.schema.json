@@ -25,6 +25,10 @@
     "revalidation_triggers": { "type": "array" },
     "material_change": { "type": "boolean" },
     "unresolved_concern": { "type": "boolean" },
+    "expired": { "type": "boolean" },
+    "evaluator_conflict": { "type": "boolean" },
+    "high_consequence": { "type": "boolean" },
+    "shutdown_evidence_present": { "type": "boolean" },
     "authority_effect": {
       "type": "string",
       "const": "NONE"
