@@ -7,6 +7,7 @@ from __future__ import annotations
 import hashlib
 import json
 import unittest
+from pathlib import Path
 
 from automation.interoperability.decision_pack_context_consistency import (
     validate_decision_pack_context_consistency,
@@ -89,37 +90,17 @@ HANDOFF = {
     "review_boundary": "Human review required before any consequential action.",
     "configuration_ref": BINDING["configuration_digest"],
 }
-HANDOFF_SCHEMA = {
-    "type": "object",
-    "additionalProperties": False,
-    "properties": {
-        "schema_version": {"const": "1.0.0"},
-        "handoff_id": {"type": "string", "minLength": 1},
-        "source_repository": {"const": "global-ai-governance-toolkit"},
-        "source_artifact_type": {"const": "AI_GOVERNANCE_DECISION_PACK_REFERENCE"},
-        "decision_pack_id": {"type": "string", "minLength": 1},
-        "system_id": {"type": "string", "minLength": 1},
-        "target_repository": {"type": "string", "minLength": 1},
-        "artifact_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
-        "evidence_refs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": True},
-        "authority_refs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": True},
-        "authority_effect": {"const": "NONE"},
-        "review_boundary": {"type": "string", "minLength": 1},
-        "configuration_ref": {"type": ["string", "null"]},
-    },
-    "required": [
-        "schema_version", "handoff_id", "source_repository", "source_artifact_type",
-        "decision_pack_id", "system_id", "target_repository", "artifact_digest",
-        "evidence_refs", "authority_refs", "authority_effect", "review_boundary",
-    ],
-}
+# Minimal trusted schema content for tests (must match the checked-in file for positive cases)
+TRUSTED_HANDOFF_SCHEMA = json.loads(
+    (Path(__file__).resolve().parents[1] / "contracts" / "governance-decision-handoff.schema.json").read_text(encoding="utf-8")
+)
 
 
 class DecisionPackContextConsistencyTests(unittest.TestCase):
-    def _call(self, handoff=HANDOFF, manifest=MANIFEST, portfolio=PORTFOLIO_REF, binding=BINDING, schema=BINDING_SCHEMA):
+    def _call(self, handoff=HANDOFF, manifest=MANIFEST, portfolio=PORTFOLIO_REF, binding=BINDING, schema=BINDING_SCHEMA, handoff_schema=None):
         return validate_decision_pack_context_consistency(
             handoff,
-            HANDOFF_SCHEMA,
+            handoff_schema,
             manifest,
             portfolio,
             binding,
@@ -129,11 +110,18 @@ class DecisionPackContextConsistencyTests(unittest.TestCase):
             expected_context_boundary=BINDING["context_boundary"],
         )
 
-    def test_positive_consistent(self) -> None:
+    def test_positive_consistent_with_config(self) -> None:
         result = self._call()
-        self.assertTrue(result["consistent"])
+        self.assertTrue(result["subject_and_manifest_consistent"])
+        self.assertTrue(result["configuration_consistent"])
         self.assertEqual(result["authority_effect"], "NONE")
         self.assertTrue(result["reference_only"])
+
+    def test_positive_subject_manifest_only_when_config_null(self) -> None:
+        handoff = {**HANDOFF, "configuration_ref": None}
+        result = self._call(handoff=handoff)
+        self.assertTrue(result["subject_and_manifest_consistent"])
+        self.assertEqual(result["configuration_consistent"], "NOT VERIFIED")
 
     def test_negative_cases(self) -> None:
         cases = [
@@ -145,6 +133,10 @@ class DecisionPackContextConsistencyTests(unittest.TestCase):
             (lambda: self._call(schema={}), "changed foundational schema"),
             (lambda: self._call(handoff={**HANDOFF, "authority_effect": "AUTHORIZE"}), "non-NONE authority"),
             (lambda: self._call(handoff={**HANDOFF, "extra": "bad"}), "unsupported field"),
+            (lambda: self._call(handoff={**HANDOFF, "configuration_ref": "sha256:" + "1" * 64}), "mismatched configuration"),
+            (lambda: self._call(handoff_schema={}), "empty handoff schema"),
+            (lambda: self._call(handoff_schema={"type": "object"}), "permissive handoff schema"),
+            (lambda: self._call(manifest="not-bytes"), "non-byte manifest"),  # type: ignore[arg-type]
         ]
         for caller, label in cases:
             with self.subTest(label=label):
