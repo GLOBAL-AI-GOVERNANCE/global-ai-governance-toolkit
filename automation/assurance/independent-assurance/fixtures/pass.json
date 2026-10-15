@@ -1,0 +1,18 @@
+{
+  "subject_id": "system-001",
+  "version": "1.0.0",
+  "configuration_digest": "sha256:abc",
+  "evaluator": {
+    "identity": "evaluator-001",
+    "interests_disclosed": true
+  },
+  "scope": "task performance and safety",
+  "method": "bounded evaluation",
+  "findings": [],
+  "limitations": "none identified",
+  "residual_risk": "low",
+  "deployment_readiness_opinion": "supports review",
+  "validity_period": "90d",
+  "revalidation_triggers": ["material change"],
+  "authority_effect": "NONE"
+}
