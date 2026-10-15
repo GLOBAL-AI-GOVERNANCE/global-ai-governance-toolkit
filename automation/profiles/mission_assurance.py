@@ -94,6 +94,33 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
         for item in data["authority_data_references"]:
             _bind(item, data, findings, "AUTHORITY_DATA")
 
+    stage_keys = {
+        1: ["baseline_reference"],
+        2: ["authority_data_references"],
+        3: ["qualification_reference"],
+        4: ["adversarial_assurance_reference"],
+        5: ["human_readiness_reference"],
+        6: ["operational_acceptance_reference"],
+        7: ["degraded_mode_reference", "recovery_reference", "support_owner_reference"],
+        8: ["succession_reference"],
+    }
+    seen = set()
+    for index in range(1, required_through + 1):
+        for key in stage_keys.get(index, []):
+            value = data.get(key)
+            items = value if isinstance(value, list) else [value]
+            for item in items:
+                if not isinstance(item, dict):
+                    continue
+                reference = "/".join(str(item.get(field, "")) for field in ("source", "artifact_type", "artifact_id", "schema_version"))
+                sha = str(item.get("artifact_digest", ""))
+                marker = (reference, sha)
+                if marker in seen:
+                    continue
+                seen.add(marker)
+                evidence.append({"type": "ARTIFACT_ID", "reference": reference, "sha256": sha})
+    evidence.sort(key=lambda item: (item["type"], item["reference"], item["sha256"]))
+
     details = {
         "reference_only": True,
         "authority_effect": "NONE",

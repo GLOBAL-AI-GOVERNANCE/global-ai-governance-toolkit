@@ -6,45 +6,565 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "mission_id": {"type": "string", "minLength": 1},
-    "mission_objective": {"type": "string", "minLength": 1},
-    "subject_id": {"type": "string", "minLength": 1},
-    "configuration_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
-    "accountable_human_ref": {"type": "string", "minLength": 1},
-    "target_stage": {"type": "string", "enum": ["G0", "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"]},
-    "reference_only": {"type": "boolean", "const": true},
-    "human_decision_required": {"type": "boolean", "const": true},
-    "authority_effect": {"type": "string", "const": "NONE"},
-    "known_unknowns": {"type": "array", "items": {"type": "string", "minLength": 1}},
-    "blocking_unknowns": {"type": "array", "items": {"type": "string", "minLength": 1}},
-    "material_change": {"type": "boolean"},
-    "baseline_reference": {"$ref": "#/$defs/evidence"},
-    "authority_data_references": {"type": "array", "items": {"$ref": "#/$defs/evidence"}},
-    "qualification_reference": {"$ref": "#/$defs/evidence"},
-    "adversarial_assurance_reference": {"$ref": "#/$defs/evidence"},
-    "human_readiness_reference": {"$ref": "#/$defs/evidence"},
-    "operational_acceptance_reference": {"$ref": "#/$defs/evidence"},
-    "degraded_mode_reference": {"$ref": "#/$defs/evidence"},
-    "recovery_reference": {"$ref": "#/$defs/evidence"},
-    "support_owner_reference": {"$ref": "#/$defs/evidence"},
-    "succession_reference": {"$ref": "#/$defs/evidence"}
-  },
-  "required": ["mission_id", "mission_objective", "subject_id", "configuration_digest", "accountable_human_ref", "target_stage", "reference_only", "human_decision_required", "authority_effect", "known_unknowns", "blocking_unknowns", "material_change"],
-  "$defs": {
-    "evidence": {
+    "mission_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mission_objective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subject_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "configuration_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "accountable_human_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_stage": {
+      "type": "string",
+      "enum": [
+        "G0",
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "G5",
+        "G6",
+        "G7",
+        "G8"
+      ]
+    },
+    "reference_only": {
+      "type": "boolean",
+      "const": true
+    },
+    "human_decision_required": {
+      "type": "boolean",
+      "const": true
+    },
+    "authority_effect": {
+      "type": "string",
+      "const": "NONE"
+    },
+    "known_unknowns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "blocking_unknowns": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "material_change": {
+      "type": "boolean"
+    },
+    "baseline_reference": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["source", "artifact_type", "artifact_id", "schema_version", "subject_id", "configuration_digest", "artifact_digest", "authority_effect"],
+      "required": [
+        "source",
+        "artifact_type",
+        "artifact_id",
+        "schema_version",
+        "subject_id",
+        "configuration_digest",
+        "artifact_digest",
+        "authority_effect"
+      ],
       "properties": {
-        "source": {"type": "string", "minLength": 1},
-        "artifact_type": {"type": "string", "minLength": 1},
-        "artifact_id": {"type": "string", "minLength": 1},
-        "schema_version": {"type": "string", "minLength": 1},
-        "subject_id": {"type": "string", "minLength": 1},
-        "configuration_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
-        "artifact_digest": {"type": "string", "pattern": "^sha256:[a-f0-9]{64}$"},
-        "authority_effect": {"type": "string", "const": "NONE"}
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configuration_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "authority_effect": {
+          "type": "string",
+          "const": "NONE"
+        }
+      }
+    },
+    "authority_data_references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source",
+          "artifact_type",
+          "artifact_id",
+          "schema_version",
+          "subject_id",
+          "configuration_digest",
+          "artifact_digest",
+          "authority_effect"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifact_type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "artifact_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "schema_version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subject_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "configuration_digest": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          },
+          "artifact_digest": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          },
+          "authority_effect": {
+            "type": "string",
+            "const": "NONE"
+          }
+        }
+      }
+    },
+    "qualification_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "artifact_type",
+        "artifact_id",
+        "schema_version",
+        "subject_id",
+        "configuration_digest",
+        "artifact_digest",
+        "authority_effect"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configuration_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "authority_effect": {
+          "type": "string",
+          "const": "NONE"
+        }
+      }
+    },
+    "adversarial_assurance_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "artifact_type",
+        "artifact_id",
+        "schema_version",
+        "subject_id",
+        "configuration_digest",
+        "artifact_digest",
+        "authority_effect"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configuration_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "authority_effect": {
+          "type": "string",
+          "const": "NONE"
+        }
+      }
+    },
+    "human_readiness_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "artifact_type",
+        "artifact_id",
+        "schema_version",
+        "subject_id",
+        "configuration_digest",
+        "artifact_digest",
+        "authority_effect"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configuration_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "authority_effect": {
+          "type": "string",
+          "const": "NONE"
+        }
+      }
+    },
+    "operational_acceptance_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "artifact_type",
+        "artifact_id",
+        "schema_version",
+        "subject_id",
+        "configuration_digest",
+        "artifact_digest",
+        "authority_effect"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configuration_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "authority_effect": {
+          "type": "string",
+          "const": "NONE"
+        }
+      }
+    },
+    "degraded_mode_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "artifact_type",
+        "artifact_id",
+        "schema_version",
+        "subject_id",
+        "configuration_digest",
+        "artifact_digest",
+        "authority_effect"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configuration_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "authority_effect": {
+          "type": "string",
+          "const": "NONE"
+        }
+      }
+    },
+    "recovery_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "artifact_type",
+        "artifact_id",
+        "schema_version",
+        "subject_id",
+        "configuration_digest",
+        "artifact_digest",
+        "authority_effect"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configuration_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "authority_effect": {
+          "type": "string",
+          "const": "NONE"
+        }
+      }
+    },
+    "support_owner_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "artifact_type",
+        "artifact_id",
+        "schema_version",
+        "subject_id",
+        "configuration_digest",
+        "artifact_digest",
+        "authority_effect"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configuration_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "authority_effect": {
+          "type": "string",
+          "const": "NONE"
+        }
+      }
+    },
+    "succession_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "artifact_type",
+        "artifact_id",
+        "schema_version",
+        "subject_id",
+        "configuration_digest",
+        "artifact_digest",
+        "authority_effect"
+      ],
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subject_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configuration_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "artifact_digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "authority_effect": {
+          "type": "string",
+          "const": "NONE"
+        }
       }
     }
-  }
+  },
+  "required": [
+    "mission_id",
+    "mission_objective",
+    "subject_id",
+    "configuration_digest",
+    "accountable_human_ref",
+    "target_stage",
+    "reference_only",
+    "human_decision_required",
+    "authority_effect",
+    "known_unknowns",
+    "blocking_unknowns",
+    "material_change"
+  ]
 }
