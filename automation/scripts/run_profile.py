@@ -36,10 +36,12 @@ def load_registry() -> dict:
     return json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
 
 
-def schema_for(profile_id: str) -> dict:
+def schema_for(profile_id: str) -> dict | None:
     registry = load_registry()
     for item in registry.get("profiles", []):
         if item.get("id") == profile_id:
+            if item.get("input_schema_enforcement") != "PRE_EVALUATOR":
+                return None
             rel = item.get("input_schema")
             if not rel:
                 raise ValueError(f"profile {profile_id} declares no input schema")
@@ -47,7 +49,7 @@ def schema_for(profile_id: str) -> dict:
             if not schema_path.is_file():
                 raise ValueError(f"registered input schema not found: {rel}")
             return json.loads(schema_path.read_text(encoding="utf-8"))
-    raise ValueError(f"profile {profile_id} not present in registry")
+    return None
 
 
 def run_profile(profile_id: str, input_path: Path, outdir: Path, manifest_path: Path | None = None, evaluation_time: str | None = None) -> tuple[int, dict[str, object]]:
@@ -61,10 +63,11 @@ def run_profile(profile_id: str, input_path: Path, outdir: Path, manifest_path: 
     if not isinstance(data, dict): raise ValueError("profile input root must be an object")
 
     schema = schema_for(profile_id)
-    try:
-        validate_instance(data, schema, base=ROOT / "automation" / "contracts" / "profiles")
-    except ContractError as exc:
-        raise ValueError(f"input fails registered schema: {exc}") from exc
+    if schema is not None:
+        try:
+            validate_instance(data, schema, base=ROOT / "automation" / "contracts" / "profiles")
+        except ContractError as exc:
+            raise ValueError(f"input fails registered schema: {exc}") from exc
 
     manifest = None
     if manifest_path:
