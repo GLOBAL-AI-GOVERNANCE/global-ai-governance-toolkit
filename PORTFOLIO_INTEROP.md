@@ -34,6 +34,12 @@ It checks the canonical foundation-to-toolkit handoff, pinned source commit, art
 
 It does not retrieve external artifacts, establish external authenticity, or confer operational validity. authority_effect remains NONE.
 
+## Decision Pack / Context Binding consistency
+
+`automation/interoperability/decision_pack_context_consistency.py` provides an optional local check that an explicitly supplied Decision Pack handoff and Assurance Context Binding share the same subject identity and that the handoff's artifact digest matches supplied manifest bytes.
+
+It reuses the source-locked Context Binding validator. It does not generate Decision Packs, retrieve external artifacts, or establish authenticity, operational validity, or approval. authority_effect remains NONE.
+
 ## Verification
 
 The existing hosted `AI Governance Checks` workflow discovers and runs `automation/tests/test_portfolio_handoff.py` with the rest of the automation test suite.
