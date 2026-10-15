@@ -8,13 +8,39 @@
   "synthetic": true,
   "automatic_requalification": false,
   "scenarios": [
-    {"id": "normal", "expect": "PASS"},
-    {"id": "adversarial-failure", "expect": "FAIL", "drop": "adversarial_assurance_reference"},
-    {"id": "dependency-failure", "expect": "NOT_CURRENT", "native_reference": "dependency-exit-failed"},
-    {"id": "recovery-failure", "expect": "FAIL", "drop": "recovery_reference"},
-    {"id": "succession-failure", "expect": "NOT_CURRENT", "native_reference": "succession-evidence-failed"},
-    {"id": "material-change", "expect": "FAIL", "material_change": true},
-    {"id": "initial-result-after-material-change", "expect": "NOT_CURRENT"}
+    {
+      "id": "normal",
+      "expect": "PASS"
+    },
+    {
+      "id": "adversarial-failure",
+      "expect": "FAIL",
+      "drop": "adversarial_assurance_reference"
+    },
+    {
+      "id": "dependency-failure",
+      "expect": "NOT_CURRENT",
+      "native_reference": "dependency-exit-failed"
+    },
+    {
+      "id": "recovery-failure",
+      "expect": "FAIL",
+      "drop": "recovery_reference"
+    },
+    {
+      "id": "succession-failure",
+      "expect": "NOT_CURRENT",
+      "native_reference": "succession-evidence-failed"
+    },
+    {
+      "id": "material-change",
+      "expect": "FAIL",
+      "material_change": true
+    },
+    {
+      "id": "initial-result-after-material-change",
+      "expect": "NOT_CURRENT"
+    }
   ],
   "references": [
     {
@@ -89,5 +115,48 @@
       "authority_effect": "NONE"
     }
   ],
-  "limitations": ["synthetic thread; native payloads are referenced, not copied or authenticated"]
+  "limitations": [
+    "synthetic thread; native payloads are referenced, not copied or authenticated"
+  ],
+  "subject_bindings": [
+    {
+      "binding_id": "binding-succession-evidence-failed",
+      "reference_id": "succession-evidence-failed",
+      "binding_type": "SUPPORTING_EVIDENCE_FOR",
+      "thread_subject_id": "synthetic-mission-alpha",
+      "thread_configuration_digest": "sha256:899a2dff609159ea1099154f7850696a0bfbabd9d28a5874ab22fda8e256c2f1",
+      "native_subject_id": "synthetic-capability-alpha",
+      "native_configuration_digest": "sha256:2b1900cb48cdd75c750cad9cd03620fd34162af8fe45dbc2161ebbbb91e2c89d",
+      "limitations": [
+        "Synthetic declared binding and not external proof of real-world system identity."
+      ],
+      "authority_effect": "NONE"
+    },
+    {
+      "binding_id": "binding-dependency-exit-failed",
+      "reference_id": "dependency-exit-failed",
+      "binding_type": "SUPPORTING_EVIDENCE_FOR",
+      "thread_subject_id": "synthetic-mission-alpha",
+      "thread_configuration_digest": "sha256:899a2dff609159ea1099154f7850696a0bfbabd9d28a5874ab22fda8e256c2f1",
+      "native_subject_id": "synthetic-subject-alpha",
+      "native_configuration_digest": "sha256:abababababababababababababababababababababababababababababababab",
+      "limitations": [
+        "Synthetic declared binding and not external proof of real-world system identity."
+      ],
+      "authority_effect": "NONE"
+    },
+    {
+      "binding_id": "binding-evidence-object",
+      "reference_id": "evidence-object",
+      "binding_type": "SUPPORTING_EVIDENCE_FOR",
+      "thread_subject_id": "synthetic-mission-alpha",
+      "thread_configuration_digest": "sha256:899a2dff609159ea1099154f7850696a0bfbabd9d28a5874ab22fda8e256c2f1",
+      "native_subject_id": "synthetic-subject-alpha",
+      "native_configuration_digest": "sha256:abababababababababababababababababababababababababababababababab",
+      "limitations": [
+        "Synthetic declared binding and not external proof of real-world system identity."
+      ],
+      "authority_effect": "NONE"
+    }
+  ]
 }

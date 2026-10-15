@@ -37,6 +37,18 @@ REFERENCE_KEYS = {
     "authority_effect",
 }
 OPTIONAL_REFERENCE_KEYS = {"subject_id", "configuration_digest", "expected_outcome"}
+BINDING_TYPES = {"SAME_SUBJECT", "COMPONENT_OF", "SUPPORTING_EVIDENCE_FOR"}
+BINDING_KEYS = {
+    "binding_id",
+    "reference_id",
+    "binding_type",
+    "thread_subject_id",
+    "thread_configuration_digest",
+    "native_subject_id",
+    "native_configuration_digest",
+    "limitations",
+    "authority_effect",
+}
 
 
 class ChallengeError(Exception):
@@ -95,7 +107,66 @@ def validate_thread(thread: dict) -> dict:
     _require(succession in seen and seen[succession]["artifact_path"].endswith("succession-evidence-failed.json"), "succession failure must name the native failed succession record")
     _require(seen[dependency]["expected_outcome"] == "FAILED", "dependency failure cannot be PASS")
     _require(seen[succession]["expected_outcome"] == "FAILED", "succession failure cannot be PASS")
-    return {"valid": True, "authority_effect": "NONE", "scenarios": len(scenarios), "references": len(references)}
+    bindings = thread.get("subject_bindings")
+    _require(isinstance(bindings, list), "subject_bindings required")
+    by_binding = {}
+    seen_binding_ids = set()
+    for binding in bindings:
+        _require(isinstance(binding, dict) and set(binding) == BINDING_KEYS, "unsupported binding fields")
+        _require(isinstance(binding["binding_id"], str) and binding["binding_id"].strip(), "binding_id required")
+        _require(binding["binding_id"] not in seen_binding_ids, "duplicate binding_id")
+        seen_binding_ids.add(binding["binding_id"])
+        ref_id = binding["reference_id"]
+        _require(ref_id in seen, "binding points to a nonexistent reference")
+        _require(ref_id not in by_binding, "duplicate binding")
+        ref = seen[ref_id]
+        _require("subject_id" in ref or "configuration_digest" in ref, "binding requires a subject-bearing reference")
+        _require(binding["binding_type"] != "AUTHORIZES", "binding cannot grant authority")
+        _require(binding["binding_type"] in BINDING_TYPES, "unsupported binding_type")
+        _require(binding["authority_effect"] == "NONE", "binding authority_effect must be NONE")
+        _require(binding["thread_subject_id"] == thread["subject_id"], "thread_subject_id differs from the golden thread")
+        _require(
+            binding["thread_configuration_digest"] == thread["configuration_digest"],
+            "thread_configuration_digest differs from the golden thread",
+        )
+        _require(DIGEST.fullmatch(binding["thread_configuration_digest"]), "thread_configuration_digest malformed")
+        _require(isinstance(binding["native_subject_id"], str) and binding["native_subject_id"].strip(), "native_subject_id required")
+        _require(DIGEST.fullmatch(binding["native_configuration_digest"]), "native_configuration_digest malformed")
+        if "subject_id" in ref:
+            _require(binding["native_subject_id"] == ref["subject_id"], "native_subject_id differs from the reference")
+        if "configuration_digest" in ref:
+            _require(
+                binding["native_configuration_digest"] == ref["configuration_digest"],
+                "native_configuration_digest differs from the reference",
+            )
+        if binding["binding_type"] == "SAME_SUBJECT":
+            _require(
+                binding["native_subject_id"] == binding["thread_subject_id"]
+                and binding["native_configuration_digest"] == binding["thread_configuration_digest"],
+                "SAME_SUBJECT declared while identifiers or configurations differ",
+            )
+            _require(isinstance(binding["limitations"], list), "limitations must be an array")
+        else:
+            limitations = binding["limitations"]
+            _require(isinstance(limitations, list) and limitations, "limitations are missing")
+            _require(all(isinstance(item, str) and item.strip() for item in limitations), "limitations malformed")
+            text = " ".join(limitations).lower()
+            _require("synthetic declared binding" in text, "limitation must state synthetic declared binding")
+            _require("not external proof" in text, "limitation must deny external proof of real-world system identity")
+        by_binding[ref_id] = binding
+    for ref_id, ref in seen.items():
+        if "subject_id" in ref or "configuration_digest" in ref:
+            _require(ref_id in by_binding, "reference with subject/configuration lacks a binding")
+    for scenario_id in ("dependency-failure", "succession-failure"):
+        native_ref = by_id[scenario_id].get("native_reference")
+        _require(native_ref in by_binding, "unbound failure scenario")
+    return {
+        "valid": True,
+        "authority_effect": "NONE",
+        "scenarios": len(scenarios),
+        "references": len(references),
+        "bindings": len(bindings),
+    }
 
 
 def validate_thread_file(path: Path | None = None) -> dict:

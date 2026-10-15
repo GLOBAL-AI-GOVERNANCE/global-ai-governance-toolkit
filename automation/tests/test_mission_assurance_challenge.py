@@ -60,6 +60,126 @@ class MissionAssuranceChallengeTests(unittest.TestCase):
         with self.assertRaises(ChallengeError):
             validate_thread(broken)
 
+    def test_subject_bindings_are_explicit(self) -> None:
+        result = validate_thread(THREAD)
+        self.assertEqual(result["authority_effect"], "NONE")
+        self.assertEqual(result["bindings"], 3)
+        self.assertTrue(THREAD["synthetic"])
+        self.assertFalse(THREAD["automatic_requalification"])
+        bindings = {item["reference_id"]: item for item in THREAD["subject_bindings"]}
+        subject_refs = [
+            item for item in THREAD["references"]
+            if "subject_id" in item or "configuration_digest" in item
+        ]
+        self.assertEqual(set(bindings), {item["reference_id"] for item in subject_refs})
+        for ref in subject_refs:
+            binding = bindings[ref["reference_id"]]
+            self.assertEqual(binding["binding_type"], "SUPPORTING_EVIDENCE_FOR")
+            self.assertEqual(binding["thread_subject_id"], THREAD["subject_id"])
+            self.assertEqual(binding["thread_configuration_digest"], THREAD["configuration_digest"])
+            self.assertEqual(binding["native_subject_id"], ref["subject_id"])
+            self.assertEqual(binding["native_configuration_digest"], ref["configuration_digest"])
+            self.assertNotEqual(binding["native_subject_id"], binding["thread_subject_id"])
+            self.assertEqual(binding["authority_effect"], "NONE")
+            self.assertTrue(binding["limitations"])
+            text = " ".join(binding["limitations"]).lower()
+            self.assertIn("synthetic declared binding", text)
+            self.assertIn("not external proof", text)
+        scenarios = {item["id"]: item for item in THREAD["scenarios"]}
+        self.assertEqual(scenarios["dependency-failure"]["expect"], "NOT_CURRENT")
+        self.assertEqual(scenarios["succession-failure"]["expect"], "NOT_CURRENT")
+        self.assertIn(scenarios["dependency-failure"]["native_reference"], bindings)
+        self.assertIn(scenarios["succession-failure"]["native_reference"], bindings)
+        normal_code, normal = _mission(MISSION)
+        self.assertEqual(normal_code, 0)
+        self.assertEqual(normal["status"], "PASS")
+        adversarial = {k: v for k, v in MISSION.items() if k != scenarios["adversarial-failure"]["drop"]}
+        recovery = {k: v for k, v in MISSION.items() if k != scenarios["recovery-failure"]["drop"]}
+        material = {**MISSION, "material_change": True}
+        for payload in (adversarial, recovery, material):
+            _code, outcome = _mission(payload)
+            self.assertEqual(outcome["status"], "FAIL")
+            self.assertEqual(outcome["authority_effect"], "NONE")
+        _code, after = _mission(material)
+        self.assertTrue(after["details"]["requalification_required"])
+
+    def test_subject_binding_negatives(self) -> None:
+        def reject(mutator, label):
+            broken = json.loads(json.dumps(THREAD))
+            mutator(broken)
+            with self.subTest(label=label):
+                with self.assertRaises(ChallengeError):
+                    validate_thread(broken)
+
+        reject(
+            lambda thread: thread.__setitem__(
+                "subject_bindings",
+                [item for item in thread["subject_bindings"] if item["reference_id"] != "evidence-object"],
+            ),
+            "missing binding",
+        )
+        reject(
+            lambda thread: thread["subject_bindings"].append(
+                dict(thread["subject_bindings"][0], binding_id="binding-duplicate")
+            ),
+            "duplicate binding",
+        )
+        reject(
+            lambda thread: thread["subject_bindings"][0].__setitem__("reference_id", "missing-reference"),
+            "unknown reference",
+        )
+        reject(
+            lambda thread: thread["subject_bindings"][0].__setitem__("thread_subject_id", "other-mission"),
+            "wrong thread subject",
+        )
+        reject(
+            lambda thread: thread["subject_bindings"][0].__setitem__(
+                "thread_configuration_digest", "sha256:" + "11" * 32
+            ),
+            "wrong thread configuration",
+        )
+        reject(
+            lambda thread: thread["subject_bindings"][0].__setitem__("native_subject_id", "other-subject"),
+            "wrong native subject",
+        )
+        reject(
+            lambda thread: thread["subject_bindings"][0].__setitem__(
+                "native_configuration_digest", "sha256:" + "22" * 32
+            ),
+            "wrong native configuration",
+        )
+        reject(
+            lambda thread: thread["subject_bindings"][0].__setitem__("binding_type", "SAME_SUBJECT"),
+            "false SAME_SUBJECT",
+        )
+        reject(
+            lambda thread: thread["subject_bindings"][0].__setitem__("binding_type", "OWNS"),
+            "unsupported relationship",
+        )
+        reject(
+            lambda thread: thread["subject_bindings"][0].__setitem__("binding_type", "AUTHORIZES"),
+            "attempted AUTHORIZES relationship",
+        )
+        reject(
+            lambda thread: thread["subject_bindings"][0].__setitem__("authority_effect", "AUTHORIZE"),
+            "authority transfer",
+        )
+        reject(
+            lambda thread: thread["subject_bindings"][0].__setitem__("limitations", []),
+            "missing limitations",
+        )
+        reject(
+            lambda thread: thread.__setitem__(
+                "subject_bindings",
+                [
+                    item
+                    for item in thread["subject_bindings"]
+                    if item["reference_id"] != "succession-evidence-failed"
+                ],
+            ),
+            "unbound failure scenario",
+        )
+
     def test_hostile_cases_do_not_create_authority(self) -> None:
         mutations = {
             "missing authority reference": {**MISSION, "authority_data_references": []},
