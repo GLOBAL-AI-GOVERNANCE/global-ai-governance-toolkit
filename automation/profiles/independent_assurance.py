@@ -47,13 +47,13 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
     revalidation_required = False
     trigger = None
 
-    if data.get("material_change"):
-        findings.append(finding(PROFILE_ID, "MATERIAL_CHANGE", "CRITICAL",
-                                "Prior assurance is stale after material change.",
+    if data.get("material_change") or data.get("expired"):
+        findings.append(finding(PROFILE_ID, "STALE", "CRITICAL",
+                                "Prior assurance is stale.",
                                 "Revalidate."))
         validity_state = "STALE"
         revalidation_required = True
-        trigger = "MATERIAL_CHANGE"
+        trigger = "MATERIAL_CHANGE" if data.get("material_change") else "EXPIRED"
 
     if data.get("unresolved_concern"):
         findings.append(finding(PROFILE_ID, "UNRESOLVED_CONCERN", "HIGH",
@@ -64,6 +64,23 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
         revalidation_required = True
         if trigger is None:
             trigger = "UNRESOLVED_CONCERN"
+
+    if data.get("evaluator_conflict"):
+        findings.append(finding(PROFILE_ID, "EVALUATOR_CONFLICT", "CRITICAL",
+                                "Material independence conflict.",
+                                "Resolve conflict and revalidate."))
+        validity_state = "STALE"
+        revalidation_required = True
+        trigger = "EVALUATOR_CONFLICT"
+
+    if data.get("high_consequence") and not data.get("shutdown_evidence_present"):
+        findings.append(finding(PROFILE_ID, "SHUTDOWN_EVIDENCE", "CRITICAL",
+                                "High-consequence subject lacks shutdown evidence.",
+                                "Supply verified shutdown evidence."))
+        validity_state = "STALE"
+        revalidation_required = True
+        if trigger is None:
+            trigger = "SHUTDOWN_EVIDENCE"
 
     details = {
         "reference_only": True,
