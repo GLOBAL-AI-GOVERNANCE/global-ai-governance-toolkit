@@ -1,16 +1,15 @@
-"""Positive and negative tests for the Assurance Context Binding local consumer."""
+"""Positive and negative tests for the Assurance Context Binding local consumer.
+
+Uses standard-library unittest so the existing CI discovery command can run them.
+"""
 from __future__ import annotations
 
 import json
-from pathlib import Path
-
-import pytest
+import unittest
 
 from automation.interoperability.assurance_context_binding import validate_assurance_context_binding
 from automation.scripts.contract_verifier import ContractError
 
-ROOT = Path(__file__).resolve().parents[2]
-# Inline expected fixtures for hermetic tests (no external fetch)
 PORTFOLIO_REF = {
     "schema_version": "1.0.0",
     "handoff_id": "foundation-to-toolkit",
@@ -83,56 +82,61 @@ SCHEMA = {
 }
 
 
-def test_positive_validates() -> None:
-    result = validate_assurance_context_binding(
-        PORTFOLIO_REF,
-        BINDING,
-        SCHEMA,
-        expected_subject_id="synthetic-system-alpha",
-        expected_configuration_digest=BINDING["configuration_digest"],
-        expected_context_boundary=BINDING["context_boundary"],
-    )
-    assert result["valid"] is True
-    assert result["authority_effect"] == "NONE"
-    assert result["reference_only"] is True
+class AssuranceContextBindingTests(unittest.TestCase):
+    def _call(self, portfolio_ref, binding, schema=SCHEMA):
+        return validate_assurance_context_binding(
+            portfolio_ref,
+            binding,
+            schema,
+            expected_subject_id="synthetic-system-alpha",
+            expected_configuration_digest=BINDING["configuration_digest"],
+            expected_context_boundary=BINDING["context_boundary"],
+        )
+
+    def test_positive_validates(self) -> None:
+        result = self._call(PORTFOLIO_REF, BINDING)
+        self.assertTrue(result["valid"])
+        self.assertEqual(result["authority_effect"], "NONE")
+        self.assertTrue(result["reference_only"])
+
+    def test_negative_portfolio_reference_cases(self) -> None:
+        cases = [
+            (lambda d: d.update({"source_repository": "other"}), "wrong source"),
+            (lambda d: d.update({"target_repository": "other"}), "wrong target"),
+            (lambda d: d.update({"handoff_id": "wrong"}), "wrong handoff"),
+            (lambda d: d.update({"source_version": "wrong"}), "wrong commit"),
+            (lambda d: d.pop("source_artifact_id", None), "missing field"),
+            (lambda d: d.update({"extra": "bad"}), "unsupported field"),
+            (lambda d: d.update({"reference_only": False}), "false reference_only"),
+            (lambda d: d.update({"authority_effect": "AUTHORIZE"}), "non-NONE authority"),
+            (lambda d: d.update({"schema_version": "2.0.0"}), "schema version mismatch"),
+            (lambda d: d.update({"source_artifact_type": "wrong"}), "wrong artifact type"),
+        ]
+        for mutator, label in cases:
+            with self.subTest(label=label):
+                bad = json.loads(json.dumps(PORTFOLIO_REF))
+                mutator(bad)
+                with self.assertRaises(ContractError):
+                    self._call(bad, BINDING)
+
+    def test_negative_binding_fixture_cases(self) -> None:
+        cases = [
+            (lambda d: d.update({"subject_id": "wrong"}), "incorrect subject"),
+            (lambda d: d.update({"configuration_digest": "sha256:" + "0" * 64}), "digest mismatch"),
+            (lambda d: d.update({"context_boundary": "wrong"}), "context mismatch"),
+            (lambda d: d.update({"configuration_digest": "not-a-digest"}), "malformed digest"),
+            (lambda d: d.update({"reference_only": False}), "false reference_only"),
+            (lambda d: d.update({"authority_effect": "AUTHORIZE"}), "non-NONE authority"),
+            (lambda d: d.pop("evidence_provenance", None), "missing provenance"),
+            (lambda d: d.update({"extra": "bad"}), "unsupported field"),
+        ]
+        for mutator, label in cases:
+            with self.subTest(label=label):
+                bad = json.loads(json.dumps(BINDING))
+                mutator(bad)
+                with self.assertRaises(ContractError):
+                    self._call(PORTFOLIO_REF, bad)
 
 
-@pytest.mark.parametrize(
-    "mutator,label",
-    [
-        (lambda d: d.update({"source_repository": "other"}), "wrong source"),
-        (lambda d: d.update({"target_repository": "other"}), "wrong target"),
-        (lambda d: d.update({"handoff_id": "wrong"}), "wrong handoff"),
-        (lambda d: d.update({"source_version": "wrong"}), "wrong commit"),
-        (lambda d: d.pop("source_artifact_id", None), "missing field"),
-        (lambda d: d.update({"extra": "bad"}), "unsupported field"),
-        (lambda d: d.update({"reference_only": False}), "false reference_only"),
-        (lambda d: d.update({"authority_effect": "AUTHORIZE"}), "non-NONE authority"),
-        (lambda d: d.update({"schema_version": "2.0.0"}), "schema version mismatch"),
-    ],
-)
-def test_negative_portfolio_reference(mutator, label: str) -> None:
-    bad = json.loads(json.dumps(PORTFOLIO_REF))
-    mutator(bad)
-    with pytest.raises(ContractError):
-        validate_assurance_context_binding(bad, BINDING, SCHEMA)
-
-
-@pytest.mark.parametrize(
-    "mutator,label",
-    [
-        (lambda d: d.update({"subject_id": "wrong"}), "incorrect subject"),
-        (lambda d: d.update({"configuration_digest": "sha256:" + "0" * 64}), "digest mismatch"),
-        (lambda d: d.update({"context_boundary": "wrong"}), "context mismatch"),
-        (lambda d: d.update({"configuration_digest": "not-a-digest"}), "malformed digest"),
-        (lambda d: d.update({"reference_only": False}), "false reference_only"),
-        (lambda d: d.update({"authority_effect": "AUTHORIZE"}), "non-NONE authority"),
-        (lambda d: d.pop("evidence_provenance", None), "missing provenance"),
-        (lambda d: d.update({"extra": "bad"}), "unsupported field"),
-    ],
-)
-def test_negative_binding_fixture(mutator, label: str) -> None:
-    bad = json.loads(json.dumps(BINDING))
-    mutator(bad)
-    with pytest.raises(ContractError):
-        validate_assurance_context_binding(PORTFOLIO_REF, bad, SCHEMA)
+if __name__ == "__main__":
+    unittest.main()
