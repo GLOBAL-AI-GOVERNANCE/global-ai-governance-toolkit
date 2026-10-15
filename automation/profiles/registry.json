@@ -53,6 +53,17 @@
       "browser_support": false,
       "authority_effect": "NONE",
       "input_schema_enforcement": "PRE_EVALUATOR"
+    },
+    {
+      "id": "machine-learning-assurance-v0.1",
+      "version": "0.1.0",
+      "maturity": "experimental non-authorizing profile",
+      "purpose": "Check submitted dataset, model, evaluation, drift, and context references for structural consistency.",
+      "input_schema": "automation/contracts/profiles/machine-learning-assurance.schema.json",
+      "result_schema": "automation/contracts/v1/profile-result.schema.json",
+      "browser_support": false,
+      "authority_effect": "NONE",
+      "input_schema_enforcement": "PRE_EVALUATOR"
     }
   ]
 }

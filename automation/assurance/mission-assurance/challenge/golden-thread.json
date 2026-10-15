@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "thread_id": "synthetic-golden-thread-001",
+  "subject_id": "synthetic-mission-alpha",
+  "configuration_digest": "sha256:899a2dff609159ea1099154f7850696a0bfbabd9d28a5874ab22fda8e256c2f1",
+  "reference_only": true,
+  "authority_effect": "NONE",
+  "synthetic": true,
+  "steps": [
+    {"id": "normal", "kind": "mission-assurance", "expect": "PASS"},
+    {"id": "adversarial-failure", "kind": "mission-assurance", "drop": "adversarial_assurance_reference", "expect": "FAIL"},
+    {"id": "dependency-failure", "kind": "dependency-exit", "outcome": "FAILED", "expect": "NOT_CURRENT"},
+    {"id": "recovery-failure", "kind": "mission-assurance", "drop": "recovery_reference", "expect": "FAIL"},
+    {"id": "succession-failure", "kind": "mission-assurance", "drop": "succession_reference", "expect": "FAIL"},
+    {"id": "material-change", "kind": "mission-assurance", "material_change": true, "expect": "FAIL"},
+    {"id": "initial-result-after-material-change", "kind": "currency", "expect": "NOT_CURRENT"}
+  ],
+  "references": {
+    "foundations": "dataset, model, evaluation, drift, unknown, and context records",
+    "agent_trust_passport": "agentic-ai-governance passport reference",
+    "verified_closure": "verified-vulnerability-governance closure reference",
+    "recovery_and_dependency_exit": "ai-cyber-resilience-framework recovery and dependency-exit references",
+    "peace_disposition": "peace-os operating-disposition reference"
+  },
+  "limitations": ["synthetic thread; referenced native artifacts are not copied or independently authenticated"]
+}

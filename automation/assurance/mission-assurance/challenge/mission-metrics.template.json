@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0.0",
+  "template_id": "mission-metrics-template",
+  "synthetic": true,
+  "reference_only": true,
+  "authority_effect": "NONE",
+  "values": {
+    "requirement_to_supported_capability_median": null,
+    "requirement_to_supported_capability_p90": null,
+    "requalification_time": null,
+    "mean_time_to_restore": null,
+    "succession_relief_success": null,
+    "fallback_success": null,
+    "evidence_freshness": null,
+    "unresolved_decision_age": null,
+    "dependency_exit_time": null,
+    "documented_exceptional_intervention": null,
+    "failed_or_declined_missions": null,
+    "comparator_result": null
+  },
+  "limitations": ["template only; no measured values are supplied"]
+}
