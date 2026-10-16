@@ -38,29 +38,53 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
                                 "Evaluator interests not disclosed.",
                                 "Disclose interests."))
 
-    qual = data.get("qualification_evidence") or {}
-    if not qual.get("qualification_id"):
+    qual = data.get("qualification_evidence")
+    if not isinstance(qual, dict):
         findings.append(finding(PROFILE_ID, "QUALIFICATION_MISSING", "HIGH",
-                                "Valid qualification reference is required for positive independent assurance.",
-                                "Supply a Foundations Qualification Evidence Record reference."))
+                                "A submitted qualification summary is required before independent assurance can pass.",
+                                "Supply a bounded Qualification Evidence summary. This profile does not authenticate the native artifact."))
     else:
+        # Inclusive interval: qualified_from <= evaluation_time <= expires_at.
+        # CONDITIONAL is not sufficient. This profile does not prove native authenticity.
         if qual.get("authority_effect") != "NONE":
             findings.append(finding(PROFILE_ID, "QUALIFICATION_AUTHORITY", "CRITICAL",
                                     "Qualification cannot confer authority.",
                                     "Set authority_effect to NONE."))
         if qual.get("outcome") != "QUALIFIED":
             findings.append(finding(PROFILE_ID, "QUALIFICATION_OUTCOME", "CRITICAL",
-                                    "Qualification outcome must be QUALIFIED for positive state.",
-                                    "Provide a QUALIFIED outcome."))
-        if evaluation_time and qual.get("expires_at") and evaluation_time > qual["expires_at"]:
+                                    "Only QUALIFIED satisfies independent assurance. CONDITIONAL is not sufficient.",
+                                    "Supply a QUALIFIED outcome. Do not treat CONDITIONAL as QUALIFIED."))
+        if qual.get("subject_id") != subject:
+            findings.append(finding(PROFILE_ID, "QUALIFICATION_SUBJECT", "CRITICAL",
+                                    "Qualification subject does not match the assurance subject.",
+                                    "Bind the summary to the same subject."))
+        if data.get("configuration_digest") and qual.get("configuration_digest") != data.get("configuration_digest"):
+            findings.append(finding(PROFILE_ID, "QUALIFICATION_CONFIGURATION", "CRITICAL",
+                                    "Qualification configuration does not match the assurance configuration.",
+                                    "Bind the summary to the same configuration."))
+        if qual.get("scope") != data.get("scope"):
+            findings.append(finding(PROFILE_ID, "QUALIFICATION_SCOPE", "CRITICAL",
+                                    "Qualification scope is not compatible with evaluation scope.",
+                                    "Use the same scope. Compatibility in this profile is exact scope match."))
+        start = qual.get("qualified_from")
+        end = qual.get("expires_at")
+        if not (isinstance(start, str) and isinstance(end, str) and start < end):
+            findings.append(finding(PROFILE_ID, "QUALIFICATION_INTERVAL", "CRITICAL",
+                                    "qualified_from must be strictly before expires_at.",
+                                    "Correct the qualification interval."))
+        elif evaluation_time is None or evaluation_time < start:
+            findings.append(finding(PROFILE_ID, "QUALIFICATION_NOT_YET_EFFECTIVE", "CRITICAL",
+                                    "Qualification is not yet effective or evaluation time is absent.",
+                                    "Evaluate inside the inclusive interval. A future qualification is not current."))
+        elif evaluation_time > end:
             findings.append(finding(PROFILE_ID, "QUALIFICATION_EXPIRED", "CRITICAL",
                                     "Qualification is expired.",
-                                    "Requalify."))
-        scope = data.get("scope", "")
-        if qual.get("scope") and scope and qual["scope"] not in scope and scope not in qual["scope"]:
-            findings.append(finding(PROFILE_ID, "QUALIFICATION_SCOPE", "HIGH",
-                                    "Qualification role/scope incompatible with evaluation scope.",
-                                    "Align scope."))
+                                    "Requalify. An expired qualification cannot satisfy readiness."))
+        refs = qual.get("competence_evidence_refs")
+        if not isinstance(refs, list) or not refs:
+            findings.append(finding(PROFILE_ID, "QUALIFICATION_COMPETENCE", "CRITICAL",
+                                    "Competence evidence references are required.",
+                                    "Supply competence_evidence_refs."))
 
     if not data.get("scope"):
         findings.append(finding(PROFILE_ID, "SCOPE", "MEDIUM",
@@ -111,5 +135,7 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
         "validity_state": validity_state,
         "revalidation_required": revalidation_required,
         "trigger": trigger,
+        "qualification_basis": "submitted bounded summary; native Foundations authenticity is not established",
+        "interval": "inclusive",
     }
     return findings, evidence, details

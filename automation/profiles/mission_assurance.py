@@ -121,45 +121,88 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
                 evidence.append({"type": "ARTIFACT_ID", "reference": reference, "sha256": sha})
     evidence.sort(key=lambda item: (item["type"], item["reference"], item["sha256"]))
 
-    # Consume optional Foundations references. Fail closed on supplied adverse evidence.
-    # Absence of a ref is not proof of absence.
+    # Consume optional submitted summaries. Absence is not proof of absence.
+    # Native authenticity is not established here. Inclusive qualification interval.
     for qual in data.get("qualification_evidence_refs") or []:
-        if isinstance(qual, dict):
-            if qual.get("authority_effect") != "NONE":
-                _critical(findings, "QUAL_AUTHORITY", "Qualification cannot confer authority.", "Set NONE.")
-            if qual.get("outcome") == "NOT_QUALIFIED":
-                _critical(findings, "QUAL_NOT_QUALIFIED", "NOT_QUALIFIED cannot satisfy readiness.", "Provide valid qualification.")
-            if evaluation_time and qual.get("expires_at") and evaluation_time > qual.get("expires_at") and qual.get("outcome") in ("QUALIFIED", "CONDITIONAL"):
-                _critical(findings, "QUAL_EXPIRED", "Expired qualification cannot satisfy current readiness.", "Requalify.")
-            if qual.get("subject_id") and qual["subject_id"] != data.get("subject_id"):
-                _critical(findings, "QUAL_SUBJECT", "Qualification subject mismatch.", "Bind correctly.")
+        if not isinstance(qual, dict):
+            _critical(findings, "QUAL_MALFORMED", "Qualification summary must be an object.", "Supply a complete summary.")
+            continue
+        if qual.get("authority_effect") != "NONE":
+            _critical(findings, "QUAL_AUTHORITY", "Qualification cannot confer authority.", "Set authority_effect to NONE.")
+        if qual.get("subject_id") != data.get("subject_id"):
+            _critical(findings, "QUAL_SUBJECT", "Qualification subject does not match the mission subject.", "Bind the same subject.")
+        if qual.get("configuration_digest") != data.get("configuration_digest"):
+            _critical(findings, "QUAL_CONFIGURATION", "Qualification configuration does not match.", "Bind the same configuration.")
+        start = qual.get("qualified_from")
+        end = qual.get("expires_at")
+        outcome = qual.get("outcome")
+        if not (isinstance(start, str) and isinstance(end, str) and start < end):
+            _critical(findings, "QUAL_INTERVAL", "qualified_from must be strictly before expires_at.", "Correct the interval.")
+        elif evaluation_time is None or evaluation_time < start:
+            _critical(findings, "QUAL_NOT_YET", "Qualification is not yet effective.", "Do not treat a future qualification as current.")
+        elif evaluation_time > end:
+            _critical(findings, "QUAL_EXPIRED", "Expired qualification cannot satisfy readiness.", "Requalify.")
+        elif outcome == "QUALIFIED":
+            pass
+        elif outcome == "CONDITIONAL":
+            _critical(findings, "QUAL_CONDITIONAL", "CONDITIONAL qualification cannot satisfy readiness in this profile.", "Do not promote CONDITIONAL to QUALIFIED.")
+        else:
+            _critical(findings, "QUAL_NOT_QUALIFIED", "NOT_QUALIFIED cannot satisfy readiness.", "Supply a current QUALIFIED outcome.")
+        if not qual.get("competence_evidence_refs"):
+            _critical(findings, "QUAL_COMPETENCE", "Competence evidence is required.", "Supply competence_evidence_refs.")
 
     for dec in data.get("unresolved_decision_refs") or []:
-        if isinstance(dec, dict):
-            if dec.get("authority_effect") != "NONE":
-                _critical(findings, "DEC_AUTHORITY", "Decision record cannot confer authority.", "Set NONE.")
-            status = dec.get("status")
-            if evaluation_time and status == "OPEN" and evaluation_time > dec.get("deadline", ""):
-                status = "EXPIRED"
-            if dec.get("blocking") is True and status in ("OPEN", "ESCALATED", "EXPIRED"):
-                _critical(findings, "DEC_BLOCKING", "Blocking decision unresolved or expired cannot satisfy readiness.", "Resolve the decision.")
-            if status == "EXPIRED" and dec.get("blocking"):
-                _critical(findings, "DEC_EXPIRED", "Expired blocking decision cannot satisfy readiness.", "Resolve or withdraw.")
+        if not isinstance(dec, dict):
+            _critical(findings, "DEC_MALFORMED", "Decision summary must be an object.", "Supply a complete summary.")
+            continue
+        if dec.get("authority_effect") != "NONE":
+            _critical(findings, "DEC_AUTHORITY", "Decision record cannot confer authority.", "Set authority_effect to NONE.")
+        if dec.get("subject_id") != data.get("subject_id"):
+            _critical(findings, "DEC_SUBJECT", "Decision subject does not match the mission subject.", "Bind the same subject.")
+        if dec.get("configuration_digest") != data.get("configuration_digest"):
+            _critical(findings, "DEC_CONFIGURATION", "Decision configuration does not match.", "Bind the same configuration.")
+        if not isinstance(dec.get("owner_ref"), str) or not dec.get("owner_ref", "").strip():
+            _critical(findings, "DEC_OWNER", "Decision debt requires an owner.", "Supply owner_ref.")
+        if not isinstance(dec.get("deadline"), str) or not dec.get("deadline"):
+            _critical(findings, "DEC_DEADLINE", "Decision debt requires a governed deadline.", "Supply deadline.")
+        status = dec.get("status")
+        if evaluation_time and status == "OPEN" and isinstance(dec.get("deadline"), str) and evaluation_time > dec["deadline"]:
+            status = "EXPIRED"
+        if status in ("OPEN", "ESCALATED") and not (isinstance(dec.get("escalation_route_ref"), str) and dec["escalation_route_ref"].strip()):
+            _critical(findings, "DEC_ESCALATION", "OPEN or ESCALATED decision requires an escalation route.", "Supply escalation_route_ref.")
+        if dec.get("blocking") is True and status in ("OPEN", "ESCALATED", "EXPIRED"):
+            _critical(findings, "DEC_BLOCKING", "Blocking decision unresolved or expired cannot satisfy readiness.", "Resolve the decision. Silence is not approval.")
+        if status == "RESOLVED" and not (isinstance(dec.get("resolution_reference"), str) and dec["resolution_reference"].strip()):
+            _critical(findings, "DEC_RESOLUTION", "RESOLVED requires resolution_reference.", "Supply the resolution reference. Resolution does not authorize operation.")
+        if status == "WITHDRAWN":
+            # Withdrawal is not approval and does not confer authority.
+            pass
 
     for conc in data.get("protected_concern_disposition_refs") or []:
-        if isinstance(conc, dict):
-            if conc.get("authority_effect") != "NONE":
-                _critical(findings, "CONCERN_AUTHORITY", "Concern disposition cannot confer authority.", "Set NONE.")
-            effect = conc.get("assurance_effect")
-            if effect in ("HOLD", "STALE"):
-                _critical(findings, "CONCERN_EFFECT", f"Protected concern has {effect} effect.", "Address and revalidate.")
-            if conc.get("status") == "ACTIVE" and effect == "HOLD":
-                _critical(findings, "CONCERN_HOLD", "ACTIVE HOLD cannot become authorization.", "Resolve concern.")
-            if conc.get("revalidation_required") is True:
-                # Material concern requires revalidation; already noted via effect
-                pass
-            if conc.get("status") == "CLOSED" and not conc.get("closure_evidence_refs"):
-                _critical(findings, "CONCERN_CLOSURE", "Closure requires bounded evidence reference.", "Supply evidence ref.")
+        if not isinstance(conc, dict):
+            _critical(findings, "CONCERN_MALFORMED", "Concern disposition must be an object.", "Supply a complete public disposition.")
+            continue
+        if conc.get("authority_effect") != "NONE":
+            _critical(findings, "CONCERN_AUTHORITY", "Concern disposition cannot confer authority.", "Set authority_effect to NONE.")
+        if conc.get("subject_id") != data.get("subject_id"):
+            _critical(findings, "CONCERN_SUBJECT", "Concern subject does not match the mission subject.", "Bind the same subject.")
+        if conc.get("configuration_digest") != data.get("configuration_digest"):
+            _critical(findings, "CONCERN_CONFIGURATION", "Concern configuration does not match.", "Bind the same configuration.")
+        effect = conc.get("assurance_effect")
+        if conc.get("revalidation_required") is True:
+            _critical(findings, "CONCERN_REVALIDATION", "Required revalidation prevents a current pass.", "Complete governed revalidation. A disposition does not establish allegation truth.")
+        if effect == "HOLD":
+            _critical(findings, "CONCERN_HOLD", "HOLD cannot pass and cannot become authorization.", "Resolve the disposition.")
+        if effect == "STALE":
+            _critical(findings, "CONCERN_STALE", "STALE cannot pass.", "Revalidate.")
+            if conc.get("revalidation_required") is not True:
+                _critical(findings, "CONCERN_STALE_REVALIDATION", "STALE requires revalidation.", "Set revalidation_required.")
+        if conc.get("status") == "ACTIVE":
+            _critical(findings, "CONCERN_ACTIVE", "An ACTIVE concern is not resolved.", "Do not treat an active disposition as closed.")
+        if conc.get("status") == "CLOSED":
+            refs = conc.get("closure_evidence_refs")
+            if not isinstance(refs, list) or not refs:
+                _critical(findings, "CONCERN_CLOSURE", "Closure requires bounded evidence reference.", "Supply closure_evidence_refs.")
 
     details = {
         "reference_only": True,
@@ -168,6 +211,7 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
         "known_unknowns": known,
         "blocking_unknowns": blocking,
         "requalification_required": data.get("material_change") is True,
+        "native_authenticity": "not established",
         "pass_means": "Selected-stage structural, identity, configuration-binding, and integrity checks only.",
         "does_not_mean": [
             "operational readiness",
@@ -179,6 +223,7 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
             "production approval",
             "endorsement",
             "mission success",
+            "allegation truth",
         ],
     }
     return findings, evidence, details

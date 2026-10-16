@@ -4,7 +4,8 @@
 - Extend independent assurance to require a valid Foundations Qualification Evidence reference for positive state. Qualification remains distinct from identity, interest, conflict, independence, and authority.
 - Allow mission assurance to consume qualification, unresolved-decision, and protected-concern-disposition references. Fail closed on expired/not-qualified, blocking unresolved/expired decisions, and HOLD/STALE concern effects.
 - Absence of a concern or decision reference is not evidence of absence. All outputs remain authority_effect NONE.
-- Add synthetic hostile cases covering developer succession, expired qualification, missing evaluator qualification, decision expiry/escalation, and concern HOLD/closure.
+- Independent assurance accepts only a complete submitted qualification summary. CONDITIONAL, future, and expired qualifications cannot pass. Native authenticity is not established here.
+- Mission fabric reference items are strict. Blocking decision debt, required revalidation, HOLD, and STALE fail closed. Authority effect remains NONE.
 
 
 

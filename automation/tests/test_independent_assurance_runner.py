@@ -14,7 +14,7 @@ class IndependentAssuranceRunnerTest(unittest.TestCase):
             fixture,
             Path("/tmp"),
             None,
-            None,
+            "2026-10-15T00:00:00Z",
         )
         self.assertEqual(code, 0)
         self.assertEqual(result["status"], "PASS")
