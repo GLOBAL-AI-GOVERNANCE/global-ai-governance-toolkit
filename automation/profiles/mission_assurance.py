@@ -121,6 +121,46 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
                 evidence.append({"type": "ARTIFACT_ID", "reference": reference, "sha256": sha})
     evidence.sort(key=lambda item: (item["type"], item["reference"], item["sha256"]))
 
+    # Consume optional Foundations references. Fail closed on supplied adverse evidence.
+    # Absence of a ref is not proof of absence.
+    for qual in data.get("qualification_evidence_refs") or []:
+        if isinstance(qual, dict):
+            if qual.get("authority_effect") != "NONE":
+                _critical(findings, "QUAL_AUTHORITY", "Qualification cannot confer authority.", "Set NONE.")
+            if qual.get("outcome") == "NOT_QUALIFIED":
+                _critical(findings, "QUAL_NOT_QUALIFIED", "NOT_QUALIFIED cannot satisfy readiness.", "Provide valid qualification.")
+            if evaluation_time and qual.get("expires_at") and evaluation_time > qual.get("expires_at") and qual.get("outcome") in ("QUALIFIED", "CONDITIONAL"):
+                _critical(findings, "QUAL_EXPIRED", "Expired qualification cannot satisfy current readiness.", "Requalify.")
+            if qual.get("subject_id") and qual["subject_id"] != data.get("subject_id"):
+                _critical(findings, "QUAL_SUBJECT", "Qualification subject mismatch.", "Bind correctly.")
+
+    for dec in data.get("unresolved_decision_refs") or []:
+        if isinstance(dec, dict):
+            if dec.get("authority_effect") != "NONE":
+                _critical(findings, "DEC_AUTHORITY", "Decision record cannot confer authority.", "Set NONE.")
+            status = dec.get("status")
+            if evaluation_time and status == "OPEN" and evaluation_time > dec.get("deadline", ""):
+                status = "EXPIRED"
+            if dec.get("blocking") is True and status in ("OPEN", "ESCALATED", "EXPIRED"):
+                _critical(findings, "DEC_BLOCKING", "Blocking decision unresolved or expired cannot satisfy readiness.", "Resolve the decision.")
+            if status == "EXPIRED" and dec.get("blocking"):
+                _critical(findings, "DEC_EXPIRED", "Expired blocking decision cannot satisfy readiness.", "Resolve or withdraw.")
+
+    for conc in data.get("protected_concern_disposition_refs") or []:
+        if isinstance(conc, dict):
+            if conc.get("authority_effect") != "NONE":
+                _critical(findings, "CONCERN_AUTHORITY", "Concern disposition cannot confer authority.", "Set NONE.")
+            effect = conc.get("assurance_effect")
+            if effect in ("HOLD", "STALE"):
+                _critical(findings, "CONCERN_EFFECT", f"Protected concern has {effect} effect.", "Address and revalidate.")
+            if conc.get("status") == "ACTIVE" and effect == "HOLD":
+                _critical(findings, "CONCERN_HOLD", "ACTIVE HOLD cannot become authorization.", "Resolve concern.")
+            if conc.get("revalidation_required") is True:
+                # Material concern requires revalidation; already noted via effect
+                pass
+            if conc.get("status") == "CLOSED" and not conc.get("closure_evidence_refs"):
+                _critical(findings, "CONCERN_CLOSURE", "Closure requires bounded evidence reference.", "Supply evidence ref.")
+
     details = {
         "reference_only": True,
         "authority_effect": "NONE",

@@ -13,6 +13,17 @@
   "residual_risk": "low",
   "deployment_readiness_opinion": "supports review",
   "validity_period": "90d",
-  "revalidation_triggers": ["material change"],
-  "authority_effect": "NONE"
+  "revalidation_triggers": [
+    "material change"
+  ],
+  "authority_effect": "NONE",
+  "qualification_evidence": {
+    "qualification_id": "qual-evaluator-001",
+    "principal_ref": "evaluator-001",
+    "role": "independent-evaluator",
+    "scope": "task performance and safety",
+    "expires_at": "2027-10-15T00:00:00Z",
+    "outcome": "QUALIFIED",
+    "authority_effect": "NONE"
+  }
 }

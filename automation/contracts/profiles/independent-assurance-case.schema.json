@@ -32,6 +32,20 @@
     "authority_effect": {
       "type": "string",
       "const": "NONE"
+    },
+    "qualification_evidence": {
+      "type": "object",
+      "description": "Optional reference to a Foundations Qualification Evidence Record. Does not certify truth.",
+      "properties": {
+        "qualification_id": { "type": "string" },
+        "principal_ref": { "type": "string" },
+        "role": { "type": "string" },
+        "scope": { "type": "string" },
+        "expires_at": { "type": "string" },
+        "outcome": { "type": "string", "enum": ["QUALIFIED", "CONDITIONAL", "NOT_QUALIFIED"] },
+        "authority_effect": { "type": "string", "const": "NONE" }
+      },
+      "additionalProperties": false
     }
   },
   "required": ["subject_id", "authority_effect"],

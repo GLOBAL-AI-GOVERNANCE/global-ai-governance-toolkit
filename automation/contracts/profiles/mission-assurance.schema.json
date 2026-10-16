@@ -69,6 +69,21 @@
     "material_change": {
       "type": "boolean"
     },
+    "qualification_evidence_refs": {
+      "type": "array",
+      "description": "Optional references to Foundations Qualification Evidence Records.",
+      "items": { "type": "object" }
+    },
+    "unresolved_decision_refs": {
+      "type": "array",
+      "description": "Optional references to Foundations Unresolved Decision Records. Absence is not proof of no decisions.",
+      "items": { "type": "object" }
+    },
+    "protected_concern_disposition_refs": {
+      "type": "array",
+      "description": "Optional references to Foundations Protected Concern Disposition Records. Absence is not proof that no concern exists.",
+      "items": { "type": "object" }
+    },
     "baseline_reference": {
       "type": "object",
       "additionalProperties": false,

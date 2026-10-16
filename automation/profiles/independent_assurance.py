@@ -38,6 +38,30 @@ def evaluate(data: dict, root: Path, evaluation_time: str | None = None) -> tupl
                                 "Evaluator interests not disclosed.",
                                 "Disclose interests."))
 
+    qual = data.get("qualification_evidence") or {}
+    if not qual.get("qualification_id"):
+        findings.append(finding(PROFILE_ID, "QUALIFICATION_MISSING", "HIGH",
+                                "Valid qualification reference is required for positive independent assurance.",
+                                "Supply a Foundations Qualification Evidence Record reference."))
+    else:
+        if qual.get("authority_effect") != "NONE":
+            findings.append(finding(PROFILE_ID, "QUALIFICATION_AUTHORITY", "CRITICAL",
+                                    "Qualification cannot confer authority.",
+                                    "Set authority_effect to NONE."))
+        if qual.get("outcome") != "QUALIFIED":
+            findings.append(finding(PROFILE_ID, "QUALIFICATION_OUTCOME", "CRITICAL",
+                                    "Qualification outcome must be QUALIFIED for positive state.",
+                                    "Provide a QUALIFIED outcome."))
+        if evaluation_time and qual.get("expires_at") and evaluation_time > qual["expires_at"]:
+            findings.append(finding(PROFILE_ID, "QUALIFICATION_EXPIRED", "CRITICAL",
+                                    "Qualification is expired.",
+                                    "Requalify."))
+        scope = data.get("scope", "")
+        if qual.get("scope") and scope and qual["scope"] not in scope and scope not in qual["scope"]:
+            findings.append(finding(PROFILE_ID, "QUALIFICATION_SCOPE", "HIGH",
+                                    "Qualification role/scope incompatible with evaluation scope.",
+                                    "Align scope."))
+
     if not data.get("scope"):
         findings.append(finding(PROFILE_ID, "SCOPE", "MEDIUM",
                                 "Evaluation scope is missing.",
