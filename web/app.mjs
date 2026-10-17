@@ -103,7 +103,7 @@ async function evaluate(token) {
 }
 async function loadCsv(textOrPromise, name) {
   const token = beginInput(name);
-  byId("workspace").scrollIntoView({ behavior: "smooth" });
+  byId("workspace").scrollIntoView();
   let text;
   try { text = await textOrPromise; }
   catch { return fail(token, { code: "FILE_READ_ERROR", remediation: "The file could not be read. Choose the file again." }); }
