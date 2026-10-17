@@ -1,5 +1,11 @@
 # Global AI Governance Toolkit
 
+<!-- gag:nav -->
+[![Global AI Governance](https://img.shields.io/badge/Global_AI_Governance-portfolio-0b100d)](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE) ![Status](https://img.shields.io/badge/status-v2.3.0_released-brightgreen) ![authority_effect](https://img.shields.io/badge/authority__effect-NONE-lightgrey)
+
+**[Connect your agent](https://global-ai-governance.github.io/global-ai-governance-toolkit/connect.html#agents)** · **[Run a pilot](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE#for-labs-and-teams)** · **[Read the spec](https://global-ai-governance.github.io/global-ai-governance-toolkit/connect.html#spec)** · [All products](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE#product-map)
+<!-- /gag:nav -->
+
 Turn an AI system inventory record into policy-driven findings and a reproducible, human-reviewed AI Governance Decision Pack.
 
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
@@ -12,7 +18,7 @@ Open the live local-first browser:
 
 **[https://global-ai-governance.github.io/global-ai-governance-toolkit/](https://global-ai-governance.github.io/global-ai-governance-toolkit/)**
 
-v2.2.0 is the first tagged release to include the local-first browser and machine-interface improvements that accumulated on `main` after v2.1.0. Future `main` development may again move ahead of the tagged release.
+The hosted browser reflects current `main`, which may move ahead of the tagged v2.3.0 release. Agents start at [`web/llms.txt`](web/llms.txt) and [`web/machine-interface.json`](web/machine-interface.json); the [Connect page](web/connect.html) covers MCP setup, pilots, and specifications.
 
 Primary browser actions are:
 
@@ -299,3 +305,15 @@ Historical version names remain in version-specific release records where approp
 - Review [CONTRIBUTING.md](CONTRIBUTING.md) before proposing changes.
 - Review [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for participation expectations.
 - Licensed under the [MIT License](LICENSE).
+
+<!-- gag:footer -->
+## Part of Global AI Governance
+
+This toolkit is the **GOVERN + MEASURE** layer and the flagship entry point: inventory in, findings and a human Decision Pack out.
+
+- **Connect your agent:** [llms.txt](https://global-ai-governance.github.io/global-ai-governance-toolkit/llms.txt), [machine-interface.json](https://global-ai-governance.github.io/global-ai-governance-toolkit/machine-interface.json), and the [gag-mcp](https://github.com/GLOBAL-AI-GOVERNANCE/gag-mcp) server. Compatible with MCP-based agents.
+- **Run a pilot:** [pilot path and contact](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE#for-labs-and-teams).
+- **Read the spec:** [versioned specifications](https://global-ai-governance.github.io/global-ai-governance-toolkit/connect.html#spec) and the [product map](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE#product-map).
+
+Outputs are non-authorizing (`authority_effect: NONE`). Not affiliated with or endorsed by any AI lab or platform.
+<!-- /gag:footer -->
