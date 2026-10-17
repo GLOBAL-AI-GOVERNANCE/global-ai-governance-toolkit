@@ -38,10 +38,11 @@ python3 -m venv .venv &amp;&amp; . .venv/bin/activate &amp;&amp; pip install -e 
 ./scripts/fetch_upstreams.sh
 gag-mcp                      # stdio (Claude Desktop and other local clients)
 gag-mcp --http --port 8000   # Streamable HTTP at /mcp</pre>
-      <p><strong>Claude:</strong> add <code>"gag": {"command": "/ABS/PATH/ai-governance-mcp/.venv/bin/gag-mcp"}</code> under <code>mcpServers</code>, or add a custom connector at <code>https://YOUR-HOST/mcp</code>.<br>
-      <strong>ChatGPT / OpenAI API:</strong> tool <code>{"type": "mcp", "server_label": "gag", "server_url": "https://YOUR-HOST/mcp"}</code>.<br>
-      <strong>Grok / xAI API:</strong> tool <code>{"type": "mcp", "server_label": "gag", "server_url": "https://YOUR-HOST/mcp"}</code>.</p>
-      <p class="fineprint">Remote platforms need a public HTTPS endpoint. A hosted Global AI Governance endpoint is not yet available; self-host with <code>gag-mcp --http</code>. The command and Python package keep the names <code>gag-mcp</code> and <code>gag_mcp</code>.</p>
+      <p><strong>Claude Desktop (local):</strong> add <code>"gag": {"command": "/ABS/PATH/ai-governance-mcp/.venv/bin/gag-mcp"}</code> under <code>mcpServers</code>.<br>
+      <strong>Anthropic API:</strong> <code>{"type": "url", "name": "gag", "url": "https://YOUR-HOST/mcp", "authorization_token": "TOKEN"}</code>.<br>
+      <strong>OpenAI API:</strong> tool <code>{"type": "mcp", "server_label": "gag", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.<br>
+      <strong>xAI API:</strong> tool <code>{"type": "mcp", "server_label": "gag", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.</p>
+      <p class="fineprint">Remote use needs an HTTPS endpoint you host yourself; Global AI Governance operates no hosted endpoint. Any network-reachable server must set <code>GAG_MCP_ALLOWED_HOSTS</code> and <code>GAG_MCP_BEARER_TOKEN</code> (32+ characters); without them it refuses to start. Consumer connector UIs that cannot send a static bearer token (ChatGPT on the web today; Claude.ai outside its request-headers beta) cannot connect. These remote recipes have not been tested against a live provider; see the repository README. The command and Python package keep the names <code>gag-mcp</code> and <code>gag_mcp</code>.</p>
     </section>
 
     <section id="pilot" class="shell connect-section">
