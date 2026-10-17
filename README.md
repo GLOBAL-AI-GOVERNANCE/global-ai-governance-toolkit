@@ -22,9 +22,12 @@ The hosted browser reflects current `main`, which may move ahead of the tagged v
 
 Primary browser actions are:
 
-- **Run sample**
+- **Run sample**: a synthetic clean inventory
+- **Run example with gaps**: a synthetic inventory that shows governance findings
 - **Load CSV**
 - **Review and download the Decision Pack**
+
+Neither example is a real security assessment, and a passing result does not authorize deployment.
 
 The browser uses the same generated contract and policy bundle as the CLI. Parity tests protect normalization, findings, result states, and the non-authorizing handoff boundary.
 
