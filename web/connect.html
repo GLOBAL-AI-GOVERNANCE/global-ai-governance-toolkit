@@ -10,12 +10,13 @@
   <link rel="alternate" type="text/plain" href="./llms.txt" title="llms.txt">
 </head>
 <body>
+  <a class="skip-link" href="#top">Skip to main content</a>
   <nav class="gag-bar shell" aria-label="Global AI Governance sites">
     <a class="gag-brand" href="/global-ai-governance-toolkit/connect.html" aria-current="page">Global AI Governance</a>
     <span class="gag-links"><a href="/global-ai-governance-toolkit/">Toolkit</a><a href="/containment-ledger/">Containment Ledger</a><a href="/peace-os/">Peace OS</a></span>
     <a class="gag-cta" href="#agents">Connect your agent</a>
   </nav>
-  <main id="top">
+  <main id="top" tabindex="-1">
     <section class="shell connect-section connect-hero">
       <p class="eyebrow">Global AI Governance</p>
       <h1>Novel governance solutions the world needs now.</h1>
@@ -33,7 +34,7 @@
       <h2>Connect your agent</h2>
       <p><strong>Read first:</strong> <a href="./llms.txt">llms.txt</a> and <a href="./machine-interface.json">machine-interface.json</a> list the CLI, inputs, outputs, profiles, and raw schema URLs.</p>
       <p><strong>Use it in your agent in 5 minutes</strong> with <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp">AI Governance MCP</a>, the AI Governance Model Context Protocol Server. Model Context Protocol (MCP) is an open standard that lets AI assistants call external tools. It is read-only and has three tools: <code>check_inventory</code>, <code>build_decision_pack</code>, and <code>validate_passport</code>.</p>
-<pre>git clone https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp &amp;&amp; cd ai-governance-mcp
+<pre tabindex="0" role="region" aria-label="AI Governance MCP setup commands">git clone https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp &amp;&amp; cd ai-governance-mcp
 python3 -m venv .venv &amp;&amp; . .venv/bin/activate &amp;&amp; pip install -e .
 ./scripts/fetch_upstreams.sh
 gag-mcp                      # stdio (Claude Desktop and other local clients)
@@ -49,7 +50,7 @@ gag-mcp --http --port 8000   # Streamable HTTP at /mcp</pre>
       <p class="eyebrow">For labs and teams</p>
       <h2>Run a pilot</h2>
       <p>One authorized AI system inventory, one accountable owner, one Decision Pack, and one documented decision boundary. Pilots can cover agent authority and passports, vulnerability closure evidence, cyber-resilience boundaries, or wiring AI Governance MCP into an internal agent platform.</p>
-      <p><strong>Contact:</strong> open a thread in <a href="https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/discussions">GitHub Discussions</a> with your use case. Do not post confidential, personal, or regulated information.</p>
+      <p><strong>Contact:</strong> start with the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/discussions/29">Pilots and integrations: start here</a> thread, or open a new thread in <a href="https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/discussions">GitHub Discussions</a>, with your use case. Do not post confidential, personal, or regulated information.</p>
     </section>
 
     <section id="spec" class="shell connect-section">
@@ -65,7 +66,7 @@ gag-mcp --http --port 8000   # Streamable HTTP at /mcp</pre>
     <section class="shell connect-section">
       <p class="eyebrow">Product map</p>
       <h2>What exists today</h2>
-      <div class="table-wrap"><table class="status-table">
+      <div class="table-wrap" tabindex="0" role="region" aria-label="What exists today: products and status"><table class="status-table">
         <thead><tr><th>Product</th><th>What you get</th><th>Status</th></tr></thead>
         <tbody>
           <tr><td><a href="./">Toolkit</a></td><td>Inventory to findings to human Decision Pack</td><td>v2.3.0 · released</td></tr>

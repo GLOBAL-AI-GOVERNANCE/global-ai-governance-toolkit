@@ -99,9 +99,14 @@ export async function normalizeCsv(text, sourceName = "inventory.csv") {
     const source = Object.fromEntries(mapped.map((field, index) => [field, values[index]]).filter(([field]) => field));
     const record = { schema_version: SCHEMA_VERSION };
     for (const field of required) {
-      const value = normalizeEnum(field, source[field]);
-      if ((contracts.canonicalSchema.properties[field].minLength || 0) > 0 && !value) throw new GovernanceInputError("EMPTY_REQUIRED_VALUE", field, source[field], [], "Supply a non-empty value.");
-      record[field] = value;
+      try {
+        const value = normalizeEnum(field, source[field]);
+        if ((contracts.canonicalSchema.properties[field].minLength || 0) > 0 && !value) throw new GovernanceInputError("EMPTY_REQUIRED_VALUE", field, source[field], [], "Supply a non-empty value.");
+        record[field] = value;
+      } catch (error) {
+        if (error instanceof GovernanceInputError && error.issue.row === undefined) error.issue.row = String(rowOffset + 2);
+        throw error;
+      }
     }
     return record;
   }).sort((a, b) => a.system_id.localeCompare(b.system_id) || a.system_name.localeCompare(b.system_name));
