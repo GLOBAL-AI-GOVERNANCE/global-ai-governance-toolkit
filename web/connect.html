@@ -44,6 +44,7 @@ gag-mcp --http --port 8000   # Streamable HTTP at /mcp</pre>
       <strong>OpenAI API:</strong> tool <code>{"type": "mcp", "server_label": "gag", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.<br>
       <strong>xAI API:</strong> tool <code>{"type": "mcp", "server_label": "gag", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.</p>
       <p class="fineprint">Remote use needs an HTTPS endpoint you host yourself; Global AI Governance operates no hosted endpoint. Any network-reachable server must set <code>GAG_MCP_ALLOWED_HOSTS</code> and <code>GAG_MCP_BEARER_TOKEN</code> (32+ characters); without them it refuses to start. Consumer connector UIs that cannot send a static bearer token (ChatGPT on the web today; Claude.ai outside its request-headers beta) cannot connect. These remote recipes have not been tested against a live provider; see the repository README. The command and Python package keep the names <code>gag-mcp</code> and <code>gag_mcp</code>.</p>
+      <p class="fineprint"><strong>Where your data goes:</strong> the browser Toolkit processes files only in this browser. Through MCP, the inventory or passport you pass becomes part of your AI client's conversation, so a hosted assistant sends it to its provider, and a remote server you host receives it over HTTPS. <code>validate_passport</code> checks a passport document; it does not monitor, enforce, or revoke anything at runtime.</p>
     </section>
 
     <section id="pilot" class="shell connect-section">

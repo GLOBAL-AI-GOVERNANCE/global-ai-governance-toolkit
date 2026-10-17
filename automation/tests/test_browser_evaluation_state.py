@@ -72,6 +72,20 @@ class EvaluationStateTests(unittest.TestCase):
         self.assertIn("table-layout:fixed", css)
         self.assertIn("hyphens:auto", css)
 
+    def test_connect_page_states_agent_data_flow_and_passport_scope(self) -> None:
+        connect = (ROOT / "web/connect.html").read_text(encoding="utf-8")
+        self.assertIn("<strong>Where your data goes:</strong> the browser Toolkit processes files only in this browser.", connect)
+        self.assertIn("a hosted assistant sends it to its provider", connect)
+        self.assertIn("it does not monitor, enforce, or revoke anything at runtime", connect)
+
+    def test_workspace_scroll_respects_reduced_motion(self) -> None:
+        # The workspace scroll follows the page's CSS scroll-behavior, which reduced motion turns off.
+        app = (ROOT / "web/app.mjs").read_text(encoding="utf-8")
+        self.assertIn('byId("workspace").scrollIntoView();', app)
+        self.assertNotIn('behavior: "smooth"', app)
+        css = (ROOT / "web/styles.css").read_text(encoding="utf-8")
+        self.assertIn("@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } }", css)
+
 
 if __name__ == "__main__":
     unittest.main()
