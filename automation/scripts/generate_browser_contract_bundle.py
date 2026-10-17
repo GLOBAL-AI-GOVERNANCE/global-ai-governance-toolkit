@@ -23,7 +23,8 @@ def build() -> str:
         for name, path in paths.items()
     }
     sample = (ROOT / "automation/fixtures/valid-ai-inventory.csv").read_text(encoding="utf-8")
-    payload = json.dumps({**values, "sampleCsv": sample}, indent=2, sort_keys=True)
+    gaps_sample = (ROOT / "automation/sample-data/sample-ai-inventory.csv").read_text(encoding="utf-8")
+    payload = json.dumps({**values, "sampleCsv": sample, "gapsSampleCsv": gaps_sample}, indent=2, sort_keys=True)
     return "// Generated from Wave A contracts. Do not edit.\nexport const contracts = " + payload + ";\n"
 
 

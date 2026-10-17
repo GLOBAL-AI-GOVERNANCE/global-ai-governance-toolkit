@@ -113,6 +113,7 @@ async function loadCsv(textOrPromise, name) {
 }
 
 byId("run-sample").addEventListener("click", () => loadCsv(contracts.sampleCsv, "safe-sample.csv"));
+byId("run-gaps-sample").addEventListener("click", () => loadCsv(contracts.gapsSampleCsv, "synthetic-sample-with-gaps.csv"));
 byId("csv-file").addEventListener("change", (event) => { const [file] = event.target.files; if (file) loadCsv(file.text(), file.name); });
 byId("run-checks").addEventListener("click", () => evaluate(beginInput(state.sourceName)));
 const tabs = [...document.querySelectorAll(".tabs [role=tab]")];

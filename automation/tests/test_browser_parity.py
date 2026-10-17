@@ -14,6 +14,7 @@ from automation.scripts.contract_verifier import validate_instance
 ROOT = Path(__file__).resolve().parents[2]
 VALID = ROOT / "automation/fixtures/valid-ai-inventory.csv"
 CRITICAL = ROOT / "automation/fixtures/critical-ai-inventory.csv"
+GAPS_SAMPLE = ROOT / "automation/sample-data/sample-ai-inventory.csv"
 PIPELINE = ROOT / "automation/scripts/run_governance_checks.py"
 RUNNER = ROOT / "web/tests/parity-runner.mjs"
 UX_RUNNER = ROOT / "web/tests/ux-runner.mjs"
@@ -72,9 +73,24 @@ class BrowserParityTests(unittest.TestCase):
     def test_critical_fixture_matches_cli_in_report_only_mode(self) -> None:
         self.assert_parity(CRITICAL)
 
+    def test_example_with_gaps_matches_cli_and_shows_findings(self) -> None:
+        self.assert_parity(GAPS_SAMPLE)
+        browser = self.browser(GAPS_SAMPLE)
+        self.assertEqual(browser["result"]["governance_gate_state"], "BLOCKED")
+        self.assertEqual(browser["result"]["human_decision_state"], "PENDING_HUMAN_DECISION")
+        self.assertEqual(browser["handoff"]["authority_effect"], "NONE")
+        rules = {item["rule_id"] for item in browser["findings"]["findings"]}
+        self.assertTrue({"GAI-AUTO-001", "GAI-AUTO-002", "GAI-AUTO-003", "GAI-AUTO-004"} <= rules, rules)
+        bundle = (ROOT / "web/contracts.generated.mjs").read_text(encoding="utf-8")
+        self.assertIn(json.dumps(GAPS_SAMPLE.read_text(encoding="utf-8")), bundle)
+        page = (ROOT / "web/index.html").read_text(encoding="utf-8")
+        self.assertIn('id="run-gaps-sample"', page)
+        self.assertIn("Both examples are synthetic inventories.", page)
+        self.assertIn('loadCsv(contracts.gapsSampleCsv', (ROOT / "web/app.mjs").read_text(encoding="utf-8"))
+
     def test_static_surface_is_local_only_and_complete(self) -> None:
         combined = "\n".join((ROOT / "web" / name).read_text(encoding="utf-8") for name in ("index.html", "app.mjs", "governance-engine.mjs", "finding-guidance.mjs"))
-        for phrase in ("Run sample", "Download blank template", "Load your CSV", "Normalization preview", "Governance results", "Machine outputs", "Decision Pack", "authority_effect", "What this means", "What to do next"):
+        for phrase in ("Run sample", "Run example with gaps", "Download blank template", "Load your CSV", "Normalization preview", "Governance results", "Machine outputs", "Decision Pack", "authority_effect", "What this means", "What to do next"):
             self.assertIn(phrase, combined)
         for forbidden in ("fetch(", "XMLHttpRequest", "WebSocket", "sendBeacon", "https://", "http://"):
             self.assertNotIn(forbidden, combined)
