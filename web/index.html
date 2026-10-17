@@ -10,6 +10,11 @@
   <link rel="alternate" type="text/plain" href="./llms.txt" title="llms.txt">
 </head>
 <body>
+  <nav class="gag-bar shell" aria-label="Global AI Governance sites">
+    <a class="gag-brand" href="/global-ai-governance-toolkit/connect.html">Global AI Governance</a>
+    <span class="gag-links"><a href="/global-ai-governance-toolkit/" aria-current="page">Toolkit</a><a href="/containment-ledger/">Containment Ledger</a><a href="/peace-os/">Peace OS</a></span>
+    <a class="gag-cta" href="/global-ai-governance-toolkit/connect.html#agents">Connect your agent</a>
+  </nav>
   <header class="shell masthead">
     <a class="brand" href="#top" aria-label="Global AI Governance Toolkit home">GLOBAL AI GOVERNANCE <span>TOOLKIT</span></a>
     <p class="local-badge">LOCAL · NO UPLOAD · NO LOGIN</p>
@@ -70,7 +75,11 @@
       <div id="profile-result" class="profile-result"></div>
     </section>
   </main>
-  <footer class="shell"><p>Reference implementation · Runs in this browser · Human decision remains pending</p></footer>
+  <footer class="shell gag-footer">
+    <p class="gag-footer-ctas"><a href="./connect.html#agents">Connect your agent</a> · <a href="./connect.html#pilot">Run a pilot</a> · <a href="./connect.html#spec">Read the spec</a></p>
+    <p>Reference implementation · Runs in this browser · Human decision remains pending</p>
+    <p>Global AI Governance · Outputs are non-authorizing (<code>authority_effect: NONE</code>) · Compatible with MCP-based agents</p>
+  </footer>
   <script type="module" src="./app.mjs"></script>
 </body>
 </html>
