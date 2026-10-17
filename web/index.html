@@ -25,7 +25,7 @@
       <div>
         <p class="eyebrow">AI governance pre-flight review</p>
         <h1>See what needs attention before an AI decision.</h1>
-        <p class="lede">Describe an AI system in a simple inventory. The toolkit shows governance gaps and prepares a Decision Pack so an accountable human can make and document the decision.</p>
+        <p class="lede">Describe AI systems and agents in a simple inventory. The toolkit shows governance gaps and prepares a Decision Pack so an accountable human can make and document the decision.</p>
         <div class="value-path" aria-label="What goes in and what comes out">
           <p><strong>What goes in</strong><span>An AI-system inventory</span></p>
           <p><strong>What comes out</strong><span>Governance gaps and a Decision Pack</span></p>
@@ -33,10 +33,12 @@
         </div>
         <div class="actions">
           <button id="run-sample" class="primary">Run sample</button>
+          <button id="run-gaps-sample" class="template-button" type="button" aria-describedby="sample-boundary">Run example with gaps</button>
           <a class="template-button" href="./ai-system-inventory-template.csv" download>Download blank template</a>
           <label class="file-button">Load your CSV<input id="csv-file" type="file" accept=".csv,text/csv"></label>
         </div>
         <p class="journey">Run an example → Download and fill the template → Load the CSV → Review what needs attention → Download the Decision Pack</p>
+        <p id="sample-boundary" class="fineprint">Both examples are synthetic inventories. The example with gaps includes an autonomous agent with no named owner, monitoring, or shutdown path.</p>
         <p class="fineprint">Automated checks support human review. They do not approve deployment, certify compliance, or accept risk.</p>
         <p class="machine-link"><a href="./machine-interface.json">Machine interface</a> · Versioned contracts and agent entry point</p>
       </div>

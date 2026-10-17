@@ -141,6 +141,7 @@ export const contracts = {
     "title": "Canonical AI System Inventory Record v1",
     "type": "object"
   },
+  "gapsSampleCsv": "system_id,system_name,owner,business_unit,vendor_internal,use_case,data_sensitivity,impact_people,impact_money,impact_security,impact_rights,impact_safety,autonomy_level,public_facing,monitoring_active,shutdown_path_exists,evidence_complete\nAI-001,Internal FAQ Chatbot,Jane Owner,Operations,Internal,Employee policy lookup,None,No,No,No,No,No,None,No,Yes,Yes,Yes\nAI-002,Benefits Eligibility Assistant,Alex Executive,People Ops,Vendor,Decision support for benefits eligibility,Personal,Yes,Yes,No,Yes,No,Partial,Yes,Yes,Yes,No\nAI-003,Autonomous Research Agent,Sam Technical,Strategy,Internal,Research and summarization,Internal,No,No,No,No,No,Partial,No,Yes,Yes,Yes\nAI-004,Frontier Operations Agent,,Security,Vendor,Autonomous workflow execution,Critical,Yes,Yes,Yes,Yes,Yes,Full,Yes,No,No,No\n",
   "mapping": {
     "boolean_aliases": {
       "No": [
