@@ -26,6 +26,28 @@ REQUIRED_SCENARIOS = {
     "succession-failure",
     "material-change",
     "initial-result-after-material-change",
+    "institutional-qualified-support",
+    "qualification-conditional",
+    "qualification-not-qualified",
+    "qualification-not-yet-effective",
+    "qualification-expired",
+    "qualification-wrong-subject",
+    "qualification-wrong-configuration",
+    "qualification-missing-competence",
+    "decision-blocking-open",
+    "decision-blocking-escalated",
+    "decision-expired",
+    "decision-wrong-subject",
+    "decision-wrong-configuration",
+    "decision-resolved-without-reference",
+    "concern-questioned-revalidation",
+    "concern-hold",
+    "concern-stale",
+    "concern-active-not-resolved",
+    "concern-wrong-subject",
+    "concern-wrong-configuration",
+    "concern-closed-without-evidence",
+    "absence-not-nonexistence",
 }
 REFERENCE_KEYS = {
     "reference_id",
@@ -107,6 +129,46 @@ def validate_thread(thread: dict) -> dict:
     _require(succession in seen and seen[succession]["artifact_path"].endswith("succession-evidence-failed.json"), "succession failure must name the native failed succession record")
     _require(seen[dependency]["expected_outcome"] == "FAILED", "dependency failure cannot be PASS")
     _require(seen[succession]["expected_outcome"] == "FAILED", "succession failure cannot be PASS")
+    for name in (
+        "qualification-evidence-record",
+        "unresolved-decision-record",
+        "protected-concern-disposition-record",
+    ):
+        _require(name in seen, f"missing institutional reference {name}")
+        _require(seen[name]["source_repository"] == "ai-governance-os", "institutional reference must stay native")
+        _require(seen[name]["authority_effect"] == "NONE", "institutional reference cannot transfer authority")
+    _require(by_id["institutional-qualified-support"]["expect"] == "PASS", "current qualification may support the structural path")
+    _require(by_id["institutional-qualified-support"].get("native_reference") == "qualification-evidence-record", "positive case must name the qualification candidate")
+    _require(by_id["absence-not-nonexistence"]["expect"] == "PASS", "absence is not itself a failure")
+    for scenario_id, item in by_id.items():
+        if scenario_id.startswith(("qualification-", "decision-", "concern-")):
+            _require(item["expect"] == "FAIL", f"{scenario_id} must not pass")
+    summary = thread.get("qualification_summary")
+    _require(isinstance(summary, dict), "qualification summary required")
+    qual = seen["qualification-evidence-record"]
+    _require(summary.get("outcome") == "QUALIFIED", "qualification summary must be QUALIFIED")
+    _require(summary.get("outcome") == qual.get("expected_outcome"), "qualification summary diverges from the native candidate")
+    _require(summary.get("subject_id") == qual["subject_id"], "qualification summary rewrites the native subject")
+    _require(summary.get("configuration_digest") == qual["configuration_digest"], "qualification summary rewrites the native configuration")
+    _require(summary.get("authority_effect") == "NONE", "qualification summary cannot transfer authority")
+    _require(summary.get("qualified_from", "") < summary.get("expires_at", ""), "qualification interval is invalid")
+    _require(isinstance(summary.get("competence_evidence_refs"), list) and summary["competence_evidence_refs"], "competence evidence required")
+    decision = thread.get("decision_summary")
+    concern = thread.get("concern_summary")
+    _require(isinstance(decision, dict) and decision.get("status") == "OPEN" and decision.get("blocking") is True, "decision summary must remain the blocking open candidate")
+    _require(decision.get("subject_id") == seen["unresolved-decision-record"]["subject_id"], "decision summary rewrites the native subject")
+    _require(decision.get("configuration_digest") == seen["unresolved-decision-record"]["configuration_digest"], "decision summary rewrites the native configuration")
+    _require(isinstance(decision.get("owner_ref"), str) and decision["owner_ref"].strip(), "decision summary requires an owner")
+    _require(isinstance(decision.get("escalation_route_ref"), str) and decision["escalation_route_ref"].strip(), "decision summary requires an escalation route")
+    _require(decision.get("authority_effect") == "NONE", "decision summary cannot transfer authority")
+    _require(isinstance(concern, dict) and concern.get("status") == "ACTIVE", "concern summary must remain active")
+    _require(concern.get("assurance_effect") == "QUESTIONED" and concern.get("revalidation_required") is True, "concern summary must retain questioned revalidation")
+    _require(concern.get("subject_id") == seen["protected-concern-disposition-record"]["subject_id"], "concern summary rewrites the native subject")
+    _require(concern.get("configuration_digest") == seen["protected-concern-disposition-record"]["configuration_digest"], "concern summary rewrites the native configuration")
+    _require(concern.get("authority_effect") == "NONE", "concern summary cannot transfer authority")
+    limitations = " ".join(thread.get("limitations") or []).lower()
+    _require("no unresolved decision exists" in limitations, "absence of a decision reference must not be treated as proof")
+    _require("no protected concern exists" in limitations, "absence of a concern reference must not be treated as proof")
     bindings = thread.get("subject_bindings")
     _require(isinstance(bindings, list), "subject_bindings required")
     by_binding = {}
