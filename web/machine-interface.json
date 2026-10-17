@@ -6,22 +6,26 @@
     "profile": "gag profile PROFILE_ID INPUT --outdir DIRECTORY [--decision-pack-manifest FILE] [--evaluation-time YYYY-MM-DDTHH:MM:SSZ]",
     "verify": "gag verify OUTPUT_DIRECTORY"
   },
-  "decision_pack_manifest": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/decision-pack-manifest.schema.json",
-  "governance_handoff": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/governance-decision-handoff.schema.json",
+  "decision_pack_manifest": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/decision-pack-manifest.schema.json",
+  "governance_handoff": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/governance-decision-handoff.schema.json",
   "profiles": {
-    "result_contract": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/profile-result.schema.json",
-    "registry": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/profiles/registry.json",
+    "result_contract": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/profile-result.schema.json",
+    "registry": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/profiles/registry.json",
     "viewer": "./profile-viewer.mjs",
     "authority_effect": "NONE",
-    "supported": ["auditable-ai-v1", "quantum-ai-convergence-v0.1", "ciso-ai-risk-v0.1"]
+    "supported": [
+      "auditable-ai-v1",
+      "quantum-ai-convergence-v0.1",
+      "ciso-ai-risk-v0.1"
+    ]
   },
   "input": {
-    "canonical_schema": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/canonical-inventory-record.schema.json",
-    "mapping": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/inventory-mapping.json",
+    "canonical_schema": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/canonical-inventory-record.schema.json",
+    "mapping": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/inventory-mapping.json",
     "sample": "./sample-ai-inventory.csv",
     "template": "./ai-system-inventory-template.csv"
   },
-  "machine_interface_version": "1.0.0",
+  "machine_interface_version": "1.0.1",
   "outputs": [
     "normalized-inventory.json",
     "canonical-inventory.csv",
@@ -43,8 +47,13 @@
     "upload": false
   },
   "schemas": {
-    "findings": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/governance-findings.schema.json",
-    "normalized_inventory": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/normalized-inventory.schema.json",
-    "result": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/automation/contracts/v1/governance-result.schema.json"
+    "findings": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/governance-findings.schema.json",
+    "normalized_inventory": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/normalized-inventory.schema.json",
+    "result": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/governance-result.schema.json"
+  },
+  "discovery": {
+    "llms_txt": "./llms.txt",
+    "human_entry": "./",
+    "schema_urls_track": "main branch of the repository (same as this Pages site); pin to a release tag for stable integrations"
   }
 }

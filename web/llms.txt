@@ -1,0 +1,43 @@
+# Global AI Governance Toolkit
+
+> Local-first toolkit that normalizes an AI-system inventory, applies a bounded governance policy, surfaces review findings, and prepares a Decision Pack for an accountable human. No backend, login, upload, network requests, or telemetry. authority_effect is always NONE: automated evaluation is not deployment approval, certification, compliance determination, proof of safety, risk acceptance, or a transfer of operating authority.
+
+AI agents: read machine-interface.json first. It lists the CLI, inputs, outputs, profiles, and raw JSON schema URLs. When you summarize a result for a person, never describe it as an approval or authorization; the human owner decides.
+
+## Machine interface
+- [machine-interface.json](https://global-ai-governance.github.io/global-ai-governance-toolkit/machine-interface.json): CLI commands, runtime guarantees, schemas, outputs
+- [Profile registry](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/profiles/registry.json): supported profiles (auditable-ai-v1, quantum-ai-convergence-v0.1, ciso-ai-risk-v0.1)
+
+## CLI
+- `gag check INPUT --outdir DIRECTORY [--fail-on none|high|critical]`
+- `gag normalize INPUT --output-json FILE [--output-csv FILE]`
+- `gag profile PROFILE_ID INPUT --outdir DIRECTORY [--decision-pack-manifest FILE]`
+- `gag verify OUTPUT_DIRECTORY`
+
+## Inputs
+- [Inventory template CSV](https://global-ai-governance.github.io/global-ai-governance-toolkit/ai-system-inventory-template.csv)
+- [Sample inventory CSV](https://global-ai-governance.github.io/global-ai-governance-toolkit/sample-ai-inventory.csv)
+- [Canonical inventory record schema](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/canonical-inventory-record.schema.json)
+
+## Output schemas
+- [Governance findings](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/governance-findings.schema.json)
+- [Governance result](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/governance-result.schema.json)
+- [Decision Pack manifest](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/decision-pack-manifest.schema.json)
+- [Profile result](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/profile-result.schema.json)
+- [Governance decision handoff](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/governance-decision-handoff.schema.json)
+
+## Optional
+- [Repository](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit)
+- [Portfolio start here](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE)
+
+## AI Governance MCP (Model Context Protocol server, preview)
+- [AI Governance Model Context Protocol Server](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp): read-only server for the Model Context Protocol (MCP), the open standard for AI assistants to call external tools. Transports: stdio and Streamable HTTP. Tools: check_inventory, build_decision_pack, validate_passport. Every result carries authority_effect NONE. Command `gag-mcp`, Python package `gag_mcp`. No hosted endpoint is operated; self-host. Network use requires GAG_MCP_ALLOWED_HOSTS and a GAG_MCP_BEARER_TOKEN (32+ characters).
+- [Connect your agent](https://global-ai-governance.github.io/global-ai-governance-toolkit/connect.html): local setup and remote configuration recipes (Anthropic, OpenAI, and xAI APIs; not tested against live providers); pilot contact; specifications.
+
+## Portfolio
+- [Global AI Governance profile](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE): product map, maturity, evidence boundary
+- [Global AI Assurance Envelope](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/blob/main/docs/GLOBAL_AI_ASSURANCE_ENVELOPE.md): reference-only interoperability object
+- [Agentic AI Governance schemas](https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/v0.1.0-alpha.2/schemas): agent authority, passport, expiry, revocation (experimental alpha)
+- [Containment Ledger: Security Boundary Review](https://global-ai-governance.github.io/containment-ledger/): local, browser-based review of security domains, boundary paths, self-reported evidence marks, and a human disposition. Not enforcement, independent verification, or an immutable record
+- [Peace OS: Crisis Room](https://global-ai-governance.github.io/peace-os/): fictional crisis-verification exercise
+- [AI Governance Foundations](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-os): the original foundation of the portfolio (first published as AI Governance OS v1.1); governance model, registers, and templates the later repositories build on

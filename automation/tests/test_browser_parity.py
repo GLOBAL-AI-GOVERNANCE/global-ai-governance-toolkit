@@ -100,7 +100,9 @@ class BrowserParityTests(unittest.TestCase):
 
     def test_machine_front_door_is_versioned_and_non_authorizing(self) -> None:
         interface = json.loads((ROOT / "web/machine-interface.json").read_text(encoding="utf-8"))
-        self.assertEqual(interface["machine_interface_version"], "1.0.0")
+        self.assertEqual(interface["machine_interface_version"], "1.0.1")
+        self.assertEqual(interface["discovery"]["llms_txt"], "./llms.txt")
+        self.assertTrue((ROOT / "web/llms.txt").is_file())
         self.assertEqual(interface["authority_effect"], "NONE")
         self.assertFalse(interface["runtime"]["upload"])
         self.assertFalse(interface["runtime"]["network_requests"])
@@ -135,7 +137,7 @@ class BrowserParityTests(unittest.TestCase):
         completed = subprocess.run(["node", str(PROFILE_SURFACE_RUNNER)], cwd=ROOT, text=True, capture_output=True, check=True)
         payload = json.loads(completed.stdout)
         html = payload["html"]
-        sequence = ["Decision:", "Consequence", "Remaining risk", "Next action", "Timeline", "Technical evidence"]
+        sequence = ['id="profile-decision-heading"', "Consequence", "Remaining risk", "Next action", "Timeline", "Technical evidence"]
         positions = [html.index(label) for label in sequence]
         self.assertEqual(positions, sorted(positions))
         self.assertEqual(payload["attributes"]["role"], "region")
@@ -144,6 +146,9 @@ class BrowserParityTests(unittest.TestCase):
         for semantic in ('role="status"', 'aria-live="polite"', '<ol class="decision-surface"', '<time>', '<details>', '<summary>Technical evidence</summary>'):
             self.assertIn(semantic, html)
         self.assertEqual(payload["view"]["authorityEffect"], "NONE")
+        self.assertNotIn(">Decision:", html)
+        self.assertIn("not issued by this tool", html)
+        self.assertIn("This tool grants no authorization.", html)
         index = (ROOT / "web/index.html").read_text(encoding="utf-8")
         self.assertIn("Run bounded synthetic example", index)
         self.assertIn('aria-describedby="profile-sample-boundary"', index)
