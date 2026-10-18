@@ -42,8 +42,6 @@ ACTION_PIN = re.compile(
 REQUIRED_FILES = (
     "README.md",
     "SECURITY.md",
-    "CONTRIBUTING.md",
-    "CODE_OF_CONDUCT.md",
     "LICENSE",
     "pyproject.toml",
     ".github/workflows/ai-governance-checks.yml",

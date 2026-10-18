@@ -4,7 +4,7 @@
 - Browser workspace: any new input (file, invalid or empty CSV, unreadable file, or a newer input arriving mid-evaluation) now clears the previous preview, results, machine output, and Decision Pack downloads before evaluation. A per-input token prevents a slower earlier evaluation from rendering or downloading after a newer input.
 - Browser workspace accessibility: evaluation views use the ARIA tab pattern with arrow, Home, and End keys; the machine-output switch exposes aria-pressed; scrollable code and tables are keyboard-focusable regions; skip links on the toolkit and Connect pages; an evaluation status is announced politely.
 - CSV errors name the column and row (header is row 1) and list accepted values without echoing cell contents.
-- Connect page: the product status table no longer clips on narrow screens, and pilot contact links to the "Pilots and integrations: start here" discussion.
+- Connect page: the product status table no longer clips on narrow screens.
 - Extend independent assurance to require a valid Foundations Qualification Evidence reference for positive state. Qualification remains distinct from identity, interest, conflict, independence, and authority.
 - Allow mission assurance to consume qualification, unresolved-decision, and protected-concern-disposition references. Fail closed on expired/not-qualified, blocking unresolved/expired decisions, and HOLD/STALE concern effects.
 - Absence of a concern or decision reference is not evidence of absence. All outputs remain authority_effect NONE.
