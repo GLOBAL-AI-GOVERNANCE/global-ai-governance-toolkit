@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Connect an AI agent to Global AI Governance, run a pilot, or read the versioned specifications.">
+  <meta name="description" content="Connect an AI agent to Global AI Governance or read the versioned specifications.">
   <title>Connect your agent · Global AI Governance</title>
   <link rel="stylesheet" href="./styles.css">
   <link rel="alternate" type="application/json" href="./machine-interface.json" title="Machine interface">
@@ -23,7 +23,6 @@
       <p class="lede">Open, non-authorizing governance infrastructure that AI agents and the teams behind them can call: evidence in, decision-ready outcomes out, humans in charge.</p>
       <div class="actions">
         <a class="primary" href="#agents">Connect your agent</a>
-        <a class="template-button" href="#pilot">Run a pilot</a>
         <a class="template-button" href="#spec">Read the spec</a>
       </div>
       <p class="fineprint">Every output carries <code>authority_effect: NONE</code>. Approval, deployment, risk acceptance, and shutdown stay with accountable humans. Compatible with Model Context Protocol (MCP) based agents; not affiliated with or endorsed by any AI lab or platform.</p>
@@ -47,11 +46,6 @@ gag-mcp --http --port 8000   # Streamable HTTP at /mcp</pre>
       <p class="fineprint"><strong>Where your data goes:</strong> the browser Toolkit processes files only in this browser. Through MCP, the inventory or passport you pass becomes part of your AI client's conversation, so a hosted assistant sends it to its provider, and a remote server you host receives it over HTTPS. <code>validate_passport</code> checks a passport document; it does not monitor, enforce, or revoke anything at runtime.</p>
     </section>
 
-    <section id="pilot" class="shell connect-section">
-      <p class="eyebrow">For labs and teams</p>
-      <h2>Run a pilot</h2>
-      <p>One authorized AI system inventory, one accountable owner, one Decision Pack, and one documented decision boundary. Pilots can cover agent authority and passports, vulnerability closure evidence, cyber-resilience boundaries, or wiring AI Governance MCP into an internal agent platform.</p>
-    </section>
 
     <section id="spec" class="shell connect-section">
       <p class="eyebrow">Specifications</p>
@@ -83,7 +77,7 @@ gag-mcp --http --port 8000   # Streamable HTTP at /mcp</pre>
     </section>
   </main>
   <footer class="shell gag-footer">
-    <p class="gag-footer-ctas"><a href="#agents">Connect your agent</a> · <a href="#pilot">Run a pilot</a> · <a href="#spec">Read the spec</a></p>
+    <p class="gag-footer-ctas"><a href="#agents">Connect your agent</a> · <a href="#spec">Read the spec</a></p>
     <p>Global AI Governance · Outputs are non-authorizing (<code>authority_effect: NONE</code>) · Compatible with MCP-based agents · <a href="https://github.com/GLOBAL-AI-GOVERNANCE">GitHub</a></p>
   </footer>
 </body>
