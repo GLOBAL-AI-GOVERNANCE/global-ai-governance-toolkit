@@ -1,0 +1,19 @@
+{
+  "framework_id": "unesco-ai-maturity-2025",
+  "name": "AI Maturity Framework: A self-positioning guide for public administrations",
+  "publisher": "UNESCO",
+  "year": 2025,
+  "version": "2025",
+  "license": "CC-BY-SA 3.0 IGO",
+  "maturity_levels": ["BASIC", "READY", "DYNAMIC", "ADVANCED"],
+  "pillars": [
+    "Strategy & Value",
+    "People & Culture",
+    "Technology & Infrastructure",
+    "AI Operations & Ecosystem",
+    "AI Governance, Ethics & Risk",
+    "Data — AI-Specific Focus"
+  ],
+  "authority_effect": "NONE",
+  "notes": "Framework source material is third-party. Global AI Governance provides an independent evidence-assurance overlay. Use does not imply UNESCO endorsement, certification, affiliation, or an independent legal/compliance determination."
+}
