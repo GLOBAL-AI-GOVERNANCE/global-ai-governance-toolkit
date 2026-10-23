@@ -1,9 +1,11 @@
 # License Notice
 
-Framework source: UNESCO AI Maturity Framework (2025).
+Framework material identified here is licensed by its publisher under CC BY-SA 3.0 IGO.
 
-Original framework material is licensed under CC-BY-SA 3.0 IGO.
+https://creativecommons.org/licenses/by-sa/3.0/igo/
 
-Global AI Governance original engine code is separate and remains under the repository license.
+Adaptations of that framework material, if distributed, stay under that license or another license the CC BY-SA 3.0 IGO terms allow. This notice applies to the isolated adapter, not as a determination that the rest of the repository changes license.
 
-This adapter isolates third-party material. Use does not imply endorsement, certification, or affiliation.
+Original engine code remains under the repository license. No framework prose is copied into that engine.
+
+authority_effect: NONE
