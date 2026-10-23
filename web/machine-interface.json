@@ -13,6 +13,19 @@
     "registry": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/profiles/registry.json",
     "viewer": "./profile-viewer.mjs",
     "authority_effect": "NONE",
+    "cli_supported": [
+      "auditable-ai-v1",
+      "quantum-ai-convergence-v0.1",
+      "ciso-ai-risk-v0.1",
+      "independent-assurance-v0.1",
+      "mission-assurance-v0.1",
+      "machine-learning-assurance-v0.1"
+    ],
+    "browser_supported": [
+      "auditable-ai-v1",
+      "quantum-ai-convergence-v0.1",
+      "ciso-ai-risk-v0.1"
+    ],
     "supported": [
       "auditable-ai-v1",
       "quantum-ai-convergence-v0.1",
@@ -25,7 +38,7 @@
     "sample": "./sample-ai-inventory.csv",
     "template": "./ai-system-inventory-template.csv"
   },
-  "machine_interface_version": "1.0.1",
+  "machine_interface_version": "1.1.0",
   "outputs": [
     "normalized-inventory.json",
     "canonical-inventory.csv",

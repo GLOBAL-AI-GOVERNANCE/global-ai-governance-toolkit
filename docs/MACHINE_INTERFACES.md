@@ -8,6 +8,8 @@ Wave A provides a local contract spine without changing the five existing govern
 
 The static browser publishes `web/machine-interface.json` as its versioned machine front door. It points to the generated browser template and sample, canonical repository contracts, CLI commands, outputs, Decision Pack manifest, governance handoff, and the non-authorizing boundary.
 
+`profiles.cli_supported` lists profiles the CLI can run. `profiles.browser_supported` lists profiles the local browser can render. `profiles.supported` remains equal to `profiles.browser_supported` for existing consumers. Neither list authorizes a result. `authority_effect` remains `NONE`.
+
 ## Commands
 
 ```text

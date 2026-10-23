@@ -6,7 +6,7 @@ AI agents: read machine-interface.json first. It lists the CLI, inputs, outputs,
 
 ## Machine interface
 - [machine-interface.json](https://global-ai-governance.github.io/global-ai-governance-toolkit/machine-interface.json): CLI commands, runtime guarantees, schemas, outputs
-- [Profile registry](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/profiles/registry.json): supported profiles (auditable-ai-v1, quantum-ai-convergence-v0.1, ciso-ai-risk-v0.1)
+- [Profile registry](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/profiles/registry.json): CLI profiles are auditable-ai-v1, quantum-ai-convergence-v0.1, ciso-ai-risk-v0.1, independent-assurance-v0.1, mission-assurance-v0.1, and machine-learning-assurance-v0.1. The browser renders the first three. authority_effect is NONE.
 
 ## CLI
 - `gag check INPUT --outdir DIRECTORY [--fail-on none|high|critical]`
