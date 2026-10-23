@@ -22,6 +22,8 @@ include = ["gag_toolkit*", "automation*"]
 automation = [
   "contracts/**/*.json",
   "profiles/**/*.json",
+  "frameworks/**/*.json",
+  "frameworks/**/*.md",
   "policy-as-code/*.yaml",
   "schemas/*.json",
 ]
