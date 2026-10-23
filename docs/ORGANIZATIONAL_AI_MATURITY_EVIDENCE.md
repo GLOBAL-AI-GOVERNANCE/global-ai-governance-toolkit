@@ -20,4 +20,4 @@ Automation does not certify, approve, authorize, guarantee compliance, or transf
 
 `authority_effect: NONE`
 
-The profile is not registered.
+The profile is registered in the Toolkit profile registry and available through the CLI and local-first maturity browser. Registration does not make the result authoritative or certifying.

@@ -12,6 +12,8 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 **Published release:** v2.5.2 — Release Surface Integrity. The status badge no longer names a release version. The published release field is the version statement. Maturity and machine-interface semantics are unchanged. A human determines organizational maturity. The toolkit checks submitted evidence and does not score, certify, or authorize.
 
+**Candidate package version:** 2.5.3 — Assurance State Integrity. This corrects current-state profile documentation and Quantum-AI publication-state semantics. It is not a GitHub Release until tagged. Capability, authority, certification, and external reproducibility claims are unchanged.
+
 ## Start Here
 
 Open the live local-first browser:
@@ -106,7 +108,7 @@ The sovereignty checker is additive to the primary Decision Pack runtime. `gover
 
 ## Advanced Profiles
 
-v2.4.0 adds independent assurance, mission assurance, and machine-learning assurance for CLI use, alongside the Auditable AI, synthetic Quantum-AI, and CISO accountability profiles published in v2.3.0. The browser renders those original three. They follow one additive path:
+The current registry contains the released optional profile set. v2.3.0 introduced Auditable AI, the synthetic Quantum-AI exercise, and CISO accountability. v2.4.0 added independent assurance, mission assurance, and machine-learning assurance. v2.5.0 added organizational AI maturity evidence. Organizational maturity has its own local-first maturity route. [`automation/profiles/registry.json`](automation/profiles/registry.json) is the discovery source of truth for registered and browser-supported profiles. They follow one additive path:
 
 Decision Pack → optional advanced profile → profile result + evidence → accountable human review → optional non-authorizing handoff.
 

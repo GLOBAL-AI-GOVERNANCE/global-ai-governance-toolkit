@@ -1,6 +1,6 @@
 # Requirements Traceability
 
-Status means implemented and machine-enforced on current main development only; it does not describe the published v2.3.0 tag.
+The Quantum-AI profile family is published in tagged Toolkit releases. Status here describes the current source. Pin a Toolkit tag for exact implementation identity. Independent external reproducibility remains `NOT_REPORTED`.
 
 | ID | Source concern / location | Requirement origin | Design response | Verification method | Acceptance evidence | Status |
 |---|---|---|---|---|---|---|

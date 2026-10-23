@@ -94,7 +94,7 @@ def evaluate(data: dict[str, object], root: Path, evaluation_time: str | None):
     if not isinstance(fallback, dict) or fallback.get("required") is not True or fallback.get("available") is not True: issues.append(_issue("FALLBACK_UNAVAILABLE", "The required synthetic fallback is unavailable.", "Restore the fixture fallback before replay."))
 
     details = {"exercise":"Synthetic Magnetic-Navigation Assurance Exercise","seed":seed,"algorithm":data.get("algorithm"),"estimates":estimates,"quality":data.get("quality"),"measurement_boundary":data.get("measurement_boundary"),
-        "evidence_dimensions":{"basis":"E1_REPRODUCIBLE_SYNTHETIC_RUN","provenance":"PROJECT_GENERATED_FIXTURE","publication_status":"CURRENT_MAIN_DEVELOPMENT","replication_status":"DETERMINISTIC_ARTIFACT_REPLAY_VERIFIED"},
+        "evidence_dimensions":{"basis":"E1_REPRODUCIBLE_SYNTHETIC_RUN","provenance":"PROJECT_GENERATED_FIXTURE","publication_status":"PUBLISHED_TOOLKIT_PROFILE","replication_status":"DETERMINISTIC_ARTIFACT_REPLAY_VERIFIED"},
         "replay_taxonomy":{"deterministic_artifact_replay":"VERIFIED","statistical_repeatability":"NOT_ASSESSED","independent_external_reproducibility":"NOT_REPORTED"},
         "experimental_evidence_states":{"usable":["E0","E1"],"reserved":["E2","E3","E4","E5"]},"threshold_boundary":"Fixture-specific research threshold; not an operational safety threshold and not generalizable.","authority_effect":"NONE","certification_semantics":"NONE"}
     evidence = [{"type":"ARTIFACT_ID","reference":str(data.get("run_evidence_id","synthetic-run"))}]
