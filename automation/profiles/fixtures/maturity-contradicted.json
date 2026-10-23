@@ -7,17 +7,21 @@
   "authority_effect": "NONE",
   "categories": [
     {
-      "pillar": "AI Governance, Ethics & Risk",
-      "category": "AI Governance Framework",
       "claimed_level": "DYNAMIC",
-      "contradictions": ["record-a-says-dynamic", "record-b-says-basic"],
+      "contradictions": [
+        "record-a-says-dynamic",
+        "record-b-says-basic"
+      ],
       "evidence": [
         {
           "reference": "ops://record-a",
           "evidence_class": "OPERATING",
           "scope": "enterprise operations"
         }
-      ]
+      ],
+      "pillar_id": "ai-governance-ethics-risk",
+      "category_id": "ai-governance-ethics-risk.ai-governance-framework"
     }
-  ]
+  ],
+  "assessment_coverage": "PARTIAL"
 }

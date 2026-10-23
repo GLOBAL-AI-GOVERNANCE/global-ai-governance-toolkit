@@ -13,4 +13,4 @@ Facts below are taken from the UNESCO Digital Library record and the CC BY-SA 3.
 
 The license requires retained copyright notices, the title when supplied, the source URI when practicable, and a credit when the work is adapted. ShareAlike applies to adaptations of the licensed work.
 
-This adapter stores identity and structural labels only. It does not copy framework prose into original engine code. Whether that isolation satisfies every ShareAlike question is not certified here.
+The category catalog in this directory records structural pillar and category labels only. It does not copy maturity-level prose. That catalog is an adaptation of the framework structure and stays with this adapter under the same license notice.

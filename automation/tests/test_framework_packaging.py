@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 REQUIRED = (
     "framework-metadata.json",
+    "category-catalog.json",
     "ATTRIBUTION.md",
     "LICENSE-NOTICE.md",
     "PROVENANCE.md",

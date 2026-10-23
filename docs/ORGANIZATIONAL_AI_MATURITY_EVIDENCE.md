@@ -1,21 +1,23 @@
 # Organizational AI Maturity Evidence
 
-Generic organizational-capability evidence engine with versioned framework adapters.
+A human process rates maturity. Global AI Governance checks the evidence submitted for that rating.
 
-First adapter: UNESCO AI Maturity Framework (2025).
+## Roles
 
-## Doctrine
+The referenced framework supplies the organizational self-positioning model: six pillars, 29 categories, and four level labels.
 
-No evidence, no maturity claim.
-No representative practice, no organizational claim.
-No scope match, no inference.
-No current evidence, no persistent maturity.
-No provenance, no trusted evidence.
-No verification, no closure.
-No human judgment, no final determination.
-No framework mapping without source attribution.
-No maturity result transfers authority.
+An accountable human process sets the claimed level, the target level, and any formal determination.
 
-Profile remains unregistered in this scaffold.
+Global AI Governance checks whether that evidence is present, in scope, representative, current, consistent, and integrity-supported where asserted. It does not read framework prose and decide that an organization is Basic, Ready, Dynamic, or Advanced.
 
-authority_effect: NONE
+`evidence_supported_level` repeats a human-determined level only when those checks pass. It is not an independent maturity finding. There is no numerical maturity score.
+
+## Boundaries
+
+Partial coverage is not organization-wide completion. Full-framework coverage requires each official category once.
+
+Automation does not certify, approve, authorize, guarantee compliance, or transfer authority.
+
+`authority_effect: NONE`
+
+The profile is not registered.

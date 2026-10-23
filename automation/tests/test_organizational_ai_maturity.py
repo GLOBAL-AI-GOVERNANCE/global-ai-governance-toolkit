@@ -6,10 +6,16 @@ Profile remains unregistered. Tests call evaluate directly.
 from __future__ import annotations
 
 import json
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
-from automation.profiles.organizational_ai_maturity import evaluate
+from automation.profiles.common import canonical_bytes
+from automation.profiles.organizational_ai_maturity import CATALOG_PATH, evaluate, load_catalog
+from automation.scripts.contract_verifier import validate_instance
+from automation.scripts import run_profile as run_profile_module
+from automation.scripts.run_profile import run_profile
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "profiles" / "fixtures"
@@ -27,8 +33,9 @@ class TestOrganizationalAIMaturity(unittest.TestCase):
         self.assertEqual(len(cats), 1)
         cat = cats[0]
         self.assertEqual(cat["claimed_level"], "DYNAMIC")
-        self.assertIsNone(cat["evidence_supported_level"])  # conservative: no auto-level
-        self.assertEqual(cat["support_status"], "PARTIAL")
+        self.assertIsNone(cat["evidence_supported_level"])
+        self.assertEqual(cat["level_support_state"], "NOT_DETERMINED")
+        self.assertEqual(cat["support_status"], "SUPPORTED")
         self.assertEqual(details["human_determination"], "PENDING")
         self.assertEqual(details["authority_effect"], "NONE")
         self.assertEqual(details["overall_synthesis"], "PENDING_HUMAN_SYNTHESIS")
@@ -37,10 +44,10 @@ class TestOrganizationalAIMaturity(unittest.TestCase):
         data = load("maturity-supported.json")
         # add second adverse category
         data["categories"].append({
-            "pillar": "People & Culture",
-            "category": "AI Literacy",
+            "pillar_id": "people-culture",
+            "category_id": "people-culture.ai-literacy-awareness",
             "claimed_level": "ADVANCED",
-            "evidence": []
+            "evidence": [],
         })
         _, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
         self.assertEqual(len(details["categories"]), 2)
@@ -111,6 +118,14 @@ class TestOrganizationalAIMaturity(unittest.TestCase):
         data["categories"][0]["evidence"][0]["valid_through"] = "2025-01-01T00:00:00+00:00"
         findings, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00+00:00")
         self.assertTrue(any(f["id"].endswith("STALE") for f in findings))
+        data["categories"][0]["evidence"][0]["valid_through"] = "2026-10-01T00:00:00Z"
+        data["categories"][0]["evidence"][0]["is_representative"] = True
+        findings, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertFalse(any(item["id"].endswith("STALE") for item in findings))
+        self.assertEqual(details["categories"][0]["freshness_status"], "CURRENT")
+        data["categories"][0]["evidence"][0]["valid_through"] = "not-a-time"
+        findings, _, _ = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertTrue(any(item["id"].endswith("INVALID_TIME") for item in findings))
 
     def test_non_representative_operating(self):
         data = load("maturity-supported.json")
@@ -126,5 +141,188 @@ class TestOrganizationalAIMaturity(unittest.TestCase):
         self.assertEqual(details["human_determination"], "PENDING")
 
 
+def accepted(level="DYNAMIC", status="ACCEPTED", conditions=None):
+    item = {
+        "level": level,
+        "status": status,
+        "accountable_role": "assurance-function",
+        "determined_at": "2026-09-15T00:00:00Z",
+        "basis_references": ["record:governance-review"],
+    }
+    if conditions is not None:
+        item["conditions"] = conditions
+    return item
+
+
+class TestMaturitySemantics(unittest.TestCase):
+    def test_catalog_shape(self):
+        catalog = load_catalog()["raw"]
+        labels = [category["label"] for pillar in catalog["pillars"] for category in pillar["categories"]]
+        ids = [category["id"] for pillar in catalog["pillars"] for category in pillar["categories"]]
+        self.assertEqual(len(catalog["pillars"]), 6)
+        self.assertEqual(len(labels), 29)
+        self.assertEqual(len(set(ids)), 29)
+        self.assertEqual(catalog["levels"], ["BASIC", "READY", "DYNAMIC", "ADVANCED"])
+        self.assertIn("Model Deployment & Management (MLOps)", labels)
+        self.assertIn("Data Readiness for AI", labels)
+        self.assertNotIn("Basic –", json.dumps(catalog))
+
+    def test_unknown_pillar_category_mismatch_and_duplicate(self):
+        data = load("maturity-supported.json")
+        data["categories"][0]["pillar_id"] = "not-a-pillar"
+        findings, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertTrue(any(item["id"].endswith("UNKNOWN_PILLAR") for item in findings))
+        self.assertEqual(details["categories"], [])
+
+        data = load("maturity-supported.json")
+        data["categories"][0]["category_id"] = "not-a-category"
+        findings, _, _ = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertTrue(any(item["id"].endswith("UNKNOWN_CATEGORY") for item in findings))
+
+        data = load("maturity-supported.json")
+        data["categories"][0]["pillar_id"] = "people-culture"
+        findings, _, _ = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertTrue(any(item["id"].endswith("CATEGORY_PILLAR_MISMATCH") for item in findings))
+
+        data = load("maturity-supported.json")
+        data["categories"].append(json.loads(json.dumps(data["categories"][0])))
+        findings, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertTrue(any(item["id"].endswith("DUPLICATE_CATEGORY") for item in findings))
+        self.assertEqual(len(details["categories"]), 1)
+
+    def test_partial_and_full_coverage(self):
+        data = load("maturity-supported.json")
+        _, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertEqual(details["coverage_status"], "PARTIAL")
+        self.assertEqual(details["framework_category_count"], 29)
+        self.assertEqual(details["assessed_category_count"], 1)
+        self.assertEqual(len(details["missing_category_ids"]), 28)
+        self.assertNotIn("organizational maturity", json.dumps(details).lower())
+
+        catalog = load_catalog()["raw"]
+        data["assessment_coverage"] = "FULL_FRAMEWORK"
+        data["categories"] = [
+            {
+                "pillar_id": pillar["id"],
+                "category_id": category["id"],
+                "claimed_level": "BASIC",
+                "evidence": [],
+            }
+            for pillar in catalog["pillars"]
+            for category in pillar["categories"]
+        ]
+        findings, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertFalse(any(item["id"].endswith("COVERAGE_INCOMPLETE") for item in findings))
+        self.assertEqual(details["coverage_status"], "COMPLETE")
+        self.assertEqual(details["missing_category_ids"], [])
+        data["categories"].pop()
+        findings, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertTrue(any(item["id"].endswith("COVERAGE_INCOMPLETE") for item in findings))
+        self.assertEqual(details["coverage_status"], "INCOMPLETE")
+
+    def test_human_determination_gates(self):
+        data = load("maturity-supported.json")
+        data["categories"][0]["human_determination"] = accepted(status="PENDING")
+        _, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertIsNone(details["categories"][0]["evidence_supported_level"])
+        self.assertEqual(details["categories"][0]["level_support_state"], "NOT_DETERMINED")
+
+        for status in ("REJECTED", "RETURNED_FOR_REASSESSMENT"):
+            data["categories"][0]["human_determination"] = accepted(status=status)
+            _, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+            self.assertIsNone(details["categories"][0]["evidence_supported_level"])
+            self.assertIsNone(details["categories"][0]["human_determined_level"])
+
+        data["categories"][0]["human_determination"] = accepted(level="READY")
+        data["categories"][0]["claimed_level"] = "DYNAMIC"
+        data["categories"][0]["target_level"] = "ADVANCED"
+        _, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        cat = details["categories"][0]
+        self.assertEqual(cat["evidence_supported_level"], "READY")
+        self.assertEqual(cat["human_determined_level"], "READY")
+        self.assertEqual(cat["claimed_level"], "DYNAMIC")
+        self.assertEqual(cat["target_level"], "ADVANCED")
+        self.assertEqual(cat["level_support_state"], "HUMAN_DETERMINATION_SUPPORTED")
+        self.assertEqual(cat["authority_effect"], "NONE")
+        self.assertEqual(details["overall_synthesis"], "PENDING_HUMAN_SYNTHESIS")
+
+    def test_accepted_blocked_by_evidence_defects(self):
+        data = load("maturity-stale.json")
+        data["categories"][0]["evidence"][0]["is_representative"] = True
+        data["categories"][0]["human_determination"] = accepted()
+        _, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertIsNone(details["categories"][0]["evidence_supported_level"])
+        self.assertEqual(details["categories"][0]["level_support_state"], "EVIDENCE_STALE")
+
+        data = load("maturity-contradicted.json")
+        data["categories"][0]["human_determination"] = accepted()
+        _, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertEqual(details["categories"][0]["level_support_state"], "EVIDENCE_CONTRADICTED")
+        self.assertIsNone(details["categories"][0]["evidence_supported_level"])
+
+        data = load("maturity-supported.json")
+        data["categories"][0]["material_change_events"] = ["provider-change"]
+        data["categories"][0]["human_determination"] = accepted()
+        _, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertIsNone(details["categories"][0]["evidence_supported_level"])
+        self.assertEqual(details["categories"][0]["assessment_state"], "REASSESSMENT_REQUIRED")
+
+        data = load("maturity-synthetic-evidence-misuse.json")
+        data["categories"][0]["human_determination"] = accepted()
+        _, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertIsNone(details["categories"][0]["evidence_supported_level"])
+
+        data = load("maturity-scope-mismatch.json")
+        data["categories"][0]["human_determination"] = accepted()
+        _, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertIsNone(details["categories"][0]["evidence_supported_level"])
+
+        data = load("maturity-supported.json")
+        data["categories"][0]["evidence"][0]["is_representative"] = False
+        data["categories"][0]["human_determination"] = accepted()
+        _, _, details = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertIsNone(details["categories"][0]["evidence_supported_level"])
+        self.assertEqual(details["categories"][0]["level_support_state"], "EVIDENCE_INSUFFICIENT")
+
+    def test_conditions_and_replay(self):
+        data = load("maturity-supported.json")
+        data["categories"][0]["human_determination"] = accepted(
+            status="ACCEPTED_WITH_CONDITIONS", conditions=["recheck after the next operating cycle"]
+        )
+        _, _, first = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        _, _, second = evaluate(data, ROOT, "2026-10-01T00:00:00Z")
+        self.assertEqual(first["categories"][0]["conditions"], ["recheck after the next operating cycle"])
+        self.assertEqual(first["categories"][0]["evidence_supported_level"], "DYNAMIC")
+        self.assertEqual(canonical_bytes(first), canonical_bytes(second))
+        self.assertNotIn("urlopen", Path(evaluate.__code__.co_filename).read_text(encoding="utf-8"))
+
+    def test_registration_ready_without_activation(self):
+        registry = json.loads((ROOT / "profiles" / "registry.json").read_text(encoding="utf-8"))
+        modules = run_profile_module.MODULES
+        self.assertNotIn("organizational-ai-maturity-v0.1", {item["id"] for item in registry["profiles"]})
+        self.assertNotIn("organizational-ai-maturity-v0.1", modules)
+        data = load("maturity-supported.json")
+        schema = json.loads((ROOT / "contracts" / "profiles" / "organizational-ai-maturity.schema.json").read_text(encoding="utf-8"))
+        validate_instance(data, schema, base=ROOT / "contracts" / "profiles")
+        fake = {"profiles": [{
+            "id": "organizational-ai-maturity-v0.1",
+            "input_schema_enforcement": "PRE_EVALUATOR",
+            "input_schema": "automation/contracts/profiles/organizational-ai-maturity.schema.json",
+        }]}
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "input.json"
+            source.write_text(json.dumps(data), encoding="utf-8")
+            with patch.dict(run_profile_module.MODULES, {"organizational-ai-maturity-v0.1": "automation.profiles.organizational_ai_maturity"}, clear=False):
+                with patch.object(run_profile_module, "load_registry", return_value=fake):
+                    code, output = run_profile("organizational-ai-maturity-v0.1", source, Path(tmp) / "out", evaluation_time="2026-10-01T00:00:00Z")
+        result_schema = json.loads((ROOT.parent / "automation" / "contracts" / "v1" / "profile-result.schema.json").read_text(encoding="utf-8"))
+        validate_instance(output, result_schema, base=ROOT.parent / "automation" / "contracts" / "v1")
+        self.assertEqual(code, 0)
+        self.assertEqual(output["authority_effect"], "NONE")
+        self.assertEqual(output["details"]["categories"][0]["level_support_state"], "NOT_DETERMINED")
+        self.assertTrue(CATALOG_PATH.is_file())
+
+
 if __name__ == "__main__":
     unittest.main()
+
