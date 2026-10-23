@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/profiles/organizational-ai-maturity.schema.json",
+  "title": "Organizational AI Maturity Evidence Assessment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["framework_id", "framework_version", "assessment_id", "assessment_scope", "accountable_owner", "categories"],
+  "properties": {
+    "framework_id": {"type": "string", "const": "unesco-ai-maturity-2025"},
+    "framework_version": {"type": "string"},
+    "assessment_id": {"type": "string"},
+    "assessment_scope": {"type": "string"},
+    "accountable_owner": {"type": "string"},
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["pillar", "category", "claimed_level"],
+        "properties": {
+          "pillar": {"type": "string"},
+          "category": {"type": "string"},
+          "claimed_level": {"enum": ["BASIC", "READY", "DYNAMIC", "ADVANCED"]},
+          "target_level": {"enum": ["BASIC", "READY", "DYNAMIC", "ADVANCED"]},
+          "evidence": {"type": "array"}
+        }
+      }
+    },
+    "authority_effect": {"const": "NONE"}
+  }
+}
