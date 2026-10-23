@@ -24,6 +24,7 @@ MODULES = {
     "independent-assurance-v0.1": "automation.profiles.independent_assurance",
     "mission-assurance-v0.1": "automation.profiles.mission_assurance",
     "machine-learning-assurance-v0.1": "automation.profiles.machine_learning_assurance",
+    "organizational-ai-maturity-v0.1": "automation.profiles.organizational_ai_maturity",
 }
 
 ROOT = Path(__file__).resolve().parents[2]

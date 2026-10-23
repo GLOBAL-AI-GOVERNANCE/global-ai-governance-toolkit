@@ -10,6 +10,8 @@ The static browser publishes `web/machine-interface.json` as its versioned machi
 
 `profiles.cli_supported` lists profiles the CLI can run. `profiles.browser_supported` lists profiles the local browser can render. `profiles.supported` remains equal to `profiles.browser_supported` for existing consumers. Neither list authorizes a result. `authority_effect` remains `NONE`.
 
+Organizational maturity evidence is one of those profiles. A human determines the level. The tool checks submitted evidence. It does not score maturity or transfer authority.
+
 ## Commands
 
 ```text

@@ -50,7 +50,7 @@ The existing hosted `AI Governance Checks` workflow discovers and runs `automati
 
 ## Machine learning assurance
 
-`machine-learning-assurance-v0.1` is an optional profile over referenced dataset, model, evaluation, drift, and context records. A PASS means those references are structurally consistent for one subject and configuration. It does not mean the model is safe, accurate in operation, approved for deployment, certified, or legally authorized. The profile does not retrain or promote a model.
+`organizational-ai-maturity-v0.1` checks submitted evidence for an accountable human maturity determination. It does not score maturity, declare an organization mature, certify, or authorize deployment. Partial coverage is not framework completion. `authority_effect` remains `NONE`.
 
 ## Mission assurance challenge
 

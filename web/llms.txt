@@ -6,7 +6,8 @@ AI agents: read machine-interface.json first. It lists the CLI, inputs, outputs,
 
 ## Machine interface
 - [machine-interface.json](https://global-ai-governance.github.io/global-ai-governance-toolkit/machine-interface.json): CLI commands, runtime guarantees, schemas, outputs
-- [Profile registry](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/profiles/registry.json): CLI profiles are auditable-ai-v1, quantum-ai-convergence-v0.1, ciso-ai-risk-v0.1, independent-assurance-v0.1, mission-assurance-v0.1, and machine-learning-assurance-v0.1. The browser renders the first three. authority_effect is NONE.
+- [Profile registry](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/profiles/registry.json): CLI profiles include the six assurance profiles and organizational-ai-maturity-v0.1. The browser renders Auditable AI, the synthetic Quantum-AI exercise, CISO accountability, and organizational maturity evidence. A human determines maturity. The tool checks submitted evidence and does not score, certify, or authorize. authority_effect is NONE.
+- [Organizational maturity evidence](https://global-ai-governance.github.io/global-ai-governance-toolkit/maturity/): local-only assessment. Partial coverage is not framework completion.
 
 ## CLI
 - `gag check INPUT --outdir DIRECTORY [--fail-on none|high|critical]`

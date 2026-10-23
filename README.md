@@ -12,6 +12,8 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 **Published release:** v2.4.0 — Assurance Interoperability & Agent Connectivity.
 
+**Candidate package version:** 2.5.0 — Organizational AI Maturity Evidence. Package metadata identifies the unreleased candidate. It is not a GitHub Release. A human determines organizational maturity. The candidate checks submitted evidence and does not score, certify, or authorize.
+
 ## Start Here
 
 Open the live local-first browser:

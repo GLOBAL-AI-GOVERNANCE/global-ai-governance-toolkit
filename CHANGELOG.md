@@ -1,4 +1,12 @@
 # Changelog
+## Unreleased
+
+Candidate notes for a later v2.5.0 tag. This section is not a published release. The published GitHub Release remains v2.4.0 until that tag exists.
+
+- Add organizational AI maturity evidence profile `organizational-ai-maturity-v0.1`. A human determines maturity. Automation checks whether submitted evidence can carry that determination. There is no maturity score. `authority_effect` remains NONE.
+- Add a local-only maturity browser. Partial coverage is not framework completion. The adapter catalog remains the structural source.
+- Machine-interface version is 1.2.0. `supported` remains equal to the browser list.
+
 ## [2.4.0] - 2026-10-23 - Assurance Interoperability & Agent Connectivity
 
 - Split machine-interface profile discovery into `cli_supported` and `browser_supported`. `supported` remains equal to the browser list. Machine-interface version is 1.1.0. `authority_effect` remains NONE.
