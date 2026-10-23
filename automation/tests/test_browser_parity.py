@@ -116,10 +116,19 @@ class BrowserParityTests(unittest.TestCase):
 
     def test_machine_front_door_is_versioned_and_non_authorizing(self) -> None:
         interface = json.loads((ROOT / "web/machine-interface.json").read_text(encoding="utf-8"))
-        self.assertEqual(interface["machine_interface_version"], "1.0.1")
+        self.assertEqual(interface["machine_interface_version"], "1.1.0")
         self.assertEqual(interface["discovery"]["llms_txt"], "./llms.txt")
         self.assertTrue((ROOT / "web/llms.txt").is_file())
         self.assertEqual(interface["authority_effect"], "NONE")
+        self.assertEqual(interface["profiles"]["authority_effect"], "NONE")
+        registry = json.loads((ROOT / "automation/profiles/registry.json").read_text(encoding="utf-8"))
+        registry_ids = [item["id"] for item in registry["profiles"]]
+        browser_ids = [item["id"] for item in registry["profiles"] if item.get("browser_support") is True]
+        self.assertEqual(interface["profiles"]["cli_supported"], registry_ids)
+        self.assertEqual(interface["profiles"]["browser_supported"], browser_ids)
+        self.assertEqual(interface["profiles"]["supported"], browser_ids)
+        self.assertNotIn("organizational-ai-maturity-v0.1", registry_ids)
+        self.assertNotIn("organizational-ai-maturity-v0.1", interface["profiles"]["cli_supported"])
         self.assertFalse(interface["runtime"]["upload"])
         self.assertFalse(interface["runtime"]["network_requests"])
         self.assertIn("not deployment approval", interface["review_boundary"])
