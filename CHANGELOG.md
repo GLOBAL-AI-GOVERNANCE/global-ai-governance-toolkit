@@ -1,10 +1,8 @@
 # Changelog
-## Unreleased
-
-Candidate notes for a later v2.4.0 tag. This section is not a published release. The published GitHub Release remains v2.3.0 until that tag exists.
+## [2.4.0] - 2026-10-23 - Assurance Interoperability & Agent Connectivity
 
 - Split machine-interface profile discovery into `cli_supported` and `browser_supported`. `supported` remains equal to the browser list. Machine-interface version is 1.1.0. `authority_effect` remains NONE.
-- Package metadata identifies 2.4.0 as the candidate version. It is not a GitHub Release.
+- Package metadata identifies 2.4.0.
 - Register independent assurance, mission assurance, and machine-learning assurance for CLI use. The browser still renders only Auditable AI, the synthetic Quantum-AI exercise, and CISO accountability.
 - Independent assurance requires a complete submitted qualification summary. CONDITIONAL, future, and expired qualifications cannot pass. Native authenticity is not established.
 - Mission assurance can consume qualification, unresolved-decision, and protected-concern-disposition references. Expired or not-qualified records, blocking unresolved decisions, and HOLD/STALE concern effects fail closed. Absence of a reference is not evidence of absence.
