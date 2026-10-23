@@ -19,7 +19,7 @@
     },
     "framework_version": {
       "type": "string",
-      "minLength": 1
+      "const": "2025"
     },
     "assessment_id": {
       "type": "string",
@@ -32,8 +32,7 @@
     },
     "accountable_owner": {
       "type": "string",
-      "minLength": 1,
-      "description": "Function or role identifier. Avoid personal names."
+      "minLength": 1
     },
     "authority_effect": {
       "const": "NONE"
@@ -50,20 +49,10 @@
           "claimed_level"
         ],
         "properties": {
-          "pillar": {
-            "type": "string",
-            "minLength": 1
-          },
-          "category": {
-            "type": "string",
-            "minLength": 1
-          },
-          "claimed_level": {
-            "enum": ["BASIC", "READY", "DYNAMIC", "ADVANCED"]
-          },
-          "target_level": {
-            "enum": ["BASIC", "READY", "DYNAMIC", "ADVANCED"]
-          },
+          "pillar": {"type": "string", "minLength": 1},
+          "category": {"type": "string", "minLength": 1},
+          "claimed_level": {"enum": ["BASIC", "READY", "DYNAMIC", "ADVANCED"]},
+          "target_level": {"enum": ["BASIC", "READY", "DYNAMIC", "ADVANCED"]},
           "evidence": {
             "type": "array",
             "items": {
@@ -71,53 +60,21 @@
               "additionalProperties": false,
               "required": ["reference", "evidence_class", "scope"],
               "properties": {
-                "reference": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "sha256": {
-                  "type": "string",
-                  "pattern": "^sha256:[0-9a-f]{64}$"
-                },
-                "evidence_class": {
-                  "enum": ["OPERATING", "POLICY", "SYNTHETIC", "PILOT", "OTHER"]
-                },
-                "scope": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "observed_at": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "valid_through": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "representative_period": {
-                  "type": "string"
-                },
-                "verification_method": {
-                  "type": "string"
-                },
-                "integrity_asserted": {
-                  "type": "boolean"
-                }
+                "reference": {"type": "string", "minLength": 1},
+                "sha256": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+                "evidence_class": {"enum": ["OPERATING", "POLICY", "SYNTHETIC", "PILOT", "OTHER"]},
+                "scope": {"type": "string", "minLength": 1},
+                "observed_at": {"type": "string"},
+                "valid_through": {"type": "string"},
+                "representative_period": {"type": "string"},
+                "is_representative": {"type": "boolean"},
+                "verification_method": {"type": "string"},
+                "integrity_asserted": {"type": "boolean"}
               }
             }
           },
-          "contradictions": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "gaps": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
+          "contradictions": {"type": "array", "items": {"type": "string"}},
+          "gaps": {"type": "array", "items": {"type": "string"}},
           "corrective_actions": {
             "type": "array",
             "items": {
@@ -129,18 +86,10 @@
               }
             }
           },
-          "reassessment_triggers": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "organization_defined_critical": {
-            "type": "boolean"
-          },
-          "critical_rationale": {
-            "type": "string"
-          }
+          "reassessment_triggers": {"type": "array", "items": {"type": "string"}},
+          "material_change_events": {"type": "array", "items": {"type": "string"}},
+          "organization_defined_critical": {"type": "boolean"},
+          "critical_rationale": {"type": "string"}
         }
       }
     }

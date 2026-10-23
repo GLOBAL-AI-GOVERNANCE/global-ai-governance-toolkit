@@ -18,7 +18,7 @@
           "scope": "enterprise operations",
           "observed_at": "2026-09-01T00:00:00Z",
           "valid_through": "2027-09-01T00:00:00Z",
-          "representative_period": "Q3-2026",
+          "is_representative": true,
           "verification_method": "document-review",
           "sha256": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         }
