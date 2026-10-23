@@ -1,17 +1,18 @@
 # Changelog
-## Unreleased
+## [2.4.0] - 2026-10-23 - Assurance Interoperability & Agent Connectivity
 
-- Browser workspace: any new input (file, invalid or empty CSV, unreadable file, or a newer input arriving mid-evaluation) now clears the previous preview, results, machine output, and Decision Pack downloads before evaluation. A per-input token prevents a slower earlier evaluation from rendering or downloading after a newer input.
-- Browser workspace accessibility: evaluation views use the ARIA tab pattern with arrow, Home, and End keys; the machine-output switch exposes aria-pressed; scrollable code and tables are keyboard-focusable regions; skip links on the toolkit and Connect pages; an evaluation status is announced politely.
-- CSV errors name the column and row (header is row 1) and list accepted values without echoing cell contents.
-- Connect page: the product status table no longer clips on narrow screens.
-- Extend independent assurance to require a valid Foundations Qualification Evidence reference for positive state. Qualification remains distinct from identity, interest, conflict, independence, and authority.
-- Allow mission assurance to consume qualification, unresolved-decision, and protected-concern-disposition references. Fail closed on expired/not-qualified, blocking unresolved/expired decisions, and HOLD/STALE concern effects.
-- Absence of a concern or decision reference is not evidence of absence. All outputs remain authority_effect NONE.
-- Independent assurance accepts only a complete submitted qualification summary. CONDITIONAL, future, and expired qualifications cannot pass. Native authenticity is not established here.
-- The synthetic mission thread now references the candidate Qualification Evidence, Unresolved Decision, and Protected Concern Disposition records without copying them.
-
-
+- Split machine-interface profile discovery into `cli_supported` and `browser_supported`. `supported` remains equal to the browser list. Machine-interface version is 1.1.0. `authority_effect` remains NONE.
+- Package metadata identifies 2.4.0.
+- Register independent assurance, mission assurance, and machine-learning assurance for CLI use. The browser still renders only Auditable AI, the synthetic Quantum-AI exercise, and CISO accountability.
+- Independent assurance requires a complete submitted qualification summary. CONDITIONAL, future, and expired qualifications cannot pass. Native authenticity is not established.
+- Mission assurance can consume qualification, unresolved-decision, and protected-concern-disposition references. Expired or not-qualified records, blocking unresolved decisions, and HOLD/STALE concern effects fail closed. Absence of a reference is not evidence of absence.
+- Add native portfolio reference checks, a local Assurance Context Binding consumer, and a Decision Pack / Context Binding consistency check. These do not retrieve external artifacts or confer authority.
+- Add the mission-assurance challenge and the unregistered offline synthetic agent-action evidence example.
+- Browser workspace: a newer input clears the previous preview, results, machine output, and Decision Pack downloads. A per-input token prevents an earlier evaluation from rendering after a newer input.
+- Browser accessibility: evaluation views use the ARIA tab pattern; the machine-output switch exposes aria-pressed; scrollable regions are focusable; skip links are present; evaluation status is announced politely. CSV errors name the column and row without echoing cell contents.
+- Add a synthetic browser example with governance gaps.
+- Add `llms.txt`, shared navigation, and a Connect page for local agent setup. Remote MCP use requires allowed hosts and a bearer token. No hosted endpoint is operated.
+- Add history privacy and pull-request identity checks.
 
 ## [2.3.0] - 2026-08-29 - Assurance & Accountability Profiles
 

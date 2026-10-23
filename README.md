@@ -1,7 +1,7 @@
 # Global AI Governance Toolkit
 
 <!-- gag:nav -->
-[![Global AI Governance](https://img.shields.io/badge/Global_AI_Governance-portfolio-0b100d)](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE) ![Status](https://img.shields.io/badge/status-v2.3.0_released-brightgreen) ![authority_effect](https://img.shields.io/badge/authority__effect-NONE-lightgrey)
+[![Global AI Governance](https://img.shields.io/badge/Global_AI_Governance-portfolio-0b100d)](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE) ![Status](https://img.shields.io/badge/status-v2.4.0_released-brightgreen) ![authority_effect](https://img.shields.io/badge/authority__effect-NONE-lightgrey)
 
 **[Connect your agent](https://global-ai-governance.github.io/global-ai-governance-toolkit/connect.html#agents)** · **[Read the spec](https://global-ai-governance.github.io/global-ai-governance-toolkit/connect.html#spec)** · [All products](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE#product-map)
 <!-- /gag:nav -->
@@ -10,7 +10,7 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
-**Current release line:** v2.3.0 - Assurance & Accountability Profiles.
+**Published release:** v2.4.0 — Assurance Interoperability & Agent Connectivity.
 
 ## Start Here
 
@@ -18,7 +18,7 @@ Open the live local-first browser:
 
 **[https://global-ai-governance.github.io/global-ai-governance-toolkit/](https://global-ai-governance.github.io/global-ai-governance-toolkit/)**
 
-The hosted browser reflects current `main`, which may move ahead of the tagged v2.3.0 release. Agents start at [`web/llms.txt`](web/llms.txt) and [`web/machine-interface.json`](web/machine-interface.json); the [Connect page](web/connect.html) covers Model Context Protocol (MCP) setup, pilots, and specifications.
+The hosted browser reflects current `main`, which may move ahead of the tagged v2.4.0 release. Agents start at [`web/llms.txt`](web/llms.txt) and [`web/machine-interface.json`](web/machine-interface.json); the [Connect page](web/connect.html) covers Model Context Protocol (MCP) setup, pilots, and specifications.
 
 Primary browser actions are:
 
@@ -106,7 +106,7 @@ The sovereignty checker is additive to the primary Decision Pack runtime. `gover
 
 ## Advanced Profiles
 
-v2.3.0 adds three optional assurance/accountability profiles to the working public reference Toolkit: Auditable AI, a synthetic Quantum-AI convergence research exercise, and CISO AI risk/accountability. They follow one additive path:
+v2.4.0 adds independent assurance, mission assurance, and machine-learning assurance for CLI use, alongside the Auditable AI, synthetic Quantum-AI, and CISO accountability profiles published in v2.3.0. The browser renders those original three. They follow one additive path:
 
 Decision Pack → optional advanced profile → profile result + evidence → accountable human review → optional non-authorizing handoff.
 
@@ -291,14 +291,17 @@ The repository preserves the following development lineage:
 - v2.1.0: Decision-Ready Governance
 - v2.2.0: AI Sovereignty Control Layer
 - v2.3.0: Assurance & Accountability Profiles
+- v2.4.0: Assurance Interoperability & Agent Connectivity
 - Current public identity: Global AI Governance Toolkit
 
 Historical version names remain in version-specific release records where appropriate.
 
 ## Release Verification
 
+- Review [v2.4.0 release notes](release-notes/v2.4.0.md).
 - Review [v2.3.0 release readiness](docs/release-readiness-v2.3.0.md).
 - Review the [v2.3.0 release notes](release-notes/v2.3.0-assurance-accountability-profiles.md).
+- Review the [v2.4.0 release gate](docs/release-readiness-v2.4.0.md).
 - Run `python -B automation/scripts/validate_repository.py`.
 - Run `python -B automation/scripts/build_decision_pack_example.py --check`.
 
