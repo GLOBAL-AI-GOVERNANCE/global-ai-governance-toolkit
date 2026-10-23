@@ -12,13 +12,15 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 **Published release:** v2.5.0 — Organizational AI Maturity Evidence. A human determines organizational maturity. The toolkit checks submitted evidence and does not score, certify, or authorize.
 
+**Candidate package version:** 2.5.1 — Public Reference Integrity. This corrects current-release references only. It is not a GitHub Release until tagged. Maturity semantics are unchanged.
+
 ## Start Here
 
 Open the live local-first browser:
 
 **[https://global-ai-governance.github.io/global-ai-governance-toolkit/](https://global-ai-governance.github.io/global-ai-governance-toolkit/)**
 
-The hosted browser reflects current `main`, which may move ahead of the tagged v2.4.0 release. Agents start at [`web/llms.txt`](web/llms.txt) and [`web/machine-interface.json`](web/machine-interface.json); the [Connect page](web/connect.html) covers Model Context Protocol (MCP) setup, pilots, and specifications.
+The hosted browser reflects current `main`, which may move ahead of the latest tagged release. Agents start at [`web/llms.txt`](web/llms.txt) and [`web/machine-interface.json`](web/machine-interface.json); the [Connect page](web/connect.html) covers Model Context Protocol (MCP) setup, pilots, and specifications.
 
 Primary browser actions are:
 

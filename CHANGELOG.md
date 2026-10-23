@@ -1,4 +1,10 @@
 # Changelog
+## Unreleased
+
+Candidate notes for a later v2.5.1 tag. The published GitHub Release remains v2.5.0 until that tag exists.
+
+- Public reference integrity patch. Correct current-release references. Preserve v2.5.0 maturity semantics. No runtime or authority change. `authority_effect` remains NONE.
+
 ## [2.5.0] - 2026-10-23 - Organizational AI Maturity Evidence
 
 - Add organizational AI maturity evidence profile `organizational-ai-maturity-v0.1`. A human determines maturity. Automation checks whether submitted evidence can carry that determination. There is no maturity score. `authority_effect` remains NONE.
