@@ -1,7 +1,7 @@
 # Global AI Governance Toolkit
 
 <!-- gag:nav -->
-[![Global AI Governance](https://img.shields.io/badge/Global_AI_Governance-portfolio-0b100d)](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE) ![Status](https://img.shields.io/badge/status-v2.5.0_released-brightgreen) ![authority_effect](https://img.shields.io/badge/authority__effect-NONE-lightgrey)
+[![Global AI Governance](https://img.shields.io/badge/Global_AI_Governance-portfolio-0b100d)](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE) ![Status](https://img.shields.io/badge/status-released-brightgreen) ![authority_effect](https://img.shields.io/badge/authority__effect-NONE-lightgrey)
 
 **[Connect your agent](https://global-ai-governance.github.io/global-ai-governance-toolkit/connect.html#agents)** · **[Read the spec](https://global-ai-governance.github.io/global-ai-governance-toolkit/connect.html#spec)** · [All products](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE#product-map)
 <!-- /gag:nav -->
@@ -11,6 +11,8 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
 **Published release:** v2.5.1 — Public Reference Integrity. This corrects current-release references. Maturity semantics are unchanged. A human determines organizational maturity. The toolkit checks submitted evidence and does not score, certify, or authorize.
+
+**Candidate package version:** 2.5.2 — Release Surface Integrity. This corrects the public status badge only. It is not a GitHub Release until tagged. Maturity and machine-interface semantics are unchanged.
 
 ## Start Here
 
