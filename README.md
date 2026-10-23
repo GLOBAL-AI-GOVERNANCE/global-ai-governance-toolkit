@@ -10,9 +10,7 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
-**Published release:** v2.5.0 — Organizational AI Maturity Evidence. A human determines organizational maturity. The toolkit checks submitted evidence and does not score, certify, or authorize.
-
-**Candidate package version:** 2.5.1 — Public Reference Integrity. This corrects current-release references only. It is not a GitHub Release until tagged. Maturity semantics are unchanged.
+**Published release:** v2.5.1 — Public Reference Integrity. This corrects current-release references. Maturity semantics are unchanged. A human determines organizational maturity. The toolkit checks submitted evidence and does not score, certify, or authorize.
 
 ## Start Here
 
@@ -295,6 +293,7 @@ The repository preserves the following development lineage:
 - v2.3.0: Assurance & Accountability Profiles
 - v2.4.0: Assurance Interoperability & Agent Connectivity
 - v2.5.0: Organizational AI Maturity Evidence
+- v2.5.1: Public Reference Integrity
 - Current public identity: Global AI Governance Toolkit
 
 Historical version names remain in version-specific release records where appropriate.
