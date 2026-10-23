@@ -1,3 +1,3 @@
 """Global AI Governance Toolkit public Python package."""
 
-__version__ = "2.5.1"
+__version__ = "2.5.2"

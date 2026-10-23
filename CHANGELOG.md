@@ -1,4 +1,10 @@
 # Changelog
+## Unreleased
+
+Candidate notes for a later v2.5.2 tag. The published GitHub Release remains v2.5.1 until that tag exists.
+
+- Release surface integrity patch. Correct the public status badge. No maturity semantic change. No machine-interface semantic change. No authority change. `authority_effect` remains NONE.
+
 ## [2.5.1] - 2026-10-23 - Public Reference Integrity
 
 - Public reference integrity patch. Correct current-release references. Preserve v2.5.0 maturity semantics. No runtime or authority change. `authority_effect` remains NONE.
