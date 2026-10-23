@@ -1,4 +1,10 @@
 # Changelog
+## Unreleased
+
+Candidate notes for a later v2.5.3 tag. The published GitHub Release remains v2.5.2 until that tag exists.
+
+- Assurance state integrity patch. Correct stale profile-registration documentation, current profile and browser documentation, and the organizational-maturity interoperability heading and boundaries. Correct Quantum-AI publication-status semantics. Do not strengthen capability, authority, certification, or external reproducibility claims. `authority_effect` remains NONE.
+
 ## [2.5.2] - 2026-10-23 - Release Surface Integrity
 
 - Release surface integrity patch. Correct the public status badge. No maturity semantic change. No machine-interface semantic change. No authority change. `authority_effect` remains NONE.

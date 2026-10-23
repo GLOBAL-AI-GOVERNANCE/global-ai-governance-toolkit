@@ -2,7 +2,7 @@
 
 ## Optional profile evidence
 
-Toolkit v2.3.0 profile results are additive evidence artifacts. A portfolio handoff may reference `profile-result.json` and its SHA-256 through the existing `evidence_refs` array. This does not change `authority_effect: NONE`, transfer authority, or imply that a declared future dependency such as Stateful Revocation is operational.
+Toolkit profile results are additive evidence artifacts. A portfolio handoff may reference `profile-result.json` and its SHA-256 through the existing `evidence_refs` array. This does not change `authority_effect: NONE`, transfer authority, or imply that a declared future dependency such as Stateful Revocation is operational.
 
 This repository remains independently useful as the Global AI Governance Toolkit. Portfolio interoperability is additive.
 
@@ -48,11 +48,26 @@ The existing hosted `AI Governance Checks` workflow discovers and runs `automati
 
 `mission-assurance-v0.1` is an optional Toolkit profile. It assembles submitted evidence references into a staged review. It does not redefine Agent Trust Passport, verified-closure, resilience, administration, or Peace OS semantics. `authority_effect` remains `NONE`. A PASS is a bounded structural check for the selected stage only.
 
-## Machine learning assurance
+## Organizational maturity evidence
 
 `organizational-ai-maturity-v0.1` checks submitted evidence for an accountable human maturity determination. It does not score maturity, declare an organization mature, certify, or authorize deployment. Partial coverage is not framework completion. `authority_effect` remains `NONE`.
+
+## Machine learning assurance
+
+`machine-learning-assurance-v0.1` checks structural consistency of submitted dataset, model, evaluation, and context-binding references. A PASS does not mean a model is safe, accurate, approved, certified, or authorized. `authority_effect` remains `NONE`.
 
 ## Mission assurance challenge
 
 `automation/assurance/mission-assurance/challenge/` holds a synthetic golden thread and a pilot template. The thread exercises the existing mission-assurance profile. It does not add another gate profile. Metric examples are templates with no measured values.
+
+## Scoped evidence references
+
+Other portfolio artifacts may be cited only as scoped evidence. Nothing in this section retrieves them automatically, creates a new handoff runtime, or transfers authority.
+
+- Agentic passport and validation artifacts may be referenced as scoped evidence. Validity does not prove organizational maturity.
+- Verified Vulnerability Governance closure receipts may be referenced as scoped evidence. Closure of one finding never proves enterprise maturity.
+- AI Cyber Resilience Framework assurance references may support a bounded capability claim. They never auto-promote maturity.
+- Peace OS participation or evaluated-practice evidence may support bounded learning evidence only. Fictional simulation never proves operational capability.
+- Governed Systems Administration design artifacts are not evidence of operational administrative maturity while its implementation gate remains closed.
+
 

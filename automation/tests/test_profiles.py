@@ -86,7 +86,8 @@ class ProfileTests(unittest.TestCase):
         self.assertIn("not an operational safety threshold", output["details"]["threshold_boundary"])
         self.assertEqual(output["authority_effect"], "NONE")
         self.assertEqual(output["details"]["certification_semantics"], "NONE")
-        self.assertEqual(set(output["details"]["evidence_dimensions"]), {"basis", "provenance", "publication_status", "replication_status"})
+        self.assertEqual(output["details"]["evidence_dimensions"]["publication_status"], "PUBLISHED_TOOLKIT_PROFILE")
+        self.assertNotIn("CURRENT_MAIN_DEVELOPMENT", json.dumps(output))
         self.assertEqual(output["details"]["replay_taxonomy"], {"deterministic_artifact_replay":"VERIFIED", "statistical_repeatability":"NOT_ASSESSED", "independent_external_reproducibility":"NOT_REPORTED"})
         validate_instance(output, json.loads(RESULT_SCHEMA.read_text()), base=RESULT_SCHEMA.parent)
 

@@ -6,7 +6,7 @@ This current-main v0.1 development profile separates four dimensions that must n
 |---|---|---|
 | Evidence basis | `E1_REPRODUCIBLE_SYNTHETIC_RUN` | Deterministic project-authored synthetic run; E0 is design evidence and E2-E5 remain reserved. |
 | Provenance | `PROJECT_GENERATED_FIXTURE` | Project-generated fixture and controls, not vendor, laboratory, policy-body, or real-hardware evidence. |
-| Publication status | `CURRENT_MAIN_DEVELOPMENT` | Current main development only; not represented as part of the published v2.3.0 tag. |
+| Publication status | `PUBLISHED_TOOLKIT_PROFILE` | The Quantum-AI profile family is published in tagged Toolkit releases. This field does not claim that an arbitrary working-tree revision is itself a release. Pin a Toolkit tag for exact implementation identity. |
 | Replication status | `DETERMINISTIC_ARTIFACT_REPLAY_VERIFIED` | Tests reproduce identical canonical result bytes from the checked-in fixture. |
 
 These dimensions appear under `details.evidence_dimensions`, which the common Profile Result contract already permits. The common contract and schema version are unchanged. No dimension carries certification, authority, operational-validity, quantum-advantage, or real-hardware semantics.
