@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Organizational AI maturity evidence</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#setup">Skip to assessment</a>
+  <header class="shell">
+    <p>Global AI Governance</p>
+    <h1>Organizational AI maturity evidence</h1>
+    <p>A human rates maturity. This local page checks whether the submitted evidence can carry that rating. It does not score maturity, certify, or authorize deployment.</p>
+  </header>
+  <main class="shell grid">
+    <section id="setup" class="setup" tabindex="-1">
+      <h2>Assessment setup</h2>
+      <div class="grid">
+        <label>Assessment identifier<input id="assessment-id"></label>
+        <label>Scope<input id="scope"></label>
+        <label>Accountable role<input id="owner"></label>
+        <label>Coverage<select id="coverage"><option>PARTIAL</option><option>FULL_FRAMEWORK</option></select></label>
+      </div>
+    </section>
+    <section class="setup">
+      <h2>What this page is</h2>
+      <p><strong>Framework.</strong> The referenced framework supplies the self-positioning taxonomy. Use does not imply publisher endorsement or certification.</p>
+      <p><strong>Global AI Governance assurance.</strong> This page verifies the structure of submitted evidence and whether that evidence can carry an accountable human determination. authority_effect is NONE.</p>
+    </section>
+    <div class="grid split">
+      <section class="nav-list" tabindex="0" aria-label="Framework categories">
+        <h2>Framework navigator</h2>
+        <label>Filter categories<input id="filter" type="search"></label>
+        <p id="count"></p>
+        <div id="pillar-nav"></div>
+      </section>
+      <section id="editor" class="editor"></section>
+    </div>
+    <section>
+      <h2>Result</h2>
+      <p id="sample-note" hidden>This is a synthetic sample. It is not operational evidence.</p>
+      <div class="actions">
+        <button id="sample" type="button">Load synthetic sample</button>
+        <button id="evaluate" class="secondary" type="button">Evaluate locally</button>
+        <label class="file-button">Import JSON<input id="import-file" type="file" accept="application/json"></label>
+        <button id="export-result" class="secondary" type="button">Download profile result</button>
+        <button id="export-gaps" class="secondary" type="button">Download gap register</button>
+        <button id="export-review" class="secondary" type="button">Download review notes</button>
+      </div>
+      <div id="result" tabindex="0" aria-live="polite"></div>
+      <p id="live" class="visually-hidden" aria-live="polite"></p>
+    </section>
+  </main>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>

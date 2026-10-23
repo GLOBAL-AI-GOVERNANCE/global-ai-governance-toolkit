@@ -35,11 +35,22 @@ jobs:
           test -f web/machine-interface.json
           test -f web/ai-system-inventory-template.csv
           test -f web/sample-ai-inventory.csv
+          test -f web/maturity/index.html
+          test -f web/maturity/app.mjs
+          test -f web/maturity/maturity-engine.mjs
+          test -f web/maturity/maturity-viewer.mjs
+          test -f web/maturity/catalog.generated.mjs
+          test -f web/maturity/styles.css
           ! grep -RIE '(fetch\(|XMLHttpRequest|WebSocket|sendBeacon|navigator\.serviceWorker)' web --include='*.mjs' --include='*.js'
           python -B automation/scripts/generate_browser_contract_bundle.py --check
+          python -B automation/scripts/generate_maturity_catalog.py --check
           node --check web/app.mjs
           node --check web/governance-engine.mjs
           node --check web/finding-guidance.mjs
+          node --check web/maturity/app.mjs
+          node --check web/maturity/maturity-engine.mjs
+          node --check web/maturity/maturity-viewer.mjs
+          node --check web/maturity/catalog.generated.mjs
 
       - name: Stage static site
         shell: bash

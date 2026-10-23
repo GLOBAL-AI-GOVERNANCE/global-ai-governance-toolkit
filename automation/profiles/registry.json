@@ -64,6 +64,17 @@
       "browser_support": false,
       "authority_effect": "NONE",
       "input_schema_enforcement": "PRE_EVALUATOR"
+    },
+    {
+      "id": "organizational-ai-maturity-v0.1",
+      "version": "0.1.0",
+      "maturity": "experimental non-authorizing organizational maturity evidence profile",
+      "purpose": "Evaluate submitted organizational AI maturity evidence against a versioned framework adapter while preserving accountable human determination.",
+      "input_schema": "automation/contracts/profiles/organizational-ai-maturity.schema.json",
+      "result_schema": "automation/contracts/v1/profile-result.schema.json",
+      "browser_support": true,
+      "authority_effect": "NONE",
+      "input_schema_enforcement": "PRE_EVALUATOR"
     }
   ]
 }

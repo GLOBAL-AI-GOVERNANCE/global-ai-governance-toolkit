@@ -1,21 +1,17 @@
-"""Unit tests for organizational AI maturity evidence evaluator.
-
-Profile remains unregistered. Tests call evaluate directly.
-"""
+"""Tests for the organizational AI maturity evidence profile."""
 
 from __future__ import annotations
 
 import json
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
 
 from automation.profiles.common import canonical_bytes
 from automation.profiles.organizational_ai_maturity import CATALOG_PATH, evaluate, load_catalog
 from automation.scripts.contract_verifier import validate_instance
-from automation.scripts import run_profile as run_profile_module
-from automation.scripts.run_profile import run_profile
+from automation.scripts.run_profile import MODULES, run_profile
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "profiles" / "fixtures"
@@ -296,33 +292,60 @@ class TestMaturitySemantics(unittest.TestCase):
         self.assertEqual(canonical_bytes(first), canonical_bytes(second))
         self.assertNotIn("urlopen", Path(evaluate.__code__.co_filename).read_text(encoding="utf-8"))
 
-    def test_registration_ready_without_activation(self):
+    def test_registration_and_browser_parity(self):
         registry = json.loads((ROOT / "profiles" / "registry.json").read_text(encoding="utf-8"))
-        modules = run_profile_module.MODULES
-        self.assertNotIn("organizational-ai-maturity-v0.1", {item["id"] for item in registry["profiles"]})
-        self.assertNotIn("organizational-ai-maturity-v0.1", modules)
+        self.assertIn("organizational-ai-maturity-v0.1", {item["id"] for item in registry["profiles"]})
+        self.assertEqual(MODULES["organizational-ai-maturity-v0.1"], "automation.profiles.organizational_ai_maturity")
         data = load("maturity-supported.json")
         schema = json.loads((ROOT / "contracts" / "profiles" / "organizational-ai-maturity.schema.json").read_text(encoding="utf-8"))
+        catalog = load_catalog()["raw"]
+        self.assertEqual(schema["properties"]["categories"]["items"]["properties"]["category_id"]["enum"], [category["id"] for pillar in catalog["pillars"] for category in pillar["categories"]])
         validate_instance(data, schema, base=ROOT / "contracts" / "profiles")
-        fake = {"profiles": [{
-            "id": "organizational-ai-maturity-v0.1",
-            "input_schema_enforcement": "PRE_EVALUATOR",
-            "input_schema": "automation/contracts/profiles/organizational-ai-maturity.schema.json",
-        }]}
+        broken = json.loads(json.dumps(data))
+        broken["categories"][0]["category_id"] = "not-a-category"
         with tempfile.TemporaryDirectory() as tmp:
+            bad = Path(tmp) / "bad.json"
+            bad.write_text(json.dumps(broken), encoding="utf-8")
+            with self.assertRaises(ValueError) as caught:
+                run_profile("organizational-ai-maturity-v0.1", bad, Path(tmp) / "out", evaluation_time="2026-10-01T00:00:00Z")
+            self.assertIn("input fails registered schema", str(caught.exception))
             source = Path(tmp) / "input.json"
             source.write_text(json.dumps(data), encoding="utf-8")
-            with patch.dict(run_profile_module.MODULES, {"organizational-ai-maturity-v0.1": "automation.profiles.organizational_ai_maturity"}, clear=False):
-                with patch.object(run_profile_module, "load_registry", return_value=fake):
-                    code, output = run_profile("organizational-ai-maturity-v0.1", source, Path(tmp) / "out", evaluation_time="2026-10-01T00:00:00Z")
+            completed = subprocess.run(
+                ["python3", "-B", "automation/scripts/run_profile.py", "organizational-ai-maturity-v0.1", str(source), "--outdir", str(Path(tmp) / "cli"), "--evaluation-time", "2026-10-01T00:00:00Z"],
+                cwd=ROOT.parent, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            output = json.loads((Path(tmp) / "cli" / "profile-result.json").read_text(encoding="utf-8"))
         result_schema = json.loads((ROOT.parent / "automation" / "contracts" / "v1" / "profile-result.schema.json").read_text(encoding="utf-8"))
         validate_instance(output, result_schema, base=ROOT.parent / "automation" / "contracts" / "v1")
-        self.assertEqual(code, 0)
         self.assertEqual(output["authority_effect"], "NONE")
-        self.assertEqual(output["details"]["categories"][0]["level_support_state"], "NOT_DETERMINED")
-        self.assertTrue(CATALOG_PATH.is_file())
+        self.assertEqual(output["details"]["overall_synthesis"], "PENDING_HUMAN_SYNTHESIS")
+        keys = ["category_id", "claimed_level", "target_level", "human_determined_level", "evidence_supported_level", "level_support_state", "support_status", "freshness_status", "assessment_state", "confidence", "contradictions", "conditions"]
+        page = (ROOT.parent / "web/maturity/index.html").read_text(encoding="utf-8")
+        style = (ROOT.parent / "web/maturity/styles.css").read_text(encoding="utf-8")
+        self.assertIn("<label>", page)
+        self.assertIn("aria-live", page)
+        self.assertIn(":focus-visible", style)
+        self.assertIn("prefers-reduced-motion", style)
+        for fixture in sorted((ROOT / "profiles" / "fixtures").glob("maturity-*.json")):
+            _, _, details = evaluate(json.loads(fixture.read_text(encoding="utf-8")), ROOT, "2026-10-01T00:00:00Z")
+            browser_run = subprocess.run(
+                ["node", str(ROOT / "tests" / "run_maturity_parity.mjs"), str(fixture), "2026-10-01T00:00:00Z"],
+                cwd=ROOT.parent, text=True, capture_output=True, check=False,
+            )
+            self.assertEqual(browser_run.returncode, 0, browser_run.stderr)
+            browser = json.loads(browser_run.stdout)
+            self.assertEqual(browser["missing_category_ids"], details["missing_category_ids"])
+            self.assertEqual(browser["authority_effect"], "NONE")
+            self.assertEqual(
+                [{key: item.get(key) for key in keys} for item in browser["categories"]],
+                [{key: item.get(key) for key in keys} for item in details["categories"]],
+                fixture.name,
+            )
 
 
 if __name__ == "__main__":
     unittest.main()
+
 

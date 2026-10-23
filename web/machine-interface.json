@@ -12,6 +12,14 @@
     "result_contract": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/profile-result.schema.json",
     "registry": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/profiles/registry.json",
     "viewer": "./profile-viewer.mjs",
+    "maturity": {
+      "profile_id": "organizational-ai-maturity-v0.1",
+      "browser_route": "./maturity/",
+      "framework_id": "unesco-ai-maturity-2025",
+      "framework_version": "2025",
+      "authority_effect": "NONE",
+      "human_review_boundary": "A human determines maturity. Automation only checks whether submitted evidence can carry that determination."
+    },
     "authority_effect": "NONE",
     "cli_supported": [
       "auditable-ai-v1",
@@ -19,17 +27,20 @@
       "ciso-ai-risk-v0.1",
       "independent-assurance-v0.1",
       "mission-assurance-v0.1",
-      "machine-learning-assurance-v0.1"
+      "machine-learning-assurance-v0.1",
+      "organizational-ai-maturity-v0.1"
     ],
     "browser_supported": [
       "auditable-ai-v1",
       "quantum-ai-convergence-v0.1",
-      "ciso-ai-risk-v0.1"
+      "ciso-ai-risk-v0.1",
+      "organizational-ai-maturity-v0.1"
     ],
     "supported": [
       "auditable-ai-v1",
       "quantum-ai-convergence-v0.1",
-      "ciso-ai-risk-v0.1"
+      "ciso-ai-risk-v0.1",
+      "organizational-ai-maturity-v0.1"
     ]
   },
   "input": {
@@ -38,7 +49,7 @@
     "sample": "./sample-ai-inventory.csv",
     "template": "./ai-system-inventory-template.csv"
   },
-  "machine_interface_version": "1.1.0",
+  "machine_interface_version": "1.2.0",
   "outputs": [
     "normalized-inventory.json",
     "canonical-inventory.csv",
