@@ -90,7 +90,7 @@ Default behavior is fail-closed for `CRITICAL` findings:
 
 ### GitHub Action
 
-The repository root provides a composite action that installs the toolkit into an isolated virtual environment and runs `gaig check` on an inventory CSV. It ships in release v2.6.0; pin it to that release's full commit SHA or a later commit from `main`.
+The repository root provides a composite action that installs the toolkit into an isolated virtual environment and runs `gaig check` on an inventory CSV. It first shipped in release v2.6.0. Pin it to the full commit SHA of the v2.7.0 tag (`0f4535b4a0358643bfd5b15f87dd71b5b67f1477`) or a later commit from `main`.
 
 ```yaml
 - uses: actions/checkout@<commit-sha>
