@@ -2,6 +2,8 @@
 ## [Unreleased]
 
 - Pin the README, site, `llms.txt`, and machine interface to v2.7.2, including the `global_ai_governance-2.7.2-py3-none-any.whl` install path and the v2.7.2 tag commit for the GitHub Action. The machine interface version stays 1.2.0.
+- Point the connect page, landing product map, and `llms.txt` to AI Governance MCP v0.3.2, which bundles toolkit v2.7.2.
+- Refine the landing, connect, and maturity introductions. Behavior is unchanged.
 
 ## [2.7.2] - 2026-10-24 - Resolvable Schema Identifiers
 
