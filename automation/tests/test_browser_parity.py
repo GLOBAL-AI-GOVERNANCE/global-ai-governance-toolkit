@@ -98,6 +98,15 @@ class BrowserParityTests(unittest.TestCase):
         ):
             self.assertIn(metadata, combined)
             combined = combined.replace(metadata, "")
+        # Structured data is an inert JSON-LD block for search engines and agents; it triggers no request.
+        start = combined.index('<script type="application/ld+json">')
+        end = combined.index("</script>", start) + len("</script>")
+        structured = json.loads(combined[start + len('<script type="application/ld+json">'):end - len("</script>")])
+        self.assertEqual(structured["@context"], "https://schema.org")
+        ids = {node["@id"] for node in structured["@graph"]}
+        self.assertIn("https://ai-governance.solutions/#organization", ids)
+        self.assertTrue(all(node_id.startswith("https://ai-governance.solutions/") for node_id in ids))
+        combined = combined[:start] + combined[end:]
         for phrase in ("Run sample", "Run example with gaps", "Download blank template", "Load your CSV", "Normalization preview", "Governance results", "Machine outputs", "Decision Pack", "authority_effect", "What this means", "What to do next"):
             self.assertIn(phrase, combined)
         for forbidden in ("fetch(", "XMLHttpRequest", "WebSocket", "sendBeacon", "https://", "http://"):

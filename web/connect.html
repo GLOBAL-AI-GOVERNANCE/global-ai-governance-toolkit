@@ -53,12 +53,84 @@ python3 -m venv .venv &amp;&amp; . .venv/bin/activate &amp;&amp; pip install -e 
 gaig-mcp                     # stdio (Claude Desktop and other local clients)
 gaig-mcp --http --port 8000  # Streamable HTTP at /mcp
 pytest &amp;&amp; python scripts/smoke_test.py   # optional checks; need the [dev] extra</pre>
-      <p><strong>Claude Desktop (local):</strong> add <code>"gaig": {"command": "uvx", "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.1", "gaig-mcp"]}</code> under <code>mcpServers</code> (launch command tested; not yet tested inside Claude Desktop). From source, use <code>"command": "/ABS/PATH/ai-governance-mcp/.venv/bin/gaig-mcp"</code> instead.<br>
-      <strong>Claude Code (local):</strong> <code>claude mcp add gaig --scope project -- uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.1 gaig-mcp</code> (launch command tested; not yet tested inside Claude Code).<br>
-      <strong>Grok CLI (local):</strong> <code>grok mcp add gaig -- uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.1 gaig-mcp</code> (launch command tested; not yet tested inside the Grok CLI).<br>
-      <strong>Anthropic API:</strong> header <code>anthropic-beta: mcp-client-2026-09-15</code>, <code>mcp_servers</code> entry <code>{"type": "url", "name": "gaig", "url": "https://YOUR-HOST/mcp", "authorization_token": "TOKEN"}</code>, and tool <code>{"type": "mcp_toolset", "mcp_server_name": "gaig"}</code>.<br>
-      <strong>OpenAI API:</strong> tool <code>{"type": "mcp", "server_label": "gaig", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.<br>
-      <strong>xAI API:</strong> tool <code>{"type": "mcp", "server_label": "gaig", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.</p>
+      <h3 class="recipe-group">On your machine</h3>
+      <div class="recipes">
+        <article class="recipe">
+          <h4>Claude Desktop</h4>
+          <p class="recipe-note">Add under <code>mcpServers</code>. Launch command tested; not yet tested inside Claude Desktop. From source, use <code>"command": "/ABS/PATH/ai-governance-mcp/.venv/bin/gaig-mcp"</code> instead.</p>
+<pre tabindex="0" role="region" aria-label="Claude Desktop configuration">"gaig": {
+  "command": "uvx",
+  "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.1", "gaig-mcp"]
+}</pre>
+        </article>
+        <article class="recipe">
+          <h4>Claude Code</h4>
+          <p class="recipe-note">Launch command tested; not yet tested inside Claude Code.</p>
+<pre tabindex="0" role="region" aria-label="Claude Code command">claude mcp add gaig --scope project -- \
+  uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.1 gaig-mcp</pre>
+        </article>
+        <article class="recipe">
+          <h4>Grok CLI</h4>
+          <p class="recipe-note">Launch command tested; not yet tested inside the Grok CLI.</p>
+<pre tabindex="0" role="region" aria-label="Grok CLI command">grok mcp add gaig -- \
+  uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.1 gaig-mcp</pre>
+        </article>
+        <article class="recipe">
+          <h4>Codex</h4>
+          <p class="recipe-note">Add to <code>~/.codex/config.toml</code> (<a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.3.1/examples/client-configs/codex.config.toml">file</a>). One recorded local stdio run (Codex CLI 0.151.0).</p>
+<pre tabindex="0" role="region" aria-label="Codex configuration">[mcp_servers.gaig]
+command = "uvx"
+args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.1", "gaig-mcp"]</pre>
+        </article>
+        <article class="recipe">
+          <h4>Cursor</h4>
+          <p class="recipe-note">Add to <code>.cursor/mcp.json</code> (<a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.3.1/examples/client-configs/cursor.mcp.json">file</a>). Launch command tested; not yet tested inside Cursor.</p>
+<pre tabindex="0" role="region" aria-label="Cursor configuration">{"mcpServers": {"gaig": {
+  "command": "uvx",
+  "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.1", "gaig-mcp"]
+}}}</pre>
+        </article>
+        <article class="recipe">
+          <h4>VS Code</h4>
+          <p class="recipe-note">Add to <code>.vscode/mcp.json</code> (<a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.3.1/examples/client-configs/vscode.mcp.json">file</a>). Launch command tested; not yet tested inside VS Code.</p>
+<pre tabindex="0" role="region" aria-label="VS Code configuration">{"servers": {"gaig": {
+  "type": "stdio",
+  "command": "uvx",
+  "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.1", "gaig-mcp"]
+}}}</pre>
+        </article>
+      </div>
+      <h3 class="recipe-group">Through the OpenAI, Anthropic, or xAI API</h3>
+      <p>Point the provider at an HTTPS endpoint you host. Replace <code>YOUR-HOST</code> and <code>TOKEN</code> (your <code>GAIG_MCP_BEARER_TOKEN</code>).</p>
+      <div class="recipes">
+        <article class="recipe">
+          <h4>OpenAI API</h4>
+          <p class="recipe-note">Responses API tool entry.</p>
+<pre tabindex="0" role="region" aria-label="OpenAI API tool entry">{"type": "mcp",
+ "server_label": "gaig",
+ "server_url": "https://YOUR-HOST/mcp",
+ "headers": {"Authorization": "Bearer TOKEN"}}</pre>
+        </article>
+        <article class="recipe">
+          <h4>Anthropic API</h4>
+          <p class="recipe-note">Messages API: beta header, server entry, and toolset.</p>
+<pre tabindex="0" role="region" aria-label="Anthropic API request fields">anthropic-beta: mcp-client-2026-09-15
+
+"mcp_servers": [{"type": "url", "name": "gaig",
+  "url": "https://YOUR-HOST/mcp",
+  "authorization_token": "TOKEN"}]
+"tools": [{"type": "mcp_toolset",
+  "mcp_server_name": "gaig"}]</pre>
+        </article>
+        <article class="recipe">
+          <h4>xAI API</h4>
+          <p class="recipe-note">Responses API tool entry.</p>
+<pre tabindex="0" role="region" aria-label="xAI API tool entry">{"type": "mcp",
+ "server_label": "gaig",
+ "server_url": "https://YOUR-HOST/mcp",
+ "headers": {"Authorization": "Bearer TOKEN"}}</pre>
+        </article>
+      </div>
       <p class="fineprint">Remote use needs an HTTPS endpoint you host yourself; Global AI Governance operates no hosted endpoint. Any network-reachable server must set <code>GAIG_MCP_ALLOWED_HOSTS</code> and <code>GAIG_MCP_BEARER_TOKEN</code> (32+ characters); without them it refuses to start. Consumer connector UIs that cannot send a static bearer token (ChatGPT on the web today; Claude.ai outside its request-headers beta) cannot connect. These remote recipes have not been tested against a live provider; see the repository README. The command is <code>gaig-mcp</code> and the Python package is <code>gaig_mcp</code>.</p>
       <p class="fineprint"><strong>Where your data goes:</strong> the browser Toolkit processes files only in this browser. Through MCP, the inventory or passport you pass becomes part of your AI client's conversation, so a hosted assistant sends it to its provider, and a remote server you host receives it over HTTPS. <code>validate_passport</code> checks a passport document; it does not monitor, enforce, or revoke anything at runtime.</p>
     </section>

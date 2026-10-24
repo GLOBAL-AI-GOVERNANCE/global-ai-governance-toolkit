@@ -78,6 +78,6 @@
   "discovery": {
     "llms_txt": "./llms.txt",
     "human_entry": "./",
-    "schema_urls_track": "main branch of the repository (same as this Pages site); pin to a release tag for stable integrations"
+    "schema_urls_track": "schema URLs are pinned to the v2.7.1 release tag; this Pages site reflects the main branch"
   }
 }
