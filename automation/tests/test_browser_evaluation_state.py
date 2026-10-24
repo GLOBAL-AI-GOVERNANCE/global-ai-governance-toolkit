@@ -86,6 +86,13 @@ class EvaluationStateTests(unittest.TestCase):
         css = (ROOT / "web/styles.css").read_text(encoding="utf-8")
         self.assertIn("@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } }", css)
 
+    def test_section_links_open_without_animated_scroll(self) -> None:
+        # Smooth scrolling applies only after a page element has focus, so a link such as
+        # connect.html#guard lands on its section at once instead of animating on load.
+        css = (ROOT / "web/styles.css").read_text(encoding="utf-8")
+        self.assertIn("@media (prefers-reduced-motion: no-preference) { html:focus-within { scroll-behavior:smooth; } }", css)
+        self.assertNotIn("html { scroll-behavior:smooth; }", css)
+
 
 if __name__ == "__main__":
     unittest.main()
