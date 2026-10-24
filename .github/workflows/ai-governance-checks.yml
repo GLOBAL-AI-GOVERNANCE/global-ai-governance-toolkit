@@ -46,6 +46,10 @@ jobs:
         run: |
           python -B automation/scripts/validate_repository.py
 
+      - name: Check schema identifiers name their published release path
+        run: |
+          python -B automation/scripts/check_schema_ids.py
+
       - name: Install and verify flagship CLI
         run: |
           python -m pip install --disable-pip-version-check --no-deps .

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/examples/agent_action_assurance/input.schema.json",
+  "$id": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/examples/agent_action_assurance/input.schema.json",
   "title": "Synthetic Agent Action Assurance Input (Candidate)",
   "description": "Candidate-only structural contract; runtime applies additional semantic checks.",
   "type": "object",
