@@ -1,14 +1,14 @@
 # Global AI Governance Toolkit
 
 <!-- gaig:nav -->
-**[Global AI Governance](https://ai-governance.solutions/)** · `v2.7.2 · released` · `authority_effect: NONE`
+**[Global AI Governance](https://ai-governance.solutions/)** · `v2.7.2 · stable` · `authority_effect: NONE`
 
 [Connect your agent](https://ai-governance.solutions/connect.html#agents) · [Specifications](https://ai-governance.solutions/connect.html#spec) · [All products](https://ai-governance.solutions/#products)
 <!-- /gaig:nav -->
 
-Check your AI systems and agents before they act. List what you run; the toolkit finds missing owners, monitoring, shutdown paths, and evidence, then prepares a reproducible Decision Pack so the person accountable can decide with care. Free, open source, and runs locally.
+Govern AI before it acts. List what you run; the toolkit finds missing owners, monitoring, shutdown paths, and evidence, then prepares a reproducible Decision Pack so the person accountable can decide with care. Free, open source, and runs locally.
 
-**Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
+**Status:** Stable · `v2.7.2`. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
 **Latest release:** v2.7.2. The command is `gaig`. A human determines organizational maturity: the toolkit checks the submitted evidence and does not score, certify, or authorize.
 
