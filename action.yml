@@ -66,8 +66,10 @@ runs:
         outdir="${GAG_OUTDIR:-$RUNNER_TEMP/gag-report}"
         args=(check "$GAG_INVENTORY" --outdir "$outdir" --fail-on "$GAG_FAIL_ON")
         if [ -n "$GAG_EVALUATION_TIME" ]; then args+=(--evaluation-time "$GAG_EVALUATION_TIME"); fi
+        set +e
         "$GAG_ACTION_BIN/gag" "${args[@]}"
         status=$?
+        set -e
         gate=""
         if [ -f "$outdir/governance-result.json" ]; then
           gate=$("$GAG_ACTION_BIN/python" -c 'import json,sys; print(json.load(open(sys.argv[1])).get("governance_gate_state", ""))' "$outdir/governance-result.json")
