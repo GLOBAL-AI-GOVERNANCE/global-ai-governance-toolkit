@@ -1,26 +1,55 @@
 [build-system]
-requires = ["setuptools>=69", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "global-ai-governance-toolkit"
+name = "global-ai-governance"
 version = "2.7.1"
 description = "Local-first AI governance reference tooling"
 readme = "README.md"
 requires-python = ">=3.11"
-license = {file = "LICENSE"}
+license = "MIT"
+license-files = ["LICENSE"]
 dependencies = []
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Quality Assurance",
+]
+
+[project.urls]
+Homepage = "https://global-ai-governance.github.io/global-ai-governance-toolkit/"
+Repository = "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit"
+Documentation = "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/tree/main/docs"
+Changelog = "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/CHANGELOG.md"
 
 [project.scripts]
 gaig = "gaig_toolkit.cli:main"
-# Deprecated alias of gaig.
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["gaig_toolkit*", "automation*"]
+# The repository keeps its reference tooling in automation/. The wheel installs it
+# under gaig_toolkit/_bundled/automation, so the only top-level package installed is
+# gaig_toolkit. automation/tests and repository-only data stay out of the wheel.
+[tool.setuptools]
+packages = [
+  "gaig_toolkit",
+  "gaig_toolkit._bundled.automation",
+  "gaig_toolkit._bundled.automation.interoperability",
+  "gaig_toolkit._bundled.automation.profiles",
+  "gaig_toolkit._bundled.automation.scripts",
+]
+
+[tool.setuptools.package-dir]
+"gaig_toolkit._bundled.automation" = "automation"
 
 [tool.setuptools.package-data]
-automation = [
+"gaig_toolkit._bundled.automation" = [
   "contracts/**/*.json",
   "profiles/**/*.json",
   "frameworks/**/*.json",
@@ -28,6 +57,9 @@ automation = [
   "policy-as-code/*.yaml",
   "schemas/*.json",
 ]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["**/__pycache__/*", "*.pyc"]
 
 [tool.pytest.ini_options]
 testpaths = ["automation/tests"]
