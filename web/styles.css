@@ -1,6 +1,6 @@
 :root { color-scheme: dark; --ink:#f3f1e9; --muted:#a7aaa7; --panel:#121817; --line:#2b3431; --acid:#c8f560; --orange:#ff7a45; --red:#ff5e68; --blue:#8fd3ff; }
 * { box-sizing:border-box; }
-html { scroll-behavior:smooth; }
+@media (prefers-reduced-motion: no-preference) { html:focus-within { scroll-behavior:smooth; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } }
 body { margin:0; background:#090d0c; color:var(--ink); font:16px/1.55 Inter, ui-sans-serif, system-ui, sans-serif; }
 button, input { font:inherit; }
