@@ -6,7 +6,7 @@
 **[Connect your agent](https://ai-governance.solutions/connect.html#agents)** · **[Read the spec](https://ai-governance.solutions/connect.html#spec)** · [All products](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE#product-map)
 <!-- /gaig:nav -->
 
-Check your AI systems and agents before they act. List what you run; the toolkit finds missing owners, monitoring, shutdown paths, and evidence, then prepares a reproducible Decision Pack so an accountable person can decide. Free, open source, and runs locally.
+Check your AI systems and agents before they act. List what you run; the toolkit finds missing owners, monitoring, shutdown paths, and evidence, then prepares a reproducible Decision Pack so the person accountable can decide with care. Free, open source, and runs locally.
 
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
