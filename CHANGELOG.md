@@ -3,6 +3,13 @@
 
 - The Release Assets workflow also attaches a CycloneDX SBOM of the clean wheel install and records a GitHub build-provenance attestation for every asset in `SHA256SUMS`. Applies to releases published after this change; existing releases are unchanged.
 
+## [2.6.1] - 2026-10-23 - First-Run Experience
+
+- First-run experience patch. Lead the README with a plain-language opener and a no-install browser path. Simplify the Quick Start so it runs from a fresh clone without changing tracked files.
+- Point the site's MCP setup at `gaig-mcp` and record the completed rename in `docs/GAIG_RENAME_MIGRATION.md`.
+- Site accessibility and metadata: add a favicon, page descriptions, and share-preview tags; raise small text sizes; show a visible focus ring on every interactive control; extend reduced-motion handling.
+- No command, schema, contract, or behavior change. `gag` remains a deprecated alias. No capability, authority, certification, or external reproducibility claim is strengthened. `authority_effect` remains NONE.
+
 ## [2.6.0] - 2026-10-23 - Primary Command `gaig`
 
 - The installed command is now `gaig`. `gag` remains installed as a deprecated alias with the same entry point and unchanged output.

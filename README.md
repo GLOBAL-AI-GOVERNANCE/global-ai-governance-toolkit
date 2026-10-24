@@ -10,7 +10,7 @@ Check your AI systems and agents before they act. List what you run; the toolkit
 
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
-**Latest release:** v2.6.0. The command is `gaig`; `gag` still works as a deprecated alias, so existing scripts keep running. A human determines organizational maturity: the toolkit checks the submitted evidence and does not score, certify, or authorize.
+**Latest release:** v2.6.1. The command is `gaig`; `gag` still works as a deprecated alias, so existing scripts keep running. A human determines organizational maturity: the toolkit checks the submitted evidence and does not score, certify, or authorize.
 
 ## Start Here
 
@@ -78,7 +78,7 @@ gaig verify "$OUT"
 grep -m1 "BLOCKED BY CRITICAL FINDINGS" "$OUT/decision-pack/executive-summary.md"
 ```
 
-Expected: both commands exit `0`, and the last line prints the `BLOCKED BY CRITICAL FINDINGS` status line from the Decision Pack summary. Open `"$OUT/decision-pack/"` to review the pack. To use the published release instead of current `main`, add `--branch v2.6.0` to `git clone`.
+Expected: both commands exit `0`, and the last line prints the `BLOCKED BY CRITICAL FINDINGS` status line from the Decision Pack summary. Open `"$OUT/decision-pack/"` to review the pack. To use the published release instead of current `main`, add `--branch v2.6.1` to `git clone`.
 
 The bundled sample intentionally includes systems with critical control gaps. The quick start therefore uses explicit report-only mode so the toolkit can generate a blocked-state Decision Pack for review. Remove `--fail-on none` to exercise the default fail-closed gate. To check your own systems, download the [blank template](web/ai-system-inventory-template.csv), fill one row per AI system or agent, and pass that file instead of the sample. The repository-relative script `python automation/scripts/run_governance_checks.py` accepts the same arguments.
 
@@ -311,6 +311,7 @@ The repository preserves the following development lineage:
 - v2.5.2: Release Surface Integrity
 - v2.5.3: Assurance State Integrity
 - v2.6.0: Primary Command `gaig`
+- v2.6.1: First-Run Experience
 - Current public identity: Global AI Governance Toolkit
 
 Historical version names remain in version-specific release records where appropriate.
@@ -321,7 +322,7 @@ Historical version names remain in version-specific release records where approp
 - Review [v2.3.0 release readiness](docs/release-readiness-v2.3.0.md).
 - Review the [v2.3.0 release notes](release-notes/v2.3.0-assurance-accountability-profiles.md).
 - Review the [v2.4.0 release gate](docs/release-readiness-v2.4.0.md).
-- Release assets (wheel, sdist, and `SHA256SUMS`) are built from the release tag and attached by the [Release Assets workflow](.github/workflows/release-assets.yml). For releases published after v2.6.0, the workflow also attaches a CycloneDX SBOM (`*.cdx.json`) and records a GitHub build-provenance attestation for every asset listed in `SHA256SUMS`; check one with `gh attestation verify <file> --repo GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit`. Releases up to and including v2.6.0 have no SBOM or attestation.
+- Release assets (wheel, sdist, and `SHA256SUMS`) are built from the release tag and attached by the [Release Assets workflow](.github/workflows/release-assets.yml). For releases published after v2.6.1, the workflow also attaches a CycloneDX SBOM (`*.cdx.json`) and records a GitHub build-provenance attestation for every asset listed in `SHA256SUMS`; check one with `gh attestation verify <file> --repo GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit`. Releases up to and including v2.6.1 have no SBOM or attestation.
 - Run `python -B automation/scripts/validate_repository.py`.
 - Run `python -B automation/scripts/build_decision_pack_example.py --check`.
 
