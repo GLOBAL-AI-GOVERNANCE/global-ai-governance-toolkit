@@ -113,6 +113,25 @@ Each of these READMEs has one footer line saying "command `gag-mcp`". They chang
 
 `agentic-ai-governance/README.md:189`, `ai-cyber-resilience-framework/README.md`, `ai-governance-os/README.md`, `containment-ledger/README.md`, `governed-systems-administration/README.md`, `verified-vulnerability-governance/README.md`, `.github/README.md`, `global-ai-governance-toolkit/README.md:322`, `peace-os/README.md:111` (checksum-covered).
 
+### Occurrences added after the initial inventory
+
+These arrived with the GitHub Action, the bundled MCP release, the client configurations, and the install table. They follow the same rules as the rows above. Line numbers in this document can drift as files change; search by occurrence.
+
+| Repository | File | Kind | Occurrence | Rollout step |
+| --- | --- | --- | --- | --- |
+| global-ai-governance-toolkit | `action.yml` | CLI/ENV | runs `gag check`; exported step variables `GAG_CHECK_REPORT_DIR`, `GAG_CHECK_EXIT_CODE`, `GAG_CHECK_GATE_STATE` (public: later workflow steps read them); internal step variables `GAG_PYTHON`, `GAG_ACTION_PATH`, `GAG_ACTION_BIN`, `GAG_INVENTORY`, `GAG_OUTDIR`, `GAG_FAIL_ON`, `GAG_EVALUATION_TIME`, `GAG_STATUS` | Step 2. Exported variables follow the alias decision (export both names during an alias period) |
+| global-ai-governance-toolkit | `README.md` (GitHub Action section) | DOC | `gag check`, `GAG_CHECK_*` | Step 2 |
+| global-ai-governance-toolkit | `.github/workflows/ai-governance-checks.yml` | CI | `GAG_CHECK_EXIT_CODE`, `GAG_CHECK_GATE_STATE` assertions on the action | Step 2 |
+| global-ai-governance-toolkit | `.github/workflows/release-assets.yml` | CI | `bin/gag --version` check on built release assets | Step 2 |
+| ai-governance-mcp | `pyproject.toml`, `MANIFEST.in`, `scripts/bundle_upstreams.py`, `src/gag_mcp/_upstream/` | PKG | bundled upstream path `src/gag_mcp/_upstream`, package data keys `gag_mcp` | Step 4 |
+| ai-governance-mcp | `.github/workflows/release-assets.yml` | CI | `bin/gag-mcp --version` check on built release assets | Step 4 |
+| ai-governance-mcp | `examples/client-configs/` (`cursor.mcp.json`, `vscode.mcp.json`, `codex.config.toml`, `README.md`) | CFG | server key `gag`, command `gag-mcp` in the `uvx --from ...@v0.1.0` line | Step 4. Configs pinned to `@v0.1.0` keep working with that tag |
+| ai-governance-mcp | `examples/agent-stacks/` and `tests/test_examples.py`, `tests/test_bundle.py` | CFG/TEST | `gag-mcp` command and `gag_mcp` imports in examples and their tests | Step 4 |
+| GLOBAL-AI-GOVERNANCE | `README.md` (Install at a glance) | DOC | `uvx ... gag-mcp`, `docker build ... -t gag-mcp` | Step 5 |
+| GLOBAL-AI-GOVERNANCE | `portfolio.json` (install entries) | MI | `uvx ... gag-mcp`, `docker build ... -t gag-mcp` | Step 5 |
+
+The `ai-governance-mcp` upstream locks now point at newer toolkit and agentic commits than the ones named in the MCP table above. The rule is unchanged: bump the toolkit lock to the first commit or release that ships `gaig`, in the same MCP change that updates the hints.
+
 ### Repositories with no occurrences
 
 `governance-continuity-assurance` (private) has none. The non-breaking PRs cleared every repository except `global-ai-governance-toolkit`, `ai-governance-mcp`, `GLOBAL-AI-GOVERNANCE`, and `peace-os` (plus the footer lines above).
