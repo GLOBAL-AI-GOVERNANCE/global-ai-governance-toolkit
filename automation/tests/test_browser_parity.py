@@ -90,6 +90,14 @@ class BrowserParityTests(unittest.TestCase):
 
     def test_static_surface_is_local_only_and_complete(self) -> None:
         combined = "\n".join((ROOT / "web" / name).read_text(encoding="utf-8") for name in ("index.html", "app.mjs", "governance-engine.mjs", "finding-guidance.mjs"))
+        # Link-preview metadata must name the site's own absolute URLs; it triggers no request from the page.
+        for metadata in (
+            '<meta property="og:url" content="https://ai-governance.solutions/">',
+            '<meta property="og:image" content="https://ai-governance.solutions/og-image.png">',
+            '<link rel="canonical" href="https://ai-governance.solutions/">',
+        ):
+            self.assertIn(metadata, combined)
+            combined = combined.replace(metadata, "")
         for phrase in ("Run sample", "Run example with gaps", "Download blank template", "Load your CSV", "Normalization preview", "Governance results", "Machine outputs", "Decision Pack", "authority_effect", "What this means", "What to do next"):
             self.assertIn(phrase, combined)
         for forbidden in ("fetch(", "XMLHttpRequest", "WebSocket", "sendBeacon", "https://", "http://"):
