@@ -6,11 +6,11 @@
     "profile": "gaig profile PROFILE_ID INPUT --outdir DIRECTORY [--decision-pack-manifest FILE] [--evaluation-time YYYY-MM-DDTHH:MM:SSZ]",
     "verify": "gaig verify OUTPUT_DIRECTORY"
   },
-  "decision_pack_manifest": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/v1/decision-pack-manifest.schema.json",
-  "governance_handoff": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/governance-decision-handoff.schema.json",
+  "decision_pack_manifest": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/decision-pack-manifest.schema.json",
+  "governance_handoff": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/governance-decision-handoff.schema.json",
   "profiles": {
-    "result_contract": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/v1/profile-result.schema.json",
-    "registry": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/profiles/registry.json",
+    "result_contract": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/profile-result.schema.json",
+    "registry": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/profiles/registry.json",
     "viewer": "./profile-viewer.mjs",
     "maturity": {
       "profile_id": "organizational-ai-maturity-v0.1",
@@ -44,8 +44,8 @@
     ]
   },
   "input": {
-    "canonical_schema": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/v1/canonical-inventory-record.schema.json",
-    "mapping": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/v1/inventory-mapping.json",
+    "canonical_schema": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/canonical-inventory-record.schema.json",
+    "mapping": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/inventory-mapping.json",
     "sample": "./sample-ai-inventory.csv",
     "template": "./ai-system-inventory-template.csv"
   },
@@ -71,9 +71,9 @@
     "upload": false
   },
   "schemas": {
-    "findings": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/v1/governance-findings.schema.json",
-    "normalized_inventory": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/v1/normalized-inventory.schema.json",
-    "result": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/v1/governance-result.schema.json"
+    "findings": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/governance-findings.schema.json",
+    "normalized_inventory": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/normalized-inventory.schema.json",
+    "result": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/governance-result.schema.json"
   },
   "discovery": {
     "llms_txt": "./llms.txt",

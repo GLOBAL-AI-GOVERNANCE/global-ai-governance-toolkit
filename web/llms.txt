@@ -6,11 +6,11 @@ AI agents: read machine-interface.json first. It lists the CLI, inputs, outputs,
 
 ## Machine interface
 - [machine-interface.json](https://global-ai-governance.github.io/global-ai-governance-toolkit/machine-interface.json): CLI commands, runtime guarantees, schemas, outputs
-- [Profile registry](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/profiles/registry.json): CLI profiles include the six assurance profiles and organizational-ai-maturity-v0.1. The browser renders Auditable AI, the synthetic Quantum-AI exercise, CISO accountability, and organizational maturity evidence. A human determines maturity. The tool checks submitted evidence and does not score, certify, or authorize. authority_effect is NONE.
+- [Profile registry](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/profiles/registry.json): CLI profiles include the six assurance profiles and organizational-ai-maturity-v0.1. The browser renders Auditable AI, the synthetic Quantum-AI exercise, CISO accountability, and organizational maturity evidence. A human determines maturity. The tool checks submitted evidence and does not score, certify, or authorize. authority_effect is NONE.
 - [Organizational maturity evidence](https://global-ai-governance.github.io/global-ai-governance-toolkit/maturity/): local-only assessment. Partial coverage is not framework completion.
 
 ## CLI
-Install (Python 3.11 or later): `pip install https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.7.0/global_ai_governance_toolkit-2.7.0-py3-none-any.whl`. Verify the wheel against the release `SHA256SUMS`. The package is not on PyPI.
+Install (Python 3.11 or later): `pip install https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.7.1/global_ai_governance_toolkit-2.7.1-py3-none-any.whl`. Verify the wheel against the release `SHA256SUMS`. The package is not on PyPI.
 - `gaig check INPUT --outdir DIRECTORY [--fail-on none|high|critical]`
 - `gaig normalize INPUT --output-json FILE [--output-csv FILE]`
 - `gaig profile PROFILE_ID INPUT --outdir DIRECTORY [--decision-pack-manifest FILE]`
@@ -19,14 +19,14 @@ Install (Python 3.11 or later): `pip install https://github.com/GLOBAL-AI-GOVERN
 ## Inputs
 - [Inventory template CSV](https://global-ai-governance.github.io/global-ai-governance-toolkit/ai-system-inventory-template.csv)
 - [Sample inventory CSV](https://global-ai-governance.github.io/global-ai-governance-toolkit/sample-ai-inventory.csv)
-- [Canonical inventory record schema](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/v1/canonical-inventory-record.schema.json)
+- [Canonical inventory record schema](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/canonical-inventory-record.schema.json)
 
 ## Output schemas
-- [Governance findings](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/v1/governance-findings.schema.json)
-- [Governance result](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/v1/governance-result.schema.json)
-- [Decision Pack manifest](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/v1/decision-pack-manifest.schema.json)
-- [Profile result](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/v1/profile-result.schema.json)
-- [Governance decision handoff](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/contracts/governance-decision-handoff.schema.json)
+- [Governance findings](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/governance-findings.schema.json)
+- [Governance result](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/governance-result.schema.json)
+- [Decision Pack manifest](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/decision-pack-manifest.schema.json)
+- [Profile result](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/profile-result.schema.json)
+- [Governance decision handoff](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/governance-decision-handoff.schema.json)
 
 ## Optional
 - [Repository](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit)
