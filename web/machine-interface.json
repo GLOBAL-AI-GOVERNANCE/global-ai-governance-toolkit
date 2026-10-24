@@ -10,7 +10,7 @@
   "governance_handoff": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/automation/contracts/governance-decision-handoff.schema.json",
   "profiles": {
     "result_contract": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/automation/contracts/v1/profile-result.schema.json",
-    "registry": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/automation/profiles/registry.json",
+    "registry": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.0/automation/profiles/registry.json",
     "viewer": "./profile-viewer.mjs",
     "maturity": {
       "profile_id": "organizational-ai-maturity-v0.1",
@@ -41,7 +41,19 @@
       "quantum-ai-convergence-v0.1",
       "ciso-ai-risk-v0.1",
       "organizational-ai-maturity-v0.1"
-    ]
+    ],
+    "independent_assurance": {
+      "profile_id": "independent-assurance-v0.1",
+      "contract_version": "0.2.0",
+      "case_contract": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.0/automation/contracts/profiles/independent-assurance-case.schema.json",
+      "autonomous_agent_requires": [
+        "agent_passport_ref",
+        "shutdown_evidence"
+      ],
+      "max_shutdown_test_age_days": 90,
+      "boundary": "Checks submitted records. It does not establish that a shutdown test occurred or validate the passport itself.",
+      "authority_effect": "NONE"
+    }
   },
   "input": {
     "canonical_schema": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/automation/contracts/v1/canonical-inventory-record.schema.json",
@@ -49,7 +61,7 @@
     "sample": "./sample-ai-inventory.csv",
     "template": "./ai-system-inventory-template.csv"
   },
-  "machine_interface_version": "1.2.0",
+  "machine_interface_version": "1.3.0",
   "outputs": [
     "normalized-inventory.json",
     "canonical-inventory.csv",
@@ -78,6 +90,7 @@
   "discovery": {
     "llms_txt": "./llms.txt",
     "human_entry": "./",
-    "schema_urls_track": "schema URLs are pinned to the v2.7.2 release tag; this Pages site reflects the main branch"
-  }
+    "schema_urls_track": "unchanged schemas keep their v2.7.2 release-tag URLs in v2.8.0; changed contracts and the profile registry are pinned to v2.8.0; this Pages site reflects the main branch"
+  },
+  "release": "v2.8.0"
 }

@@ -46,7 +46,7 @@
       <h2>Connect your agent</h2>
       <p><strong>Read first:</strong> <a href="./llms.txt">llms.txt</a> and <a href="./machine-interface.json">machine-interface.json</a> list the CLI, inputs, outputs, profiles, and raw schema URLs.</p>
       <p><strong>Use it in your agent in 5 minutes</strong> with <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp">AI Governance MCP</a>, the AI Governance Model Context Protocol Server. Model Context Protocol (MCP) is an open standard that lets AI assistants call external tools. It is read-only and has three tools: <code>check_inventory</code>, <code>build_decision_pack</code>, and <code>validate_passport</code>.</p>
-<pre tabindex="0" role="region" aria-label="AI Governance MCP run command">uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.2 gaig-mcp   # stdio</pre>
+<pre tabindex="0" role="region" aria-label="AI Governance MCP run command">uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0 gaig-mcp   # stdio</pre>
       <p>That one command needs only <a href="https://docs.astral.sh/uv/">uv</a>: the pinned Toolkit and Agentic files are bundled in the package, so nothing else is cloned or fetched. It was tested in a clean environment. To run from source instead, or to run the test suite and smoke test:</p>
 <pre tabindex="0" role="region" aria-label="AI Governance MCP from-source commands">git clone https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp &amp;&amp; cd ai-governance-mcp
 python3 -m venv .venv &amp;&amp; . .venv/bin/activate &amp;&amp; pip install -e ".[dev]"
@@ -60,43 +60,43 @@ pytest &amp;&amp; python scripts/smoke_test.py   # optional checks; need the [de
           <p class="recipe-note">Add under <code>mcpServers</code>. Launch command tested; not yet tested inside Claude Desktop. From source, use <code>"command": "/ABS/PATH/ai-governance-mcp/.venv/bin/gaig-mcp"</code> instead.</p>
 <pre tabindex="0" role="region" aria-label="Claude Desktop configuration">"gaig": {
   "command": "uvx",
-  "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.2", "gaig-mcp"]
+  "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0", "gaig-mcp"]
 }</pre>
         </article>
         <article class="recipe">
           <h4>Claude Code</h4>
           <p class="recipe-note">Launch command tested; not yet tested inside Claude Code.</p>
 <pre tabindex="0" role="region" aria-label="Claude Code command">claude mcp add gaig --scope project -- \
-  uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.2 gaig-mcp</pre>
+  uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0 gaig-mcp</pre>
         </article>
         <article class="recipe">
           <h4>Grok CLI</h4>
           <p class="recipe-note">Launch command tested; not yet tested inside the Grok CLI.</p>
 <pre tabindex="0" role="region" aria-label="Grok CLI command">grok mcp add gaig -- \
-  uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.2 gaig-mcp</pre>
+  uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0 gaig-mcp</pre>
         </article>
         <article class="recipe">
           <h4>Codex</h4>
-          <p class="recipe-note">Add to <code>~/.codex/config.toml</code> (<a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.3.2/examples/client-configs/codex.config.toml">file</a>). One recorded local stdio run (Codex CLI 0.151.0).</p>
+          <p class="recipe-note">Add to <code>~/.codex/config.toml</code> (<a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.4.0/examples/client-configs/codex.config.toml">file</a>). One recorded local stdio run (Codex CLI 0.151.0).</p>
 <pre tabindex="0" role="region" aria-label="Codex configuration">[mcp_servers.gaig]
 command = "uvx"
-args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.2", "gaig-mcp"]</pre>
+args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0", "gaig-mcp"]</pre>
         </article>
         <article class="recipe">
           <h4>Cursor</h4>
-          <p class="recipe-note">Add to <code>.cursor/mcp.json</code> (<a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.3.2/examples/client-configs/cursor.mcp.json">file</a>). Launch command tested; not yet tested inside Cursor.</p>
+          <p class="recipe-note">Add to <code>.cursor/mcp.json</code> (<a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.4.0/examples/client-configs/cursor.mcp.json">file</a>). Launch command tested; not yet tested inside Cursor.</p>
 <pre tabindex="0" role="region" aria-label="Cursor configuration">{"mcpServers": {"gaig": {
   "command": "uvx",
-  "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.2", "gaig-mcp"]
+  "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0", "gaig-mcp"]
 }}}</pre>
         </article>
         <article class="recipe">
           <h4>VS Code</h4>
-          <p class="recipe-note">Add to <code>.vscode/mcp.json</code> (<a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.3.2/examples/client-configs/vscode.mcp.json">file</a>). Launch command tested; not yet tested inside VS Code.</p>
+          <p class="recipe-note">Add to <code>.vscode/mcp.json</code> (<a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.4.0/examples/client-configs/vscode.mcp.json">file</a>). Launch command tested; not yet tested inside VS Code.</p>
 <pre tabindex="0" role="region" aria-label="VS Code configuration">{"servers": {"gaig": {
   "type": "stdio",
   "command": "uvx",
-  "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.2", "gaig-mcp"]
+  "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0", "gaig-mcp"]
 }}}</pre>
         </article>
       </div>
@@ -138,7 +138,7 @@ args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp
     <section id="guard" class="shell connect-section">
       <p class="eyebrow">For agent builders</p>
       <h2>Guard every tool call</h2>
-      <p>Your agent has more tools than these three. A small <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.3.2/examples/agent-stacks/action_level_guard.py">Action Level guard</a> (Python standard library) checks each tool call before it runs, using the Action Levels in the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/blob/main/spec/08-action-authority.md">action-authority spec</a>: Levels 0 to 3 run, Level 4 waits for an accountable person to approve or reject it, Level 5 is blocked, and a tool missing from your policy counts as Level 4. The guard never approves a Level 4 call itself.</p>
+      <p>Your agent has more tools than these three. A small <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.4.0/examples/agent-stacks/action_level_guard.py">Action Level guard</a> (Python standard library) checks each tool call before it runs, using the Action Levels in the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/blob/main/spec/08-action-authority.md">action-authority spec</a>: Levels 0 to 3 run, Level 4 waits for an accountable person to approve or reject it, Level 5 is blocked, and a tool missing from your policy counts as Level 4. The guard never approves a Level 4 call itself.</p>
       <div class="table-wrap" tabindex="0" role="region" aria-label="Action Level guard by agent stack"><table class="status-table">
         <thead><tr><th>Works with</th><th>How Level 4 and Level 5 are enforced</th><th>Status</th></tr></thead>
         <tbody>
@@ -149,7 +149,8 @@ args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp
           <tr><td>OpenAI, Anthropic, and xAI APIs (hosted MCP)</td><td>Only Level 0 to 3 tools are exposed unattended; OpenAI can also ask for Level 4 through <code>require_approval</code></td><td><span class="g-status">Request shapes tested offline; no live request</span></td></tr>
         </tbody>
       </table></div>
-      <p>Files and setup: <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.3.2#guard-agent-tool-calls-by-action-level">AI Governance MCP README</a> (release v0.3.2). The guard limits what an agent can do unattended; it does not make any action authorized.</p>
+      <p>Files and setup: <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.4.0#guard-agent-tool-calls-by-action-level">AI Governance MCP README</a> (release v0.4.0). The guard limits what an agent can do unattended; it does not make any action authorized.</p>
+      <p>To check the agent's passport as well, the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.4.0/examples/agent-stacks/passport_tool_call_hook.py">passport tool-call hook</a> for Claude Code and the Grok CLI runs one combined check at the server's own clock: the passport must verify, a signed revocation list must pass, and the tool's Action Level must be within the passport's level. Any failed check denies. Status: tested offline; not run inside Claude Code or the Grok CLI. <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.4.0#check-the-passport-and-the-action-level-before-each-tool-call">Setup</a>.</p>
     </section>
 
     <section id="spec" class="shell connect-section">
@@ -157,8 +158,8 @@ args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp
       <h2>Read the spec</h2>
       <ul>
         <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/blob/main/docs/GLOBAL_AI_ASSURANCE_ENVELOPE.md">Global AI Assurance Envelope</a>: the portfolio-level, reference-only interoperability object.</li>
-        <li><a href="./machine-interface.json">Toolkit machine interface</a> and <a href="https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/tree/v2.7.2/automation">v2.7.2 contracts</a>.</li>
-        <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/v0.1.0-alpha.2/schemas">Agentic AI Governance v0.1.0-alpha.2 schemas</a>: agent authority, passport, expiry, and revocation.</li>
+        <li><a href="./machine-interface.json">Toolkit machine interface</a> and <a href="https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/tree/v2.8.0/automation">v2.8.0 contracts</a>.</li>
+        <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/v0.1.0-alpha.4/schemas">Agentic AI Governance v0.1.0-alpha.4 schemas</a>: agent authority, passport, expiry, and revocation, plus <a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/blob/v0.1.0-alpha.4/spec/11-agent-fleet-controls.md">Agent Fleet Controls</a>: status freshness by Action Level, suspension, fleet action terms, a delegation depth cap, and sub-agent passports bound to their parent.</li>
       </ul>
     </section>
 
@@ -166,10 +167,10 @@ args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp
       <p class="eyebrow">The suite</p>
       <h2 id="products-heading">From inventory to verified closure</h2>
       <ul class="suite">
-        <li><h3><a href="./#toolkit">Toolkit</a></h3><p>Turn an AI-system inventory into findings and a Decision Pack for the person accountable.</p><span class="g-badge" data-g-status="done">v2.7.2 · stable</span></li>
-        <li><h3><a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp">AI Governance MCP</a></h3><p>The same checks, callable by your agents over Model Context Protocol (MCP). Read-only.</p><span class="g-badge" data-g-status="done">v0.3.2 · released</span></li>
-        <li><h3><a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance">Agentic AI Governance</a></h3><p>Agent Trust Passports and Action Levels: who an agent acts for, what it may do alone, and when that ends.</p><span class="g-badge" data-g-status="done">v0.1.0-alpha.3 · available</span></li>
-        <li><h3><a href="https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance">Verified Vulnerability Governance</a></h3><p>Track each vulnerability from owner to fix to retest, and close it only with evidence.</p><span class="g-badge" data-g-status="done">v0.2.0 · released</span></li>
+        <li><h3><a href="./#toolkit">Toolkit</a></h3><p>Turn an AI-system inventory into findings and a Decision Pack for the person accountable.</p><span class="g-badge" data-g-status="done">v2.8.0 · stable</span></li>
+        <li><h3><a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp">AI Governance MCP</a></h3><p>The same checks, callable by your agents over Model Context Protocol (MCP). Read-only.</p><span class="g-badge" data-g-status="done">v0.4.0 · released</span></li>
+        <li><h3><a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance">Agentic AI Governance</a></h3><p>Agent Trust Passports and Action Levels: who an agent acts for, what it and its sub-agents may do alone, and when that ends.</p><span class="g-badge" data-g-status="done">v0.1.0-alpha.4 · available</span></li>
+        <li><h3><a href="https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance">Verified Vulnerability Governance</a></h3><p>Track each vulnerability from owner to fix to retest, and close it only with evidence reviewed by a separate role.</p><span class="g-badge" data-g-status="done">v0.3.0 · released</span></li>
         <li><h3><a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework">AI Cyber Resilience Framework</a></h3><p>Limit the blast radius of AI-accelerated cyber risk, protect recovery, and keep critical work running.</p><span class="g-badge" data-g-status="done">v0.1.1 · released</span></li>
         <li><h3><a href="https://global-ai-governance.github.io/containment-ledger/">Containment Ledger</a></h3><p>Review a system's security boundaries in your browser: domains, paths, evidence, and a human disposition.</p><span class="g-badge" data-g-status="done">v1.0.0 · released</span></li>
         <li><h3><a href="https://global-ai-governance.github.io/peace-os/">Peace OS: Crisis Room</a></h3><p>A crisis-room simulator for weighing evidence, protecting civilians, and keeping the final decision with people. Scenarios are synthetic.</p><span class="g-badge" data-g-status="done">v0.3.0-rc2 · available</span></li>

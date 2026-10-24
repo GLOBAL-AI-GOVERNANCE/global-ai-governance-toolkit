@@ -133,7 +133,7 @@ class BrowserParityTests(unittest.TestCase):
 
     def test_machine_front_door_is_versioned_and_non_authorizing(self) -> None:
         interface = json.loads((ROOT / "web/machine-interface.json").read_text(encoding="utf-8"))
-        self.assertEqual(interface["machine_interface_version"], "1.2.0")
+        self.assertEqual(interface["machine_interface_version"], "1.3.0")
         self.assertEqual(interface["discovery"]["llms_txt"], "./llms.txt")
         self.assertTrue((ROOT / "web/llms.txt").is_file())
         self.assertEqual(interface["authority_effect"], "NONE")
@@ -148,6 +148,22 @@ class BrowserParityTests(unittest.TestCase):
         self.assertFalse(interface["runtime"]["upload"])
         self.assertFalse(interface["runtime"]["network_requests"])
         self.assertIn("not deployment approval", interface["review_boundary"])
+        pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        self.assertIn(f'version = "{interface["release"].removeprefix("v")}"', pyproject)
+        self.assertIn(f"/{interface['release']}/", interface["profiles"]["registry"])
+        assurance = interface["profiles"]["independent_assurance"]
+        self.assertIn(assurance["profile_id"], registry_ids)
+        self.assertEqual(assurance["authority_effect"], "NONE")
+        case_path = "automation/contracts/profiles/independent-assurance-case.schema.json"
+        self.assertTrue(assurance["case_contract"].endswith(f"/{interface['release']}/{case_path}"))
+        case_schema = json.loads((ROOT / case_path).read_text(encoding="utf-8"))
+        self.assertIn(f"Contract {assurance['contract_version']}:", case_schema["description"])
+        for field in assurance["autonomous_agent_requires"]:
+            self.assertIn(field, case_schema["properties"])
+        self.assertEqual(
+            case_schema["properties"]["max_shutdown_test_age_days"]["maximum"],
+            assurance["max_shutdown_test_age_days"],
+        )
         for relative in (interface["input"]["template"], interface["input"]["sample"]):
             self.assertTrue((ROOT / "web" / relative.removeprefix("./")).is_file())
 
