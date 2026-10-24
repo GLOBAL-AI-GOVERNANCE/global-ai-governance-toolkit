@@ -321,7 +321,7 @@ Historical version names remain in version-specific release records where approp
 - Review [v2.3.0 release readiness](docs/release-readiness-v2.3.0.md).
 - Review the [v2.3.0 release notes](release-notes/v2.3.0-assurance-accountability-profiles.md).
 - Review the [v2.4.0 release gate](docs/release-readiness-v2.4.0.md).
-- Release assets (wheel, sdist, and `SHA256SUMS`) are built from the release tag and attached by the [Release Assets workflow](.github/workflows/release-assets.yml). No build-provenance attestation is published.
+- Release assets (wheel, sdist, and `SHA256SUMS`) are built from the release tag and attached by the [Release Assets workflow](.github/workflows/release-assets.yml). For releases published after v2.6.0, the workflow also attaches a CycloneDX SBOM (`*.cdx.json`) and records a GitHub build-provenance attestation for every asset listed in `SHA256SUMS`; check one with `gh attestation verify <file> --repo GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit`. Releases up to and including v2.6.0 have no SBOM or attestation.
 - Run `python -B automation/scripts/validate_repository.py`.
 - Run `python -B automation/scripts/build_decision_pack_example.py --check`.
 

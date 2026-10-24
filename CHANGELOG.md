@@ -1,4 +1,8 @@
 # Changelog
+## [Unreleased]
+
+- The Release Assets workflow also attaches a CycloneDX SBOM of the clean wheel install and records a GitHub build-provenance attestation for every asset in `SHA256SUMS`. Applies to releases published after this change; existing releases are unchanged.
+
 ## [2.6.0] - 2026-10-23 - Primary Command `gaig`
 
 - The installed command is now `gaig`. `gag` remains installed as a deprecated alias with the same entry point and unchanged output.
