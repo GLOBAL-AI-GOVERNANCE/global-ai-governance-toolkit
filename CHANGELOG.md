@@ -1,4 +1,8 @@
 # Changelog
+## [Unreleased]
+
+- The Release Assets workflow also attaches a CycloneDX SBOM of the clean wheel install and records a GitHub build-provenance attestation for every asset in `SHA256SUMS`. Applies to releases published after this change; existing releases are unchanged.
+
 ## [2.7.0] - 2026-10-23 - `gaig` Only
 
 - Breaking: remove the deprecated `gag` command, the `gag_toolkit` import package, and the GitHub Action's `GAG_CHECK_REPORT_DIR`, `GAG_CHECK_EXIT_CODE`, and `GAG_CHECK_GATE_STATE` exports. Use `gaig`, `gaig_toolkit`, and `GAIG_CHECK_*`. Earlier releases are unchanged.
