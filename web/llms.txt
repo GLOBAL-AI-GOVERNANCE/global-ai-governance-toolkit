@@ -42,5 +42,5 @@ Install (Python 3.11 or later): `pip install https://github.com/GLOBAL-AI-GOVERN
 - [Global AI Assurance Envelope](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/blob/main/docs/GLOBAL_AI_ASSURANCE_ENVELOPE.md): reference-only interoperability object
 - [Agentic AI Governance schemas](https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/v0.1.0-alpha.2/schemas): agent authority, passport, expiry, revocation (experimental alpha)
 - [Containment Ledger: Security Boundary Review](https://global-ai-governance.github.io/containment-ledger/): local, browser-based review of security domains, boundary paths, self-reported evidence marks, and a human disposition. Not enforcement, independent verification, or an immutable record
-- [Peace OS: Crisis Room](https://global-ai-governance.github.io/peace-os/): fictional crisis-verification exercise
+- [Peace OS: Crisis Room](https://global-ai-governance.github.io/peace-os/): a fictional crisis simulation for practicing evidence review, civilian protection, and human-controlled decisions
 - [AI Governance Foundations](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-os): the original foundation of the portfolio (first published as AI Governance OS v1.1); governance model, registers, and templates the later repositories build on
