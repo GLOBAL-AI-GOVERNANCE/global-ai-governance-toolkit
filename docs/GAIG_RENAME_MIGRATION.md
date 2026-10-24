@@ -1,6 +1,6 @@
 # GAIG rename migration (gag to gaig)
 
-**Status:** COMPLETED with an alias period (option A below). `gaig` is the primary name in every public repository. The `gag` names listed under "Deprecated aliases" keep working so that no existing install, script, client configuration, or deployment breaks. The inventory and plan further down are the pre-rename record and are kept for reference.
+**Status:** COMPLETE. The `gag` names are removed. Toolkit v2.7.0 and AI Governance MCP v0.3.0 ship only `gaig` names: the `gaig` and `gaig-mcp` commands, the `gaig_toolkit` and `gaig_mcp` packages, the `gaig-mcp` distribution, and `GAIG_*` settings and exports. The alias period (option A below) ran from toolkit v2.6.0 and MCP v0.2.0 through toolkit v2.6.1 and MCP v0.2.1. The inventory and plan further down are the pre-rename record, kept for reference.
 
 **Goal:** the abbreviation for Global AI Governance is always `gaig`, never `gag`, in every public repository of the `GLOBAL-AI-GOVERNANCE` account.
 
@@ -23,26 +23,24 @@ Everything below is **breaking or not yet safe** and is intentionally unchanged.
 
 Earlier releases (toolkit v2.5.3 and before, MCP v0.1.0) are unchanged and still install the `gag` names.
 
-### Deprecated aliases
+### Removal (toolkit v2.7.0, MCP v0.3.0)
 
-| Alias | Primary | Behavior |
-| --- | --- | --- |
-| `gag` command | `gaig` | Same entry point; keeps its `gag` usage and error prefix. |
-| `gag_toolkit` import package | `gaig_toolkit` | Shim re-exporting `gaig_toolkit`. |
-| `GAG_CHECK_REPORT_DIR`, `GAG_CHECK_EXIT_CODE`, `GAG_CHECK_GATE_STATE` (Action) | `GAIG_CHECK_*` | Exported alongside the primary names with identical values. |
-| `gag-mcp` command | `gaig-mcp` | Same entry point. |
-| `gag_mcp` import package, `python -m gag_mcp.server` | `gaig_mcp` | Shim modules aliasing `gaig_mcp`. |
-| `GagInputError` | `GaigInputError` | Same class. |
-| `GAG_MCP_ALLOWED_HOSTS`, `GAG_MCP_BEARER_TOKEN`, `GAG_MCP_CORS_ORIGINS`, `GAG_TOOLKIT_PATH`, `GAG_AGENTIC_PATH` | `GAIG_*` | Read only when the `GAIG_*` name is unset, with a warning on stderr. If both names are set to different values, the server refuses to start. The network-exposure rules apply to both names, including the loopback-plus-tunnel case, and tests cover it. |
+| Removed name | Use instead |
+| --- | --- |
+| `gag` command | `gaig` |
+| `gag_toolkit` import package | `gaig_toolkit` |
+| `GAG_CHECK_REPORT_DIR`, `GAG_CHECK_EXIT_CODE`, `GAG_CHECK_GATE_STATE` (Action) | `GAIG_CHECK_*` |
+| `gag-mcp` command and `gag-mcp` distribution | `gaig-mcp` (distribution and wheel `gaig_mcp`) |
+| `gag_mcp` import package, `python -m gag_mcp.server` | `gaig_mcp`, `python -m gaig_mcp.server` |
+| `GagInputError` | `GaigInputError` |
+| `GAG_MCP_ALLOWED_HOSTS`, `GAG_MCP_BEARER_TOKEN`, `GAG_MCP_CORS_ORIGINS`, `GAG_TOOLKIT_PATH`, `GAG_AGENTIC_PATH` | `GAIG_*` |
 
-No removal version is set. Removing an alias is a separate, announced change.
+**Security finding, resolved fail-closed.** The MCP server does not read the old `GAG_*` settings. If any of them is set, it refuses to start and names the `GAIG_*` replacement, whatever the bind address. A loopback server behind a tunnel therefore cannot start without its token because an old variable name was left in place (see the security note below).
 
 ### Kept on purpose
 
-- **MCP distribution name `gag-mcp`** (and the `name` in `manifest.json`). Renaming the distribution would install a second package that conflicts with the old one over the `gag_mcp` files instead of upgrading it in place. Keeping it means `pip install --upgrade` and `uvx` from a new tag both move existing users to the `gaig-mcp` command. This is the only interface name that still uses `gag`.
 - **Repository names** are unchanged.
-- **History:** past CHANGELOG entries, `release-notes/` before v2.6.0, `docs/release-readiness-*`, published release notes, and the git tags `v2.5.3` (toolkit) and `v0.1.0` (MCP).
-- **The alias code and its tests**, which must name `gag` to provide and check the aliases.
+- **History:** past CHANGELOG entries, published release notes, `release-notes/` and `docs/release-readiness-*` files for earlier versions, and all earlier git tags. Earlier releases still install the names they shipped with.
 - **This document**, which records the old names.
 
 ## Decision: alias period or clean break

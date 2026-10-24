@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "global-ai-governance-toolkit"
-version = "2.6.1"
+version = "2.7.0"
 description = "Local-first AI governance reference tooling"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -14,11 +14,10 @@ dependencies = []
 [project.scripts]
 gaig = "gaig_toolkit.cli:main"
 # Deprecated alias of gaig.
-gag = "gaig_toolkit.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["gaig_toolkit*", "gag_toolkit*", "automation*"]
+include = ["gaig_toolkit*", "automation*"]
 
 [tool.setuptools.package-data]
 automation = [
