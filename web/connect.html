@@ -36,13 +36,13 @@
 <pre tabindex="0" role="region" aria-label="AI Governance MCP setup commands">git clone https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp &amp;&amp; cd ai-governance-mcp
 python3 -m venv .venv &amp;&amp; . .venv/bin/activate &amp;&amp; pip install -e .
 ./scripts/fetch_upstreams.sh
-gag-mcp                      # stdio (Claude Desktop and other local clients)
-gag-mcp --http --port 8000   # Streamable HTTP at /mcp</pre>
-      <p><strong>Claude Desktop (local):</strong> add <code>"gag": {"command": "/ABS/PATH/ai-governance-mcp/.venv/bin/gag-mcp"}</code> under <code>mcpServers</code>.<br>
-      <strong>Anthropic API:</strong> <code>{"type": "url", "name": "gag", "url": "https://YOUR-HOST/mcp", "authorization_token": "TOKEN"}</code>.<br>
-      <strong>OpenAI API:</strong> tool <code>{"type": "mcp", "server_label": "gag", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.<br>
-      <strong>xAI API:</strong> tool <code>{"type": "mcp", "server_label": "gag", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.</p>
-      <p class="fineprint">Remote use needs an HTTPS endpoint you host yourself; Global AI Governance operates no hosted endpoint. Any network-reachable server must set <code>GAG_MCP_ALLOWED_HOSTS</code> and <code>GAG_MCP_BEARER_TOKEN</code> (32+ characters); without them it refuses to start. Consumer connector UIs that cannot send a static bearer token (ChatGPT on the web today; Claude.ai outside its request-headers beta) cannot connect. These remote recipes have not been tested against a live provider; see the repository README. The command and Python package keep the names <code>gag-mcp</code> and <code>gag_mcp</code>.</p>
+gaig-mcp                     # stdio (Claude Desktop and other local clients)
+gaig-mcp --http --port 8000  # Streamable HTTP at /mcp</pre>
+      <p><strong>Claude Desktop (local):</strong> add <code>"gaig": {"command": "/ABS/PATH/ai-governance-mcp/.venv/bin/gaig-mcp"}</code> under <code>mcpServers</code>.<br>
+      <strong>Anthropic API:</strong> <code>{"type": "url", "name": "gaig", "url": "https://YOUR-HOST/mcp", "authorization_token": "TOKEN"}</code>.<br>
+      <strong>OpenAI API:</strong> tool <code>{"type": "mcp", "server_label": "gaig", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.<br>
+      <strong>xAI API:</strong> tool <code>{"type": "mcp", "server_label": "gaig", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.</p>
+      <p class="fineprint">Remote use needs an HTTPS endpoint you host yourself; Global AI Governance operates no hosted endpoint. Any network-reachable server must set <code>GAIG_MCP_ALLOWED_HOSTS</code> and <code>GAIG_MCP_BEARER_TOKEN</code> (32+ characters); without them it refuses to start. Consumer connector UIs that cannot send a static bearer token (ChatGPT on the web today; Claude.ai outside its request-headers beta) cannot connect. These remote recipes have not been tested against a live provider; see the repository README. The command is <code>gaig-mcp</code> and the Python package is <code>gaig_mcp</code>. The <code>gag-mcp</code> command, <code>gag_mcp</code> package, and <code>GAG_MCP_*</code> variables remain as deprecated aliases.</p>
       <p class="fineprint"><strong>Where your data goes:</strong> the browser Toolkit processes files only in this browser. Through MCP, the inventory or passport you pass becomes part of your AI client's conversation, so a hosted assistant sends it to its provider, and a remote server you host receives it over HTTPS. <code>validate_passport</code> checks a passport document; it does not monitor, enforce, or revoke anything at runtime.</p>
     </section>
 

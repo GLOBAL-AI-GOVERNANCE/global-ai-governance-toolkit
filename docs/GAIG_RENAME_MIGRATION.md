@@ -1,6 +1,6 @@
-# GAIG rename migration plan (gag to gaig)
+# GAIG rename migration (gag to gaig)
 
-**Status:** PROPOSED. This document is an inventory and plan, not a change. Nothing listed here has been renamed yet.
+**Status:** COMPLETED with an alias period (option A below). `gaig` is the primary name in every public repository. The `gag` names listed under "Deprecated aliases" keep working so that no existing install, script, client configuration, or deployment breaks. The inventory and plan further down are the pre-rename record and are kept for reference.
 
 **Goal:** the abbreviation for Global AI Governance is always `gaig`, never `gag`, in every public repository of the `GLOBAL-AI-GOVERNANCE` account.
 
@@ -11,9 +11,43 @@
 
 Everything below is **breaking or not yet safe** and is intentionally unchanged. The working rule was: when unsure, treat it as breaking.
 
-## Open decision: alias period or clean break
+## Completion record
 
-This is **not decided**. Maintainers must choose one before any step in the rollout below.
+| Repository | Change | Release |
+| --- | --- | --- |
+| global-ai-governance-toolkit | Primary command `gaig`, import package `gaig_toolkit`, error prefixes `gaig:` / `gaig profile:`, GitHub Action exports `GAIG_CHECK_REPORT_DIR`, `GAIG_CHECK_EXIT_CODE`, `GAIG_CHECK_GATE_STATE`, machine interfaces, docs, and site MCP setup lines | v2.6.0 |
+| ai-governance-mcp | Primary command `gaig-mcp`, import package `gaig_mcp`, `GaigInputError`, server name and `/health` value `gaig-mcp`, `GAIG_*` settings, client configs (server key `gaig`), Dockerfile, bundle entry point, toolkit pin `f454bf9` (v2.6.0), `reproduce_locally` hints `gaig check` / `gaig verify` | v0.2.0 |
+| GLOBAL-AI-GOVERNANCE | Install table and `portfolio.json` use `gaig-mcp` at v0.2.0 | (no release) |
+| peace-os | README markers, footer command line, and site classes use `gaig`; `MANIFEST.json` and `SHA256SUMS.txt` regenerated in the same change, and verification passes | (main tree; no new RC) |
+| `.github`, agentic-ai-governance, ai-cyber-resilience-framework, ai-governance-os, containment-ledger, governed-systems-administration, verified-vulnerability-governance | Footer names the `gaig-mcp` command | (no release) |
+
+Earlier releases (toolkit v2.5.3 and before, MCP v0.1.0) are unchanged and still install the `gag` names.
+
+### Deprecated aliases
+
+| Alias | Primary | Behavior |
+| --- | --- | --- |
+| `gag` command | `gaig` | Same entry point; keeps its `gag` usage and error prefix. |
+| `gag_toolkit` import package | `gaig_toolkit` | Shim re-exporting `gaig_toolkit`. |
+| `GAG_CHECK_REPORT_DIR`, `GAG_CHECK_EXIT_CODE`, `GAG_CHECK_GATE_STATE` (Action) | `GAIG_CHECK_*` | Exported alongside the primary names with identical values. |
+| `gag-mcp` command | `gaig-mcp` | Same entry point. |
+| `gag_mcp` import package, `python -m gag_mcp.server` | `gaig_mcp` | Shim modules aliasing `gaig_mcp`. |
+| `GagInputError` | `GaigInputError` | Same class. |
+| `GAG_MCP_ALLOWED_HOSTS`, `GAG_MCP_BEARER_TOKEN`, `GAG_MCP_CORS_ORIGINS`, `GAG_TOOLKIT_PATH`, `GAG_AGENTIC_PATH` | `GAIG_*` | Read only when the `GAIG_*` name is unset, with a warning on stderr. If both names are set to different values, the server refuses to start. The network-exposure rules apply to both names, including the loopback-plus-tunnel case, and tests cover it. |
+
+No removal version is set. Removing an alias is a separate, announced change.
+
+### Kept on purpose
+
+- **MCP distribution name `gag-mcp`** (and the `name` in `manifest.json`). Renaming the distribution would install a second package that conflicts with the old one over the `gag_mcp` files instead of upgrading it in place. Keeping it means `pip install --upgrade` and `uvx` from a new tag both move existing users to the `gaig-mcp` command. This is the only interface name that still uses `gag`.
+- **Repository names** are unchanged.
+- **History:** past CHANGELOG entries, `release-notes/` before v2.6.0, `docs/release-readiness-*`, published release notes, and the git tags `v2.5.3` (toolkit) and `v0.1.0` (MCP).
+- **The alias code and its tests**, which must name `gag` to provide and check the aliases.
+- **This document**, which records the old names.
+
+## Decision: alias period or clean break
+
+Decided: option A, alias period. It was chosen so that no existing user breaks on upgrade.
 
 | Option | What it means | Cost | Benefit |
 | --- | --- | --- | --- |
@@ -145,18 +179,18 @@ The `ai-governance-mcp` upstream locks now point at newer toolkit and agentic co
 - `web/connect.html` command lines and MCP server name/label `"gag"`: user-copied configuration.
 - Footer `gag-mcp` mentions: they document a real command.
 
-## Suggested rollout order
+## Rollout order (as planned)
 
 Each step is its own reviewed PR and release. Under either option, do not publish a `gaig` command in machine interfaces before a release ships it.
 
 1. **Decide alias period vs clean break** (open decision above). If aliasing, also decide the removal version.
 2. **Toolkit release (`global-ai-governance-toolkit`).** Rename `gag_toolkit/` to `gaig_toolkit/` and the console script to `gaig`. Optionally keep the `gag` script and a `gag_toolkit` shim. Update `prog`, the error prefixes, `validate_repository.py`, `test_contract_spine.py`, CI (`gaig --version`), and all DOC rows. Add a new CHANGELOG entry describing the rename and the alias policy. Leave past CHANGELOG entries, `release-notes/`, and `docs/release-readiness-*` untouched. Tag a release.
 3. **Toolkit machine interfaces.** Update `web/machine-interface.json`, `web/llms.txt` (commands), and `docs/MACHINE_INTERFACES.md` in the same release as step 2 or right after it. They must never advertise a command that is not yet installable.
-4. **MCP release (`ai-governance-mcp`).** Rename the distribution to `gaig-mcp`, the package to `gaig_mcp`, `GagInputError` to `GaigInputError`, the server name, `/health`, temp prefixes, and `prog`. Rename the env vars to `GAIG_MCP_ALLOWED_HOSTS`, `GAIG_MCP_BEARER_TOKEN`, `GAIG_MCP_CORS_ORIGINS`, `GAIG_TOOLKIT_PATH`, `GAIG_AGENTIC_PATH`. Never silently ignore old `GAG_MCP_*` names. Either honor them with a warning (alias) or refuse to start naming the replacement (clean break). Refuse to start on conflicting old/new values. Test the loopback-plus-tunnel case. Add tests for both names. **Bump the toolkit pin** in `scripts/fetch_upstreams.sh` and the README to the step-2 release, and update the `reproduce_locally` hints to `gaig`. Update `manifest.json`, `deploy/Dockerfile`, README client configs (server name/label `"gaig"`), and the docs addendum. Regenerate `docs/verification-transcript.md` with `scripts/smoke_test.py`. Publish operator upgrade notes for remote deployments, covering how to rename secrets before upgrading.
+4. **MCP release (`ai-governance-mcp`).** Rename the distribution to `gaig-mcp` (not done; see "Kept on purpose"), the package to `gaig_mcp`, `GagInputError` to `GaigInputError`, the server name, `/health`, temp prefixes, and `prog`. Rename the env vars to `GAIG_MCP_ALLOWED_HOSTS`, `GAIG_MCP_BEARER_TOKEN`, `GAIG_MCP_CORS_ORIGINS`, `GAIG_TOOLKIT_PATH`, `GAIG_AGENTIC_PATH`. Never silently ignore old `GAG_MCP_*` names. Either honor them with a warning (alias) or refuse to start naming the replacement (clean break). Refuse to start on conflicting old/new values. Test the loopback-plus-tunnel case. Add tests for both names. **Bump the toolkit pin** in `scripts/fetch_upstreams.sh` and the README to the step-2 release, and update the `reproduce_locally` hints to `gaig`. Update `manifest.json`, `deploy/Dockerfile`, README client configs (server name/label `"gaig"`), and the docs addendum. Regenerate `docs/verification-transcript.md` with `scripts/smoke_test.py`. Publish operator upgrade notes for remote deployments, covering how to rename secrets before upgrading.
 5. **Site and portfolio surfaces.** Update the toolkit `web/connect.html` and `web/llms.txt` MCP lines, the `GLOBAL-AI-GOVERNANCE` README and `portfolio.json`, and the footer `gag-mcp` line in each repository README.
 6. **peace-os next RC.** Rename the README markers, the footer command line, and the `web/` classes. Regenerate `SHA256SUMS.txt` and run `scripts/verify_release_artifacts.py` as part of the RC process.
 7. **Alias removal (only if aliasing was chosen).** At the announced version, remove the `gag` script, the shims, `GagInputError`, and the env fallbacks. Add a changelog note.
 
 History files (past CHANGELOG entries, `release-notes/`, `docs/release-readiness-*`, published GitHub release notes, recorded transcripts) stay as-is. Each repository's changelog gets a note at rename time instead.
 
-Boundary: this plan is decision support only. It authorizes no change (`authority_effect: NONE`). Each step needs its own human review and approval.
+Boundary: this document is a record and decision support only (`authority_effect: NONE`). Removing an alias needs its own review and approval.
