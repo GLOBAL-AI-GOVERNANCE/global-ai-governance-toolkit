@@ -93,4 +93,9 @@ runs:
           echo "> Non-authorizing. This result is automated reference checking. It does not approve, certify, or authorize any AI system; a named human decision is still required."
         } >> "$GITHUB_STEP_SUMMARY"
         echo "Non-authorizing: automated reference check only; not an approval, certification, or authorization."
-        exit "$status"
+
+    - name: Enforce fail-on threshold
+      shell: bash
+      env:
+        GAG_STATUS: ${{ steps.check.outputs.exit-code }}
+      run: exit "$GAG_STATUS"

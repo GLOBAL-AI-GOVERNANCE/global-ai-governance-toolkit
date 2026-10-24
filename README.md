@@ -100,7 +100,7 @@ The repository root provides a composite action that installs the toolkit into a
     fail-on: critical   # critical (default), high, or none
 ```
 
-The step fails on findings at or above `fail-on`, exactly like the CLI, and exposes `report-dir`, `exit-code`, and `gate-state` outputs. Because GitHub does not publish composite-action outputs from a failed step, the same values are also exported as `GAG_CHECK_REPORT_DIR`, `GAG_CHECK_EXIT_CODE`, and `GAG_CHECK_GATE_STATE` environment variables for later steps. Its job summary is labelled non-authorizing: a passing check does not approve deployment, certify compliance, or replace the pending human decision. Hosted CI runs the action against the valid and critical fixtures on every change.
+The step fails on findings at or above `fail-on`, exactly like the CLI, and exposes `report-dir`, `exit-code`, and `gate-state` outputs. The same values are also exported as `GAG_CHECK_REPORT_DIR`, `GAG_CHECK_EXIT_CODE`, and `GAG_CHECK_GATE_STATE` environment variables for later steps. Its job summary is labelled non-authorizing: a passing check does not approve deployment, certify compliance, or replace the pending human decision. Hosted CI runs the action against the valid and critical fixtures on every change.
 
 ## AI Sovereignty Control Layer
 
