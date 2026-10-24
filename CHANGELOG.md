@@ -1,8 +1,12 @@
 # Changelog
-## Unreleased
+## [2.6.0] - 2026-10-23 - Primary Command `gaig`
 
-- Add a composite GitHub Action (`action.yml`) that runs `gag check` on an inventory CSV, fails on findings at the selected threshold, and labels its summary non-authorizing.
+- The installed command is now `gaig`. `gag` remains installed as a deprecated alias with the same entry point and unchanged output.
+- The import package is now `gaig_toolkit`. `gag_toolkit` remains as a deprecated alias package that re-exports it, so `python -m gag_toolkit.cli` keeps working.
+- Add a composite GitHub Action (`action.yml`) that runs `gaig check` on an inventory CSV, fails on findings at the selected threshold, and labels its summary non-authorizing. It exports `GAIG_CHECK_REPORT_DIR`, `GAIG_CHECK_EXIT_CODE`, and `GAIG_CHECK_GATE_STATE`, plus the deprecated `GAG_CHECK_*` names with the same values.
 - Add a Release Assets workflow that builds the wheel and sdist from a release tag and attaches them with `SHA256SUMS`.
+- Machine interface and `llms.txt` command strings use `gaig`.
+- No capability, authority, or contract change. `authority_effect` remains NONE.
 
 ## [2.5.3] - 2026-10-23 - Assurance State Integrity
 

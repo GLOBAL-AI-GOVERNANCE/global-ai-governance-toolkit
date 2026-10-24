@@ -51,6 +51,7 @@ jobs:
           python -m venv "$RUNNER_TEMP/verify"
           "$RUNNER_TEMP/verify/bin/python" -m pip install --disable-pip-version-check --no-deps "$RUNNER_TEMP"/dist/*.whl
           cd "$RUNNER_TEMP"
+          test "$("$RUNNER_TEMP/verify/bin/gaig" --version)" = "${TAG#v}"
           test "$("$RUNNER_TEMP/verify/bin/gag" --version)" = "${TAG#v}"
 
       - name: Write SHA256SUMS

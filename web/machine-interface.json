@@ -1,10 +1,10 @@
 {
   "authority_effect": "NONE",
   "cli": {
-    "check": "gag check INPUT --outdir DIRECTORY [--fail-on none|high|critical] [--evaluation-time YYYY-MM-DDTHH:MM:SSZ]",
-    "normalize": "gag normalize INPUT --output-json FILE [--output-csv FILE]",
-    "profile": "gag profile PROFILE_ID INPUT --outdir DIRECTORY [--decision-pack-manifest FILE] [--evaluation-time YYYY-MM-DDTHH:MM:SSZ]",
-    "verify": "gag verify OUTPUT_DIRECTORY"
+    "check": "gaig check INPUT --outdir DIRECTORY [--fail-on none|high|critical] [--evaluation-time YYYY-MM-DDTHH:MM:SSZ]",
+    "normalize": "gaig normalize INPUT --output-json FILE [--output-csv FILE]",
+    "profile": "gaig profile PROFILE_ID INPUT --outdir DIRECTORY [--decision-pack-manifest FILE] [--evaluation-time YYYY-MM-DDTHH:MM:SSZ]",
+    "verify": "gaig verify OUTPUT_DIRECTORY"
   },
   "decision_pack_manifest": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/v1/decision-pack-manifest.schema.json",
   "governance_handoff": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/main/automation/contracts/governance-decision-handoff.schema.json",

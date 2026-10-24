@@ -1,3 +1,5 @@
-"""Global AI Governance Toolkit public Python package."""
+"""Deprecated alias of :mod:`gaig_toolkit`. Import ``gaig_toolkit`` instead."""
 
-__version__ = "2.5.3"
+from gaig_toolkit import __version__
+
+__all__ = ["__version__"]

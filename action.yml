@@ -1,5 +1,5 @@
 name: Global AI Governance Check
-description: "Run `gag check` on an AI system inventory CSV. Fails on critical findings by default. Output is non-authorizing."
+description: "Run `gaig check` on an AI system inventory CSV. Fails on critical findings by default. Output is non-authorizing."
 author: Global AI Governance
 branding:
   icon: shield
@@ -18,7 +18,7 @@ inputs:
     required: false
     default: critical
   evaluation-time:
-    description: "Optional RFC 3339 evaluation time passed to `gag check`."
+    description: "Optional RFC 3339 evaluation time passed to `gaig check`."
     required: false
     default: ""
   python:
@@ -31,7 +31,7 @@ outputs:
     description: "Directory containing the generated reports."
     value: ${{ steps.check.outputs.report-dir }}
   exit-code:
-    description: "Exit code from `gag check` (0 pass, 1 blocked by findings, 2 input error)."
+    description: "Exit code from `gaig check` (0 pass, 1 blocked by findings, 2 input error)."
     value: ${{ steps.check.outputs.exit-code }}
   gate-state:
     description: "governance_gate_state from governance-result.json, when produced."
@@ -40,39 +40,39 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Install gag into an isolated environment
+    - name: Install gaig into an isolated environment
       shell: bash
       env:
-        GAG_PYTHON: ${{ inputs.python }}
-        GAG_ACTION_PATH: ${{ github.action_path }}
+        GAIG_PYTHON: ${{ inputs.python }}
+        GAIG_ACTION_PATH: ${{ github.action_path }}
       run: |
         set -euo pipefail
-        venv="$RUNNER_TEMP/gag-action-venv"
-        "$GAG_PYTHON" -m venv "$venv"
+        venv="$RUNNER_TEMP/gaig-action-venv"
+        "$GAIG_PYTHON" -m venv "$venv"
         if [ -x "$venv/bin/python" ]; then bin="$venv/bin"; else bin="$venv/Scripts"; fi
-        "$bin/python" -m pip install --disable-pip-version-check --quiet --no-deps "$GAG_ACTION_PATH"
-        echo "GAG_ACTION_BIN=$bin" >> "$GITHUB_ENV"
+        "$bin/python" -m pip install --disable-pip-version-check --quiet --no-deps "$GAIG_ACTION_PATH"
+        echo "GAIG_ACTION_BIN=$bin" >> "$GITHUB_ENV"
 
-    - name: Run gag check
+    - name: Run gaig check
       id: check
       shell: bash
       env:
-        GAG_INVENTORY: ${{ inputs.inventory }}
-        GAG_OUTDIR: ${{ inputs.outdir }}
-        GAG_FAIL_ON: ${{ inputs.fail-on }}
-        GAG_EVALUATION_TIME: ${{ inputs.evaluation-time }}
+        GAIG_INVENTORY: ${{ inputs.inventory }}
+        GAIG_OUTDIR: ${{ inputs.outdir }}
+        GAIG_FAIL_ON: ${{ inputs.fail-on }}
+        GAIG_EVALUATION_TIME: ${{ inputs.evaluation-time }}
       run: |
         set -uo pipefail
-        outdir="${GAG_OUTDIR:-$RUNNER_TEMP/gag-report}"
-        args=(check "$GAG_INVENTORY" --outdir "$outdir" --fail-on "$GAG_FAIL_ON")
-        if [ -n "$GAG_EVALUATION_TIME" ]; then args+=(--evaluation-time "$GAG_EVALUATION_TIME"); fi
+        outdir="${GAIG_OUTDIR:-$RUNNER_TEMP/gaig-report}"
+        args=(check "$GAIG_INVENTORY" --outdir "$outdir" --fail-on "$GAIG_FAIL_ON")
+        if [ -n "$GAIG_EVALUATION_TIME" ]; then args+=(--evaluation-time "$GAIG_EVALUATION_TIME"); fi
         set +e
-        "$GAG_ACTION_BIN/gag" "${args[@]}"
+        "$GAIG_ACTION_BIN/gaig" "${args[@]}"
         status=$?
         set -e
         gate=""
         if [ -f "$outdir/governance-result.json" ]; then
-          gate=$("$GAG_ACTION_BIN/python" -c 'import json,sys; print(json.load(open(sys.argv[1])).get("governance_gate_state", ""))' "$outdir/governance-result.json")
+          gate=$("$GAIG_ACTION_BIN/python" -c 'import json,sys; print(json.load(open(sys.argv[1])).get("governance_gate_state", ""))' "$outdir/governance-result.json")
         fi
         {
           echo "report-dir=$outdir"
@@ -80,6 +80,9 @@ runs:
           echo "gate-state=$gate"
         } >> "$GITHUB_OUTPUT"
         {
+          echo "GAIG_CHECK_REPORT_DIR=$outdir"
+          echo "GAIG_CHECK_EXIT_CODE=$status"
+          echo "GAIG_CHECK_GATE_STATE=$gate"
           echo "GAG_CHECK_REPORT_DIR=$outdir"
           echo "GAG_CHECK_EXIT_CODE=$status"
           echo "GAG_CHECK_GATE_STATE=$gate"
@@ -87,8 +90,8 @@ runs:
         {
           echo "### Global AI Governance check"
           echo ""
-          echo "- Inventory: \`$GAG_INVENTORY\`"
-          echo "- Fail on: \`$GAG_FAIL_ON\`"
+          echo "- Inventory: \`$GAIG_INVENTORY\`"
+          echo "- Fail on: \`$GAIG_FAIL_ON\`"
           echo "- Governance gate state: \`${gate:-not produced}\`"
           echo "- Exit code: \`$status\`"
           echo ""
@@ -99,5 +102,5 @@ runs:
     - name: Enforce fail-on threshold
       shell: bash
       env:
-        GAG_STATUS: ${{ steps.check.outputs.exit-code }}
-      run: exit "$GAG_STATUS"
+        GAIG_STATUS: ${{ steps.check.outputs.exit-code }}
+      run: exit "$GAIG_STATUS"
