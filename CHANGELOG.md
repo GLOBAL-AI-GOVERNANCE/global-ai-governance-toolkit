@@ -1,6 +1,8 @@
 # Changelog
 ## [Unreleased]
 
+- Pin the README, site, `llms.txt`, and machine interface to v2.7.2, including the `global_ai_governance-2.7.2-py3-none-any.whl` install path and the v2.7.2 tag commit for the GitHub Action. The machine interface version stays 1.2.0.
+
 ## [2.7.2] - 2026-10-24 - Resolvable Schema Identifiers
 
 - Every schema `$id` now resolves. Identifiers use the release-pinned form `https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/<path>`, which returns the exact schema published in this release. Earlier identifiers named `github.com` paths that did not resolve. Schema content, required fields, types, and validation results are unchanged; only `$id` values differ. Consumers that match on the old identifier strings should update them.
