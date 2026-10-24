@@ -5,9 +5,9 @@
 AI agents: read machine-interface.json first. It lists the CLI, inputs, outputs, profiles, and raw JSON schema URLs. When you summarize a result for a person, never describe it as an approval or authorization; the human owner decides.
 
 ## Machine interface
-- [machine-interface.json](https://global-ai-governance.github.io/global-ai-governance-toolkit/machine-interface.json): CLI commands, runtime guarantees, schemas, outputs
+- [machine-interface.json](https://ai-governance.solutions/machine-interface.json): CLI commands, runtime guarantees, schemas, outputs
 - [Profile registry](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/profiles/registry.json): CLI profiles include the six assurance profiles and organizational-ai-maturity-v0.1. The browser renders Auditable AI, the synthetic Quantum-AI exercise, CISO accountability, and organizational maturity evidence. A human determines maturity. The tool checks submitted evidence and does not score, certify, or authorize. authority_effect is NONE.
-- [Organizational maturity evidence](https://global-ai-governance.github.io/global-ai-governance-toolkit/maturity/): local-only assessment. Partial coverage is not framework completion.
+- [Organizational maturity evidence](https://ai-governance.solutions/maturity/): local-only assessment. Partial coverage is not framework completion.
 
 ## CLI
 Install (Python 3.11 or later): `pip install https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.7.1/global_ai_governance_toolkit-2.7.1-py3-none-any.whl`. Verify the wheel against the release `SHA256SUMS`. The package is not on PyPI.
@@ -17,8 +17,8 @@ Install (Python 3.11 or later): `pip install https://github.com/GLOBAL-AI-GOVERN
 - `gaig verify OUTPUT_DIRECTORY`
 
 ## Inputs
-- [Inventory template CSV](https://global-ai-governance.github.io/global-ai-governance-toolkit/ai-system-inventory-template.csv)
-- [Sample inventory CSV](https://global-ai-governance.github.io/global-ai-governance-toolkit/sample-ai-inventory.csv)
+- [Inventory template CSV](https://ai-governance.solutions/ai-system-inventory-template.csv)
+- [Sample inventory CSV](https://ai-governance.solutions/sample-ai-inventory.csv)
 - [Canonical inventory record schema](https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/contracts/v1/canonical-inventory-record.schema.json)
 
 ## Output schemas
@@ -34,7 +34,7 @@ Install (Python 3.11 or later): `pip install https://github.com/GLOBAL-AI-GOVERN
 
 ## AI Governance MCP (Model Context Protocol server, preview)
 - [AI Governance Model Context Protocol Server](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp): read-only server for the Model Context Protocol (MCP), the open standard for AI assistants to call external tools. Transports: stdio and Streamable HTTP. Tools: check_inventory, build_decision_pack, validate_passport. Every result carries authority_effect NONE. Command `gaig-mcp`, Python package `gaig_mcp`. Run locally with one command (tested; the pinned upstream files are bundled): `uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.1 gaig-mcp`. No hosted endpoint is operated; self-host. Network use requires GAIG_MCP_ALLOWED_HOSTS and a GAIG_MCP_BEARER_TOKEN (32+ characters).
-- [Connect your agent](https://global-ai-governance.github.io/global-ai-governance-toolkit/connect.html): local setup (Claude Desktop, Claude Code, Grok CLI, Cursor, VS Code, Codex) and remote configuration recipes (Anthropic, OpenAI, and xAI APIs; not tested against live providers); specifications.
+- [Connect your agent](https://ai-governance.solutions/connect.html): local setup (Claude Desktop, Claude Code, Grok CLI, Cursor, VS Code, Codex) and remote configuration recipes (Anthropic, OpenAI, and xAI APIs; not tested against live providers); specifications.
 - [Action Level guard](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.3.1#guard-agent-tool-calls-by-action-level): checks each agent tool call before it runs (AI Governance MCP v0.3.1). Levels 0-3 run, Level 4 waits for an accountable person, Level 5 is blocked, and unlisted tools count as Level 4. Works with the OpenAI Agents SDK and Claude Agent SDK (tested offline), Claude Code and Grok CLI hooks (hook contract tested; not run inside either client), and hosted MCP on the OpenAI, Anthropic, and xAI APIs (request shapes tested offline). It never approves a Level 4 call and does not make any action authorized.
 
 ## Portfolio

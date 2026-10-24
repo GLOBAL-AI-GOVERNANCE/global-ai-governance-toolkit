@@ -25,7 +25,7 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://global-ai-governance.github.io/global-ai-governance-toolkit/"
+Homepage = "https://ai-governance.solutions/"
 Repository = "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit"
 Documentation = "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/tree/main/docs"
 Changelog = "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/CHANGELOG.md"
