@@ -1,9 +1,4 @@
-"""Installed ``gaig`` command.
-
-``gag`` is a deprecated alias installed with the same entry point. When the
-program is invoked as ``gag``, usage and error text keep the ``gag`` prefix so
-existing scripts see unchanged output.
-"""
+"""Installed ``gaig`` command."""
 
 from __future__ import annotations
 
@@ -21,19 +16,11 @@ from . import __version__
 
 
 PRIMARY_PROG = "gaig"
-DEPRECATED_PROG = "gag"
-
-
-def program_name(argv0: str | None = None) -> str:
-    """Return ``gag`` when invoked through the deprecated alias, else ``gaig``."""
-    name = os.path.basename(argv0 if argv0 is not None else (sys.argv[0] if sys.argv else ""))
-    stem = name[:-4] if name.lower().endswith(".exe") else name
-    return DEPRECATED_PROG if stem == DEPRECATED_PROG else PRIMARY_PROG
 
 
 def build_parser(prog: str | None = None) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog=prog or program_name(),
+        prog=prog or PRIMARY_PROG,
         description="Local-first Global AI Governance reference CLI.",
     )
     parser.add_argument("--version", action="version", version=__version__)
@@ -79,7 +66,7 @@ def build_parser(prog: str | None = None) -> argparse.ArgumentParser:
 
 
 def main() -> None:
-    prog = program_name()
+    prog = PRIMARY_PROG
     args = build_parser(prog).parse_args()
     try:
         if args.command == "normalize":
