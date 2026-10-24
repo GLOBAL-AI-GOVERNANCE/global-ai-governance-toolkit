@@ -78,6 +78,11 @@ runs:
           echo "gate-state=$gate"
         } >> "$GITHUB_OUTPUT"
         {
+          echo "GAG_CHECK_REPORT_DIR=$outdir"
+          echo "GAG_CHECK_EXIT_CODE=$status"
+          echo "GAG_CHECK_GATE_STATE=$gate"
+        } >> "$GITHUB_ENV"
+        {
           echo "### Global AI Governance check"
           echo ""
           echo "- Inventory: \`$GAG_INVENTORY\`"
