@@ -10,7 +10,7 @@ Check your AI systems and agents before they act. List what you run; the toolkit
 
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
-**Latest release:** v2.7.0. The command is `gaig`. A human determines organizational maturity: the toolkit checks the submitted evidence and does not score, certify, or authorize.
+**Latest release:** v2.7.1. The command is `gaig`. A human determines organizational maturity: the toolkit checks the submitted evidence and does not score, certify, or authorize.
 
 ## Start Here
 
@@ -65,12 +65,12 @@ The current automation pipeline:
 
 ### Quick Start
 
-**Fastest CLI path, no clone:** install the v2.7.0 release wheel and run the sample with gaps. Requires Python 3.11 or later and `curl`.
+**Fastest CLI path, no clone:** install the v2.7.1 release wheel and run the sample with gaps. Requires Python 3.11 or later and `curl`.
 
 ```bash
 python3.11 -m venv gaig-venv && . gaig-venv/bin/activate
-python -m pip install https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.7.0/global_ai_governance_toolkit-2.7.0-py3-none-any.whl
-curl -fsSLO https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/sample-data/sample-ai-inventory.csv
+python -m pip install https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.7.1/global_ai_governance_toolkit-2.7.1-py3-none-any.whl
+curl -fsSLO https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.1/automation/sample-data/sample-ai-inventory.csv
 OUT="$(mktemp -d)"
 gaig check sample-ai-inventory.csv --outdir "$OUT" --fail-on none
 gaig verify "$OUT"
@@ -92,7 +92,7 @@ gaig verify "$OUT"
 grep -m1 "BLOCKED BY CRITICAL FINDINGS" "$OUT/decision-pack/executive-summary.md"
 ```
 
-Expected: both commands exit `0`, and the last line prints the `BLOCKED BY CRITICAL FINDINGS` status line from the Decision Pack summary. Open `"$OUT/decision-pack/"` to review the pack. To use the published release instead of current `main`, add `--branch v2.7.0` to `git clone`.
+Expected: both commands exit `0`, and the last line prints the `BLOCKED BY CRITICAL FINDINGS` status line from the Decision Pack summary. Open `"$OUT/decision-pack/"` to review the pack. To use the published release instead of current `main`, add `--branch v2.7.1` to `git clone`.
 
 The bundled sample intentionally includes systems with critical control gaps. The quick start therefore uses explicit report-only mode so the toolkit can generate a blocked-state Decision Pack for review. Remove `--fail-on none` to exercise the default fail-closed gate. To check your own systems, download the [blank template](web/ai-system-inventory-template.csv), fill one row per AI system or agent, and pass that file instead of the sample. The repository-relative script `python automation/scripts/run_governance_checks.py` accepts the same arguments.
 
@@ -104,7 +104,7 @@ Default behavior is fail-closed for `CRITICAL` findings:
 
 ### GitHub Action
 
-The repository root provides a composite action that installs the toolkit into an isolated virtual environment and runs `gaig check` on an inventory CSV. It first shipped in release v2.6.0. Pin it to the full commit SHA of the v2.7.0 tag (`0f4535b4a0358643bfd5b15f87dd71b5b67f1477`) or a later commit from `main`.
+The repository root provides a composite action that installs the toolkit into an isolated virtual environment and runs `gaig check` on an inventory CSV. It first shipped in release v2.6.0. Pin it to the full commit SHA of the v2.7.1 tag (`4deb5b70b07d8f91cf157ef07d7ddd7dfe68731c`) or a later commit from `main`.
 
 ```yaml
 - uses: actions/checkout@<commit-sha>
@@ -327,6 +327,7 @@ The repository preserves the following development lineage:
 - v2.6.0: Primary Command `gaig`
 - v2.6.1: First-Run Experience
 - v2.7.0: `gaig` Only
+- v2.7.1: Plain Run Output
 - Current public identity: Global AI Governance Toolkit
 
 Historical version names remain in version-specific release records where appropriate.
