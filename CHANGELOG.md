@@ -1,6 +1,10 @@
 # Changelog
 ## [Unreleased]
 
+## [2.7.2] - 2026-10-24 - Resolvable Schema Identifiers
+
+- Every schema `$id` now resolves. Identifiers use the release-pinned form `https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/<path>`, which returns the exact schema published in this release. Earlier identifiers named `github.com` paths that did not resolve. Schema content, required fields, types, and validation results are unchanged; only `$id` values differ. Consumers that match on the old identifier strings should update them.
+- CI checks that every absolute schema `$id` names the file's own path at a release tag listed in this changelog, and the Release Assets workflow fetches every `$id` from the tag and requires the identical document before it attaches assets.
 - The site root at ai-governance.solutions is the Global AI Governance landing page: what it is and who it is for, three starting paths (browser, command line, agent), the product map, and a GitHub link, followed by the unchanged browser Toolkit at `#toolkit`. Pages gain an absolute canonical link, a link-preview image, and an Apple touch icon. On narrow screens the site links sit on their own row.
 - Pin the README, site, `llms.txt`, and machine interface to v2.7.1. The machine interface version stays 1.2.0.
 - The Connect page and `llms.txt` add Claude Code and Grok CLI setup, the full Anthropic MCP connector shape, and an Action Level guard section linking to AI Governance MCP examples. The product map gains the `#products` anchor.

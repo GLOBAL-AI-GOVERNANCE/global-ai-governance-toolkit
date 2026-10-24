@@ -1,7 +1,7 @@
 // Generated from Wave A contracts. Do not edit.
 export const contracts = {
   "canonicalSchema": {
-    "$id": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/automation/contracts/v1/canonical-inventory-record.schema.json",
+    "$id": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/automation/contracts/v1/canonical-inventory-record.schema.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "additionalProperties": false,
     "properties": {
