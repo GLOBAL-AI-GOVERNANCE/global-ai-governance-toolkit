@@ -50,7 +50,6 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check --no-deps .
           gaig --version
-          gag --version
           python -B automation/scripts/generate_inventory_templates.py --check
           python -B automation/scripts/generate_browser_contract_bundle.py --check
 
@@ -180,7 +179,4 @@ jobs:
           test "$GAIG_CHECK_EXIT_CODE" = "1"
           test "$GAIG_CHECK_GATE_STATE" = "BLOCKED"
           test "$GAIG_CHECK_REPORT_DIR" = "${{ runner.temp }}/action-critical"
-          test "$GAG_CHECK_EXIT_CODE" = "1"
-          test "$GAG_CHECK_GATE_STATE" = "BLOCKED"
-          test "$GAG_CHECK_REPORT_DIR" = "${{ runner.temp }}/action-critical"
           grep -q "CRITICAL - Missing named owner" "${{ runner.temp }}/action-critical/governance-validation-report.md"
