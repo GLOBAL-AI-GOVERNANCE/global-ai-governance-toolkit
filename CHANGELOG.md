@@ -2,6 +2,7 @@
 ## [Unreleased]
 
 - Pin the README, site, `llms.txt`, and machine interface to v2.7.1. The machine interface version stays 1.2.0.
+- The Connect page and `llms.txt` add Claude Code and Grok CLI setup, the full Anthropic MCP connector shape, and an Action Level guard section linking to AI Governance MCP examples. The product map gains the `#products` anchor.
 
 ## [2.7.1] - 2026-10-23 - Plain Run Output
 

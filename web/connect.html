@@ -46,13 +46,31 @@ gaig-mcp                     # stdio (Claude Desktop and other local clients)
 gaig-mcp --http --port 8000  # Streamable HTTP at /mcp
 pytest &amp;&amp; python scripts/smoke_test.py   # optional checks; need the [dev] extra</pre>
       <p><strong>Claude Desktop (local):</strong> add <code>"gaig": {"command": "uvx", "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.0", "gaig-mcp"]}</code> under <code>mcpServers</code> (launch command tested; not yet tested inside Claude Desktop). From source, use <code>"command": "/ABS/PATH/ai-governance-mcp/.venv/bin/gaig-mcp"</code> instead.<br>
-      <strong>Anthropic API:</strong> <code>{"type": "url", "name": "gaig", "url": "https://YOUR-HOST/mcp", "authorization_token": "TOKEN"}</code>.<br>
+      <strong>Claude Code (local):</strong> <code>claude mcp add gaig --scope project -- uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.0 gaig-mcp</code> (launch command tested; not yet tested inside Claude Code).<br>
+      <strong>Grok CLI (local):</strong> <code>grok mcp add gaig -- uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.3.0 gaig-mcp</code> (launch command tested; not yet tested inside the Grok CLI).<br>
+      <strong>Anthropic API:</strong> header <code>anthropic-beta: mcp-client-2026-09-15</code>, <code>mcp_servers</code> entry <code>{"type": "url", "name": "gaig", "url": "https://YOUR-HOST/mcp", "authorization_token": "TOKEN"}</code>, and tool <code>{"type": "mcp_toolset", "mcp_server_name": "gaig"}</code>.<br>
       <strong>OpenAI API:</strong> tool <code>{"type": "mcp", "server_label": "gaig", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.<br>
       <strong>xAI API:</strong> tool <code>{"type": "mcp", "server_label": "gaig", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.</p>
       <p class="fineprint">Remote use needs an HTTPS endpoint you host yourself; Global AI Governance operates no hosted endpoint. Any network-reachable server must set <code>GAIG_MCP_ALLOWED_HOSTS</code> and <code>GAIG_MCP_BEARER_TOKEN</code> (32+ characters); without them it refuses to start. Consumer connector UIs that cannot send a static bearer token (ChatGPT on the web today; Claude.ai outside its request-headers beta) cannot connect. These remote recipes have not been tested against a live provider; see the repository README. The command is <code>gaig-mcp</code> and the Python package is <code>gaig_mcp</code>.</p>
       <p class="fineprint"><strong>Where your data goes:</strong> the browser Toolkit processes files only in this browser. Through MCP, the inventory or passport you pass becomes part of your AI client's conversation, so a hosted assistant sends it to its provider, and a remote server you host receives it over HTTPS. <code>validate_passport</code> checks a passport document; it does not monitor, enforce, or revoke anything at runtime.</p>
     </section>
 
+    <section id="guard" class="shell connect-section">
+      <p class="eyebrow">For agent builders</p>
+      <h2>Guard every tool call</h2>
+      <p>Your agent has more tools than these three. A small <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/main/examples/agent-stacks/action_level_guard.py">Action Level guard</a> (Python standard library) checks each tool call before it runs, using the Action Levels in the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/blob/main/spec/08-action-authority.md">action-authority spec</a>: Levels 0 to 3 run, Level 4 waits for an accountable person to approve or reject it, Level 5 is blocked, and a tool missing from your policy counts as Level 4. The guard never approves a Level 4 call itself.</p>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Action Level guard by agent stack"><table class="status-table">
+        <thead><tr><th>Works with</th><th>How Level 4 and Level 5 are enforced</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>OpenAI Agents SDK</td><td><code>require_approval</code> pauses Level 4 for a person; a tool input guardrail rejects Level 5</td><td>Tested offline (real runner and server, scripted model)</td></tr>
+          <tr><td>Claude Agent SDK</td><td><code>PreToolUse</code> hook returns <code>ask</code> or <code>deny</code></td><td>Tested offline (hook called directly)</td></tr>
+          <tr><td>Claude Code</td><td>Command hook returns <code>ask</code> or <code>deny</code></td><td>Hook contract tested; not run inside Claude Code</td></tr>
+          <tr><td>Grok CLI</td><td>Command hook denies Level 4 and Level 5 (Grok hooks cannot ask) and denies on any error</td><td>Hook contract tested; not run inside the Grok CLI</td></tr>
+          <tr><td>OpenAI, Anthropic, and xAI APIs (hosted MCP)</td><td>Only Level 0 to 3 tools are exposed unattended; OpenAI can also ask for Level 4 through <code>require_approval</code></td><td>Request shapes tested offline; no live request</td></tr>
+        </tbody>
+      </table></div>
+      <p>Files and setup: <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp#guard-agent-tool-calls-by-action-level">AI Governance MCP README</a>. The guard limits what an agent can do unattended; it does not make any action authorized.</p>
+    </section>
 
     <section id="spec" class="shell connect-section">
       <p class="eyebrow">Specifications</p>
@@ -64,7 +82,7 @@ pytest &amp;&amp; python scripts/smoke_test.py   # optional checks; need the [de
       </ul>
     </section>
 
-    <section class="shell connect-section">
+    <section id="products" class="shell connect-section">
       <p class="eyebrow">Product map</p>
       <h2>What exists today</h2>
       <div class="table-wrap" tabindex="0" role="region" aria-label="What exists today: products and status"><table class="status-table">
@@ -84,7 +102,7 @@ pytest &amp;&amp; python scripts/smoke_test.py   # optional checks; need the [de
     </section>
   </main>
   <footer class="shell gaig-footer">
-    <p class="gaig-footer-ctas"><a href="#agents">Connect your agent</a> · <a href="#spec">Read the spec</a></p>
+    <p class="gaig-footer-ctas"><a href="#agents">Connect your agent</a> · <a href="#guard">Guard tool calls</a> · <a href="#spec">Read the spec</a></p>
     <p>Global AI Governance · Outputs are non-authorizing (<code>authority_effect: NONE</code>) · Compatible with MCP-based agents · <a href="https://github.com/GLOBAL-AI-GOVERNANCE">GitHub</a></p>
   </footer>
 </body>
