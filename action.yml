@@ -1,0 +1,91 @@
+name: Global AI Governance Check
+description: "Run `gag check` on an AI system inventory CSV. Fails on critical findings by default. Output is non-authorizing."
+author: Global AI Governance
+branding:
+  icon: shield
+  color: blue
+
+inputs:
+  inventory:
+    description: "Path to the AI system inventory CSV, relative to the workspace."
+    required: true
+  outdir:
+    description: "Directory for generated reports. Defaults to a directory under the runner temp path."
+    required: false
+    default: ""
+  fail-on:
+    description: "Lowest finding severity that fails the step: critical, high, or none."
+    required: false
+    default: critical
+  evaluation-time:
+    description: "Optional RFC 3339 evaluation time passed to `gag check`."
+    required: false
+    default: ""
+  python:
+    description: "Python 3.11+ interpreter used to create the isolated environment."
+    required: false
+    default: python3
+
+outputs:
+  report-dir:
+    description: "Directory containing the generated reports."
+    value: ${{ steps.check.outputs.report-dir }}
+  exit-code:
+    description: "Exit code from `gag check` (0 pass, 1 blocked by findings, 2 input error)."
+    value: ${{ steps.check.outputs.exit-code }}
+  gate-state:
+    description: "governance_gate_state from governance-result.json, when produced."
+    value: ${{ steps.check.outputs.gate-state }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install gag into an isolated environment
+      shell: bash
+      env:
+        GAG_PYTHON: ${{ inputs.python }}
+        GAG_ACTION_PATH: ${{ github.action_path }}
+      run: |
+        set -euo pipefail
+        venv="$RUNNER_TEMP/gag-action-venv"
+        "$GAG_PYTHON" -m venv "$venv"
+        if [ -x "$venv/bin/python" ]; then bin="$venv/bin"; else bin="$venv/Scripts"; fi
+        "$bin/python" -m pip install --disable-pip-version-check --quiet --no-deps "$GAG_ACTION_PATH"
+        echo "GAG_ACTION_BIN=$bin" >> "$GITHUB_ENV"
+
+    - name: Run gag check
+      id: check
+      shell: bash
+      env:
+        GAG_INVENTORY: ${{ inputs.inventory }}
+        GAG_OUTDIR: ${{ inputs.outdir }}
+        GAG_FAIL_ON: ${{ inputs.fail-on }}
+        GAG_EVALUATION_TIME: ${{ inputs.evaluation-time }}
+      run: |
+        set -uo pipefail
+        outdir="${GAG_OUTDIR:-$RUNNER_TEMP/gag-report}"
+        args=(check "$GAG_INVENTORY" --outdir "$outdir" --fail-on "$GAG_FAIL_ON")
+        if [ -n "$GAG_EVALUATION_TIME" ]; then args+=(--evaluation-time "$GAG_EVALUATION_TIME"); fi
+        "$GAG_ACTION_BIN/gag" "${args[@]}"
+        status=$?
+        gate=""
+        if [ -f "$outdir/governance-result.json" ]; then
+          gate=$("$GAG_ACTION_BIN/python" -c 'import json,sys; print(json.load(open(sys.argv[1])).get("governance_gate_state", ""))' "$outdir/governance-result.json")
+        fi
+        {
+          echo "report-dir=$outdir"
+          echo "exit-code=$status"
+          echo "gate-state=$gate"
+        } >> "$GITHUB_OUTPUT"
+        {
+          echo "### Global AI Governance check"
+          echo ""
+          echo "- Inventory: \`$GAG_INVENTORY\`"
+          echo "- Fail on: \`$GAG_FAIL_ON\`"
+          echo "- Governance gate state: \`${gate:-not produced}\`"
+          echo "- Exit code: \`$status\`"
+          echo ""
+          echo "> Non-authorizing. This result is automated reference checking. It does not approve, certify, or authorize any AI system; a named human decision is still required."
+        } >> "$GITHUB_STEP_SUMMARY"
+        echo "Non-authorizing: automated reference check only; not an approval, certification, or authorization."
+        exit "$status"
