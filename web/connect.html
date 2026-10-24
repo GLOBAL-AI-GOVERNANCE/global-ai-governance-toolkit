@@ -19,8 +19,8 @@
   <main id="top" tabindex="-1">
     <section class="shell connect-section connect-hero">
       <p class="eyebrow">Global AI Governance</p>
-      <h1>Novel governance solutions the world needs now.</h1>
-      <p class="lede">Open, non-authorizing governance infrastructure that AI agents and the teams behind them can call: evidence in, decision-ready outcomes out, humans in charge.</p>
+      <h1>Governance checks your AI agents can call, with humans in charge.</h1>
+      <p class="lede">Open-source tools that check an AI system inventory or an agent passport and prepare the evidence for an accountable human decision. Use them in the browser, from the command line, or inside your agent over Model Context Protocol (MCP). Free, local-first, and non-authorizing.</p>
       <div class="actions">
         <a class="primary" href="#agents">Connect your agent</a>
         <a class="template-button" href="#spec">Read the spec</a>
@@ -33,12 +33,14 @@
       <h2>Connect your agent</h2>
       <p><strong>Read first:</strong> <a href="./llms.txt">llms.txt</a> and <a href="./machine-interface.json">machine-interface.json</a> list the CLI, inputs, outputs, profiles, and raw schema URLs.</p>
       <p><strong>Use it in your agent in 5 minutes</strong> with <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp">AI Governance MCP</a>, the AI Governance Model Context Protocol Server. Model Context Protocol (MCP) is an open standard that lets AI assistants call external tools. It is read-only and has three tools: <code>check_inventory</code>, <code>build_decision_pack</code>, and <code>validate_passport</code>.</p>
-<pre tabindex="0" role="region" aria-label="AI Governance MCP setup commands">git clone https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp &amp;&amp; cd ai-governance-mcp
-python3 -m venv .venv &amp;&amp; . .venv/bin/activate &amp;&amp; pip install -e .
-./scripts/fetch_upstreams.sh
+<pre tabindex="0" role="region" aria-label="AI Governance MCP run command">uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.1.0 gag-mcp   # stdio</pre>
+      <p>That one command needs only <a href="https://docs.astral.sh/uv/">uv</a>: the pinned Toolkit and Agentic files are bundled in the package, so nothing else is cloned or fetched. It was tested in a clean environment. To run from source instead, or to run the test suite and smoke test:</p>
+<pre tabindex="0" role="region" aria-label="AI Governance MCP from-source commands">git clone https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp &amp;&amp; cd ai-governance-mcp
+python3 -m venv .venv &amp;&amp; . .venv/bin/activate &amp;&amp; pip install -e ".[dev]"
 gag-mcp                      # stdio (Claude Desktop and other local clients)
-gag-mcp --http --port 8000   # Streamable HTTP at /mcp</pre>
-      <p><strong>Claude Desktop (local):</strong> add <code>"gag": {"command": "/ABS/PATH/ai-governance-mcp/.venv/bin/gag-mcp"}</code> under <code>mcpServers</code>.<br>
+gag-mcp --http --port 8000   # Streamable HTTP at /mcp
+pytest &amp;&amp; python scripts/smoke_test.py   # optional checks; need the [dev] extra</pre>
+      <p><strong>Claude Desktop (local):</strong> add <code>"gag": {"command": "uvx", "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.1.0", "gag-mcp"]}</code> under <code>mcpServers</code> (launch command tested; not yet tested inside Claude Desktop). From source, use <code>"command": "/ABS/PATH/ai-governance-mcp/.venv/bin/gag-mcp"</code> instead.<br>
       <strong>Anthropic API:</strong> <code>{"type": "url", "name": "gag", "url": "https://YOUR-HOST/mcp", "authorization_token": "TOKEN"}</code>.<br>
       <strong>OpenAI API:</strong> tool <code>{"type": "mcp", "server_label": "gag", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.<br>
       <strong>xAI API:</strong> tool <code>{"type": "mcp", "server_label": "gag", "server_url": "https://YOUR-HOST/mcp", "headers": {"Authorization": "Bearer TOKEN"}}</code>.</p>

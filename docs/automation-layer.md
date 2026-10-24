@@ -40,11 +40,13 @@ The current pipeline helps identify:
 
 ## Command
 
+Run from the repository root. Each command writes its reports to a new temporary directory, so no tracked file is overwritten; the report paths are printed when the run completes. The full first-run path is the [README Quick Start](../README.md#quick-start).
+
 Installed:
 
 ```bash
 gaig check automation/sample-data/sample-ai-inventory.csv \
-  --outdir automation/reports
+  --outdir "$(mktemp -d)"
 ```
 
 Repository compatibility entry point:
@@ -52,7 +54,7 @@ Repository compatibility entry point:
 ```bash
 python automation/scripts/run_governance_checks.py \
   automation/sample-data/sample-ai-inventory.csv \
-  --outdir automation/reports
+  --outdir "$(mktemp -d)"
 ```
 
 The command blocks `CRITICAL` findings by default.

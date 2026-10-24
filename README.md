@@ -18,7 +18,7 @@ Open the live local-first browser:
 
 **[https://global-ai-governance.github.io/global-ai-governance-toolkit/](https://global-ai-governance.github.io/global-ai-governance-toolkit/)**
 
-The hosted browser reflects current `main`, which may move ahead of the latest tagged release. Agents start at [`web/llms.txt`](web/llms.txt) and [`web/machine-interface.json`](web/machine-interface.json); the [Connect page](web/connect.html) covers Model Context Protocol (MCP) setup, pilots, and specifications.
+The hosted browser reflects current `main`, which may move ahead of the latest tagged release. Agents start at [`web/llms.txt`](web/llms.txt) and [`web/machine-interface.json`](web/machine-interface.json); the [Connect page](web/connect.html) covers Model Context Protocol (MCP) setup and specifications.
 
 Primary browser actions are:
 
@@ -47,15 +47,7 @@ The browser is deployed through the repository-native [GitHub Pages workflow](.g
 
 Static hosting does not change the data boundary: CSV content is read by the browser on the local device, processing occurs in browser memory, and downloads are generated locally. The site has no backend, upload path, application login, telemetry, service worker, or runtime network request. Organizations should still serve a reviewed commit and apply their own browser, device, and data-handling controls.
 
-Install from a reviewed checkout in an isolated Python 3.11 environment:
-
-```bash
-python -m pip install .
-gaig check automation/fixtures/valid-ai-inventory.csv \
-  --outdir /tmp/gaig-output \
-  --evaluation-time 2026-08-29T12:00:00Z
-gaig verify /tmp/gaig-output
-```
+To install the command-line tool, follow the [Quick Start](#quick-start) below.
 
 `gaig` is the primary command. `gag` is a deprecated alias installed with the same entry point; it behaves identically and keeps its `gag` usage and error prefix. The `gag_toolkit` import package remains as a deprecated alias of `gaig_toolkit`.
 
@@ -73,16 +65,22 @@ The current automation pipeline:
 
 ### Quick Start
 
-**Prerequisite:** Python 3.11 is used in hosted CI.
+**Prerequisite:** Python 3.11 (the version used in hosted CI) and Git. Reports go to a new temporary directory, so the run changes no tracked file in the checkout.
 
 ```bash
-python automation/scripts/run_governance_checks.py \
-  automation/sample-data/sample-ai-inventory.csv \
-  --outdir automation/reports \
-  --fail-on none
+git clone https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit.git
+cd global-ai-governance-toolkit
+python3.11 -m venv ../gaig-venv && . ../gaig-venv/bin/activate
+python -m pip install .
+OUT="$(mktemp -d)"
+gaig check automation/sample-data/sample-ai-inventory.csv --outdir "$OUT" --fail-on none
+gaig verify "$OUT"
+grep -m1 "BLOCKED BY CRITICAL FINDINGS" "$OUT/decision-pack/executive-summary.md"
 ```
 
-The bundled sample intentionally includes systems with critical control gaps. The quick start therefore uses explicit report-only mode so the toolkit can generate a blocked-state Decision Pack for review. Remove `--fail-on none` to exercise the default fail-closed gate.
+Expected: both commands exit `0`, and the last line prints the `BLOCKED BY CRITICAL FINDINGS` status line from the Decision Pack summary. Open `"$OUT/decision-pack/"` to review the pack. To use the published release instead of current `main`, add `--branch v2.6.0` to `git clone`.
+
+The bundled sample intentionally includes systems with critical control gaps. The quick start therefore uses explicit report-only mode so the toolkit can generate a blocked-state Decision Pack for review. Remove `--fail-on none` to exercise the default fail-closed gate. To check your own systems, download the [blank template](web/ai-system-inventory-template.csv), fill one row per AI system or agent, and pass that file instead of the sample. The repository-relative script `python automation/scripts/run_governance_checks.py` accepts the same arguments.
 
 Default behavior is fail-closed for `CRITICAL` findings:
 
