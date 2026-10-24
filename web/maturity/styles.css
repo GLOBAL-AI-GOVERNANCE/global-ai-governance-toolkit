@@ -40,6 +40,32 @@
 .g-status { display: inline-flex; align-items: baseline; gap: .55em; }
 .g-status::before { transform: translateY(-.05em); }
 
+/* Global AI Governance design tokens v2: atmosphere (shared verbatim across ai-governance.solutions, Peace OS, and Containment Ledger) */
+:root, [data-g-scheme="dark"] {
+  --g-tracking-label: .2em;
+  --g-grid-size: 56px;
+  --g-grid-line: rgb(255 255 255 / .045);
+  --g-glow: rgb(255 255 255 / .07);
+  --g-glow-strong: rgb(255 255 255 / .16);
+  --g-rule-lit: rgb(255 255 255 / .7);
+  --g-reveal: 1.8s;
+}
+[data-g-scheme="light"] {
+  --g-grid-line: rgb(10 10 10 / .055);
+  --g-glow: rgb(10 10 10 / .045);
+  --g-glow-strong: rgb(10 10 10 / .12);
+  --g-rule-lit: rgb(10 10 10 / .55);
+}
+/* Field: a hairline grid that fades toward every edge, a soft edge glow, and a luminous rule drawn once along the lower edge. Decorative only; no layout shift. */
+.g-field { position: relative; isolation: isolate; }
+.g-field::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background-image: radial-gradient(ellipse 60% 70% at 30% 20%, var(--g-glow), transparent 70%), linear-gradient(var(--g-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--g-grid-line) 1px, transparent 1px); background-size: 100% 100%, var(--g-grid-size) var(--g-grid-size), var(--g-grid-size) var(--g-grid-size); background-position: 0 0, -1px -1px, -1px -1px; -webkit-mask-image: radial-gradient(ellipse 70% 85% at 30% 45%, #000 15%, transparent 72%); mask-image: radial-gradient(ellipse 70% 85% at 30% 45%, #000 15%, transparent 72%); }
+.g-field::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; pointer-events: none; background: linear-gradient(90deg, transparent, var(--g-rule-lit) 22%, transparent 78%); transform-origin: 0 50%; animation: g-draw var(--g-reveal) var(--g-ease) .25s both; }
+@keyframes g-draw { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .g-field::after { animation: none; } }
+@media (forced-colors: active) { .g-field::before, .g-field::after { display: none; } }
+/* Machine detail: versions, hashes, and identifiers read as instrument text. */
+code, pre, kbd, samp, .g-badge { font-variant-numeric: tabular-nums slashed-zero; }
+
 /* Site: ai-governance.solutions/maturity */
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--g-bg); color: var(--g-text); font: 400 var(--g-text-base)/var(--g-leading-body) var(--g-font-sans); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -54,11 +80,11 @@ a:hover { text-decoration-color: currentColor; }
 .gaig-bar a:hover, .gaig-bar a[aria-current="page"] { color: var(--g-text); }
 .gaig-brand { color: var(--g-text) !important; font-weight: 600; font-size: var(--g-text-xs); letter-spacing: .22em; text-transform: uppercase; }
 .gaig-links { display: flex; flex-wrap: wrap; gap: 24px; flex: 1; }
-.gaig-cta { border: var(--g-hairline) solid var(--g-line-strong); color: var(--g-text) !important; padding: 8px 14px; border-radius: var(--g-radius-sm); font-weight: 500; }
-.gaig-cta:hover { background: var(--g-invert-bg); border-color: var(--g-invert-bg); color: var(--g-invert-text) !important; }
+.gaig-cta { border: var(--g-hairline) solid var(--g-line-strong); color: var(--g-text) !important; padding: 8px 14px; border-radius: var(--g-radius-sm); font-weight: 500; transition: background-color var(--g-duration) var(--g-ease), border-color var(--g-duration) var(--g-ease), color var(--g-duration) var(--g-ease), box-shadow var(--g-duration) var(--g-ease); }
+.gaig-cta:hover { background: var(--g-invert-bg); border-color: var(--g-invert-bg); color: var(--g-invert-text) !important; box-shadow: 0 0 24px var(--g-glow-strong); }
 header { padding-block: 56px 40px; border-bottom: var(--g-hairline) solid var(--g-line); }
 header p { color: var(--g-text-2); max-width: 760px; }
-.eyebrow { display: flex; align-items: center; gap: 12px; color: var(--g-text-muted) !important; letter-spacing: var(--g-tracking-caps); text-transform: uppercase; font: 500 var(--g-text-2xs)/1.4 var(--g-font-mono); }
+.eyebrow { display: flex; align-items: center; gap: 12px; color: var(--g-text-muted) !important; letter-spacing: var(--g-tracking-label); text-transform: uppercase; font: 500 var(--g-text-2xs)/1.4 var(--g-font-mono); }
 .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--g-line-strong); }
 h1 { margin: .3em 0 .4em; font-size: clamp(2.2rem, 4.4vw, 3.6rem); line-height: 1.05; letter-spacing: var(--g-tracking-display); font-weight: 600; }
 h2, h3 { line-height: 1.2; font-weight: 600; letter-spacing: -.015em; }
