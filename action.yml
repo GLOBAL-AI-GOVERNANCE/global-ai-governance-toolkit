@@ -83,9 +83,6 @@ runs:
           echo "GAIG_CHECK_REPORT_DIR=$outdir"
           echo "GAIG_CHECK_EXIT_CODE=$status"
           echo "GAIG_CHECK_GATE_STATE=$gate"
-          echo "GAG_CHECK_REPORT_DIR=$outdir"
-          echo "GAG_CHECK_EXIT_CODE=$status"
-          echo "GAG_CHECK_GATE_STATE=$gate"
         } >> "$GITHUB_ENV"
         {
           echo "### Global AI Governance check"
