@@ -18,7 +18,7 @@ Govern AI before it acts. List what you run; the toolkit finds missing owners, m
 
 **[https://ai-governance.solutions/](https://ai-governance.solutions/)**
 
-The hosted browser reflects current `main`, which may move ahead of the latest tagged release. Agents start at [`web/llms.txt`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/web/llms.txt) and [`web/machine-interface.json`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/web/machine-interface.json); the [Connect page](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/web/connect.html) covers Model Context Protocol (MCP) setup and specifications.
+The hosted browser reflects current `main`, which may move ahead of the latest tagged release. **AI agents start at the [agent setup guide](https://ai-governance.solutions/AGENT_SETUP.md):** every command, the result to expect after it, client configs for the MCP server, and a done check, with no account, API key, or human step. Machine-readable entry points: [llms.txt](https://ai-governance.solutions/llms.txt) and [machine-interface.json](https://ai-governance.solutions/machine-interface.json); the [Connect page](https://ai-governance.solutions/connect.html) covers Model Context Protocol (MCP) setup and specifications.
 
 Primary browser actions are:
 
@@ -68,7 +68,7 @@ The current automation pipeline:
 **Fastest CLI path, no clone:** install the v2.8.0 release wheel and run the sample with gaps. Requires Python 3.11 or later and `curl`.
 
 ```bash
-python3.11 -m venv gaig-venv && . gaig-venv/bin/activate
+python3 -m venv gaig-venv && . gaig-venv/bin/activate   # Python 3.11 or later
 python -m pip install https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.0/global_ai_governance-2.8.0-py3-none-any.whl
 curl -fsSLO https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.0/automation/sample-data/sample-ai-inventory.csv
 OUT="$(mktemp -d)"
@@ -77,14 +77,14 @@ gaig verify "$OUT"
 grep -m1 "BLOCKED BY CRITICAL FINDINGS" "$OUT/decision-pack/executive-summary.md"
 ```
 
-TESTED in a clean environment: both commands exit `0` and the last line prints the blocked-state summary. Verify the wheel against the release `SHA256SUMS`. The package is not on PyPI.
+TESTED in a clean environment: both commands exit `0` and the last line prints the blocked-state summary. To check the wheel, download `SHA256SUMS` from the same release and run `grep ' global_ai_governance-2.8.0-py3-none-any.whl$' SHA256SUMS | sha256sum -c -`; with the GitHub CLI, `gh attestation verify global_ai_governance-2.8.0-py3-none-any.whl --owner GLOBAL-AI-GOVERNANCE` checks build provenance. The package is not on PyPI.
 
 **From a checkout:** Python 3.11 (the version used in hosted CI) and Git. Reports go to a new temporary directory, so the run changes no tracked file in the checkout.
 
 ```bash
 git clone https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit.git
 cd global-ai-governance-toolkit
-python3.11 -m venv ../gaig-venv && . ../gaig-venv/bin/activate
+python3 -m venv ../gaig-venv && . ../gaig-venv/bin/activate   # Python 3.11 or later
 python -m pip install .
 OUT="$(mktemp -d)"
 gaig check automation/sample-data/sample-ai-inventory.csv --outdir "$OUT" --fail-on none

@@ -1,6 +1,7 @@
 # Changelog
 ## [Unreleased]
 
+- Add the agent setup guide, `docs/AGENT_SETUP.md`, published at `https://ai-governance.solutions/AGENT_SETUP.md`: every command an agent runs to install the CLI, run AI Governance MCP, register it with a client, add the Action Level guard, and try Agentic AI Governance and Verified Vulnerability Governance, with the expected result after each step and a done check. `llms.txt` opens with an agent setup section, the connect page adds `#setup` with an instruction to give an agent, the landing page links the guide, and machine interface 1.4.0 adds `discovery.agent_setup`. The README Quick Start uses `python3` and gives the checksum and attestation commands. Toolkit behavior is unchanged.
 - Lead the landing page with "Govern AI before it acts." and state that the person accountable keeps the final decision.
 - Show current product releases on the landing and connect pages: Verified Vulnerability Governance v0.2.0, Containment Ledger v1.0.0, and stable, released, or available labels for the rest.
 - Pin the README, site, `llms.txt`, and machine interface to v2.7.2, including the `global_ai_governance-2.7.2-py3-none-any.whl` install path and the v2.7.2 tag commit for the GitHub Action. The machine interface version stays 1.2.0.
