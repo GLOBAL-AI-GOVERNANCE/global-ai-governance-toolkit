@@ -5,6 +5,10 @@
 - The Connect page and `llms.txt` add Claude Code and Grok CLI setup, the full Anthropic MCP connector shape, and an Action Level guard section linking to AI Governance MCP examples. The product map gains the `#products` anchor.
 - Pin AI Governance MCP references on the Connect page and in `llms.txt` to v0.3.1, which ships the Action Level guard and bundles toolkit v2.7.1.
 - Links that open a page at a section, such as `connect.html#guard`, land on the section at once instead of animating the scroll on load. Smooth scrolling for in-page links and the reduced-motion setting are unchanged.
+- Packaging: the distribution name is `global-ai-governance`, so future wheel and sdist files are named `global_ai_governance-<version>`. The command `gaig` and the import package `gaig_toolkit` are unchanged, and assets of existing releases keep their names. The package is not on PyPI yet.
+- The wheel installs only `gaig_toolkit` at the top level: the reference tooling ships under `gaig_toolkit/_bundled/automation` instead of a top-level `automation` package, and `automation/tests` is no longer in the wheel. Repository scripts, CI paths, and the GitHub Action are unchanged.
+- Package metadata: SPDX license `MIT` with license files, classifiers, and project links. README links are absolute and pinned to the release tag so they resolve on package indexes.
+- The Release Assets workflow gains PyPI and TestPyPI trusted-publishing jobs that upload only the wheel and sdist. Both stay skipped until a repository variable enables them, so no upload happens now.
 
 ## [2.7.1] - 2026-10-23 - Plain Run Output
 

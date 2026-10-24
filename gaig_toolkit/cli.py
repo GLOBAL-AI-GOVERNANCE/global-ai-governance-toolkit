@@ -7,6 +7,17 @@ import os
 import sys
 from pathlib import Path
 
+# An installed wheel carries the reference tooling under gaig_toolkit/_bundled; a
+# repository checkout has it at the repository root. Either way it imports as
+# ``automation`` inside this command, and the wheel installs no top-level package
+# other than gaig_toolkit.
+_PACKAGE_DIR = Path(__file__).resolve().parent
+for _root in (_PACKAGE_DIR / "_bundled", _PACKAGE_DIR.parent):
+    if (_root / "automation" / "scripts" / "run_governance_checks.py").is_file():
+        if str(_root) not in sys.path:
+            sys.path.insert(0, str(_root))
+        break
+
 from automation.scripts.contract_verifier import verify_output_directory
 from automation.scripts.inventory_normalizer import normalize_file
 from automation.scripts.run_governance_checks import run_pipeline
