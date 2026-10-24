@@ -1,9 +1,9 @@
 # Global AI Governance Toolkit
 
 <!-- gaig:nav -->
-[![Global AI Governance](https://img.shields.io/badge/Global_AI_Governance-portfolio-0b100d)](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE) ![Status](https://img.shields.io/badge/status-released-brightgreen) ![authority_effect](https://img.shields.io/badge/authority__effect-NONE-lightgrey)
+**[Global AI Governance](https://ai-governance.solutions/)** · `v2.7.2 · released` · `authority_effect: NONE`
 
-**[Connect your agent](https://ai-governance.solutions/connect.html#agents)** · **[Read the spec](https://ai-governance.solutions/connect.html#spec)** · [All products](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE#product-map)
+[Connect your agent](https://ai-governance.solutions/connect.html#agents) · [Specifications](https://ai-governance.solutions/connect.html#spec) · [All products](https://ai-governance.solutions/#products)
 <!-- /gaig:nav -->
 
 Check your AI systems and agents before they act. List what you run; the toolkit finds missing owners, monitoring, shutdown paths, and evidence, then prepares a reproducible Decision Pack so the person accountable can decide with care. Free, open source, and runs locally.
@@ -353,8 +353,9 @@ Historical version names remain in version-specific release records where approp
 
 This toolkit is the **GOVERN + MEASURE** layer and the flagship entry point: inventory in, findings and a human Decision Pack out.
 
-- **Connect your agent:** [llms.txt](https://ai-governance.solutions/llms.txt), [machine-interface.json](https://ai-governance.solutions/machine-interface.json), and the [AI Governance Model Context Protocol Server](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp) (AI Governance MCP; command `gaig-mcp`). Compatible with MCP-based agents.
-- **Read the spec:** [versioned specifications](https://ai-governance.solutions/connect.html#spec) and the [product map](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE#product-map).
+**[ai-governance.solutions](https://ai-governance.solutions/)** · [Connect your agent](https://ai-governance.solutions/connect.html#agents) · [Specifications](https://ai-governance.solutions/connect.html#spec) · [All products](https://ai-governance.solutions/#products)
 
-Outputs are non-authorizing (`authority_effect: NONE`). Not affiliated with or endorsed by any AI lab or platform.
+For agents: [llms.txt](https://ai-governance.solutions/llms.txt) · [machine-interface.json](https://ai-governance.solutions/machine-interface.json) · [AI Governance MCP](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp) (`gaig-mcp`). Compatible with Model Context Protocol (MCP) based agents.
+
+Framework-neutral and jurisdiction-neutral. Outputs are non-authorizing (`authority_effect: NONE`). Not affiliated with or endorsed by any AI lab or platform.
 <!-- /gaig:footer -->
