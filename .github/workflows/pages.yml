@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "web/**"
+      - "docs/AGENT_SETUP.md"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -57,6 +58,7 @@ jobs:
         run: |
           mkdir _site
           cp -R web/. _site/
+          cp docs/AGENT_SETUP.md _site/AGENT_SETUP.md
           touch _site/.nojekyll
 
       - name: Upload Pages artifact

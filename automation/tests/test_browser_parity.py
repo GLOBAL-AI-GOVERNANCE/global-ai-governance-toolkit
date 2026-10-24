@@ -133,7 +133,12 @@ class BrowserParityTests(unittest.TestCase):
 
     def test_machine_front_door_is_versioned_and_non_authorizing(self) -> None:
         interface = json.loads((ROOT / "web/machine-interface.json").read_text(encoding="utf-8"))
-        self.assertEqual(interface["machine_interface_version"], "1.3.0")
+        self.assertEqual(interface["machine_interface_version"], "1.4.0")
+        self.assertEqual(interface["discovery"]["agent_setup"], "./AGENT_SETUP.md")
+        self.assertTrue((ROOT / "docs/AGENT_SETUP.md").is_file())
+        pages = (ROOT / ".github/workflows/pages.yml").read_text(encoding="utf-8")
+        self.assertIn("cp docs/AGENT_SETUP.md _site/AGENT_SETUP.md", pages)
+        self.assertIn("https://ai-governance.solutions/AGENT_SETUP.md", (ROOT / "web/llms.txt").read_text(encoding="utf-8"))
         self.assertEqual(interface["discovery"]["llms_txt"], "./llms.txt")
         self.assertTrue((ROOT / "web/llms.txt").is_file())
         self.assertEqual(interface["authority_effect"], "NONE")
