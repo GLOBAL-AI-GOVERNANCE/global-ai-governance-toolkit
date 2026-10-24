@@ -126,3 +126,44 @@ jobs:
           name: governance-reports
           path: ${{ runner.temp }}/governance-reports/
           if-no-files-found: error
+
+  action-self-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Run action on a valid inventory
+        id: valid
+        uses: ./
+        with:
+          inventory: automation/fixtures/valid-ai-inventory.csv
+          outdir: ${{ runner.temp }}/action-valid
+
+      - name: Run action on a critical inventory
+        id: critical
+        continue-on-error: true
+        uses: ./
+        with:
+          inventory: automation/fixtures/critical-ai-inventory.csv
+          outdir: ${{ runner.temp }}/action-critical
+
+      - name: Verify action outcomes
+        shell: bash
+        env:
+          VALID_EXIT: ${{ steps.valid.outputs.exit-code }}
+          VALID_GATE: ${{ steps.valid.outputs.gate-state }}
+          CRITICAL_OUTCOME: ${{ steps.critical.outcome }}
+        run: |
+          set -euo pipefail
+          test "$VALID_EXIT" = "0"
+          test "$VALID_GATE" = "PASSED_CURRENT_AUTOMATED_CHECKS"
+          test -d "${{ runner.temp }}/action-valid/decision-pack"
+          test "$CRITICAL_OUTCOME" = "failure"
+          test "$GAG_CHECK_EXIT_CODE" = "1"
+          test "$GAG_CHECK_GATE_STATE" = "BLOCKED"
+          grep -q "CRITICAL - Missing named owner" "${{ runner.temp }}/action-critical/governance-validation-report.md"

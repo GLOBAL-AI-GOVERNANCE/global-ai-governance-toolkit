@@ -1,4 +1,9 @@
 # Changelog
+## Unreleased
+
+- Add a composite GitHub Action (`action.yml`) that runs `gag check` on an inventory CSV, fails on findings at the selected threshold, and labels its summary non-authorizing.
+- Add a Release Assets workflow that builds the wheel and sdist from a release tag and attaches them with `SHA256SUMS`.
+
 ## [2.5.3] - 2026-10-23 - Assurance State Integrity
 
 - Assurance state integrity patch. Correct stale profile-registration documentation, current profile and browser documentation, and the organizational-maturity interoperability heading and boundaries. Correct Quantum-AI publication-status semantics. Do not strengthen capability, authority, certification, or external reproducibility claims. `authority_effect` remains NONE.

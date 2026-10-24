@@ -88,6 +88,20 @@ Default behavior is fail-closed for `CRITICAL` findings:
 - `--fail-on high`: block `HIGH` and `CRITICAL` findings.
 - `--fail-on none`: explicit report-only mode; retain findings but return exit code `0`.
 
+### GitHub Action
+
+The repository root provides a composite action that installs the toolkit into an isolated virtual environment and runs `gag check` on an inventory CSV. It is unreleased current-main code; pin it to a full commit SHA from `main`.
+
+```yaml
+- uses: actions/checkout@<commit-sha>
+- uses: GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit@<commit-sha>
+  with:
+    inventory: governance/ai-inventory.csv
+    fail-on: critical   # critical (default), high, or none
+```
+
+The step fails on findings at or above `fail-on`, exactly like the CLI, and exposes `report-dir`, `exit-code`, and `gate-state` outputs. The same values are also exported as `GAG_CHECK_REPORT_DIR`, `GAG_CHECK_EXIT_CODE`, and `GAG_CHECK_GATE_STATE` environment variables for later steps. Its job summary is labelled non-authorizing: a passing check does not approve deployment, certify compliance, or replace the pending human decision. Hosted CI runs the action against the valid and critical fixtures on every change.
+
 ## AI Sovereignty Control Layer
 
 v2.2.0 adds an additive, local-first sovereignty assessment path for organizations reviewing whether strategic AI use preserves institutional control.
@@ -306,6 +320,7 @@ Historical version names remain in version-specific release records where approp
 - Review [v2.3.0 release readiness](docs/release-readiness-v2.3.0.md).
 - Review the [v2.3.0 release notes](release-notes/v2.3.0-assurance-accountability-profiles.md).
 - Review the [v2.4.0 release gate](docs/release-readiness-v2.4.0.md).
+- Release assets (wheel, sdist, and `SHA256SUMS`) are built from the release tag and attached by the [Release Assets workflow](.github/workflows/release-assets.yml). No build-provenance attestation is published.
 - Run `python -B automation/scripts/validate_repository.py`.
 - Run `python -B automation/scripts/build_decision_pack_example.py --check`.
 
