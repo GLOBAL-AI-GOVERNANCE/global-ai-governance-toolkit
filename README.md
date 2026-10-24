@@ -6,15 +6,15 @@
 **[Connect your agent](https://global-ai-governance.github.io/global-ai-governance-toolkit/connect.html#agents)** · **[Read the spec](https://global-ai-governance.github.io/global-ai-governance-toolkit/connect.html#spec)** · [All products](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE#product-map)
 <!-- /gaig:nav -->
 
-Turn an AI system inventory record into policy-driven findings and a reproducible, human-reviewed AI Governance Decision Pack.
+Check your AI systems and agents before they act. List what you run; the toolkit finds missing owners, monitoring, shutdown paths, and evidence, then prepares a reproducible Decision Pack so an accountable person can decide. Free, open source, and runs locally.
 
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
-**Published release:** v2.6.0 — Primary Command `gaig`. The installed command is now `gaig`. `gag` remains installed as a deprecated alias of the same command, so existing scripts keep working. Capability, authority, certification, and external reproducibility claims are unchanged. A human determines organizational maturity. The toolkit checks submitted evidence and does not score, certify, or authorize.
+**Latest release:** v2.6.0. The command is `gaig`; `gag` still works as a deprecated alias, so existing scripts keep running. A human determines organizational maturity: the toolkit checks the submitted evidence and does not score, certify, or authorize.
 
 ## Start Here
 
-Open the live local-first browser:
+**Fastest path, nothing to install:** open the browser Toolkit and select **Run example with gaps**.
 
 **[https://global-ai-governance.github.io/global-ai-governance-toolkit/](https://global-ai-governance.github.io/global-ai-governance-toolkit/)**
 
