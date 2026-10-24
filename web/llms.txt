@@ -10,6 +10,7 @@ AI agents: read machine-interface.json first. It lists the CLI, inputs, outputs,
 - [Organizational maturity evidence](https://global-ai-governance.github.io/global-ai-governance-toolkit/maturity/): local-only assessment. Partial coverage is not framework completion.
 
 ## CLI
+Install (Python 3.11 or later): `pip install https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.7.0/global_ai_governance_toolkit-2.7.0-py3-none-any.whl`. Verify the wheel against the release `SHA256SUMS`. The package is not on PyPI.
 - `gaig check INPUT --outdir DIRECTORY [--fail-on none|high|critical]`
 - `gaig normalize INPUT --output-json FILE [--output-csv FILE]`
 - `gaig profile PROFILE_ID INPUT --outdir DIRECTORY [--decision-pack-manifest FILE]`
