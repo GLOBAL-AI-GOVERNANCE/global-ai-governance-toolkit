@@ -1,7 +1,14 @@
 # Changelog
 ## [Unreleased]
 
+## [2.7.1] - 2026-10-23 - Plain Run Output
+
+- `gaig check` and `gaig verify` print "Output contracts and Decision Pack integrity verified." in place of an internal phase name.
+- A blocked `gaig check` run keeps its first line, "Governance validation blocked by CRITICAL findings." (or HIGH), then prints where the reports were written, the top three blocking findings to fix, and that `--fail-on none` generates the Decision Pack for review without failing.
+- The browser check labels risk tiers as coming from the built-in calculator.
 - The Release Assets workflow also attaches a CycloneDX SBOM of the clean wheel install and records a GitHub build-provenance attestation for every asset in `SHA256SUMS`. Applies to releases published after this change; existing releases are unchanged.
+- Remove the completed rename migration note. This changelog and the release notes remain the record of the rename.
+- Exit codes, flags, structured errors, JSON outputs, schemas, contracts, findings, and check logic are unchanged. No capability, authority, certification, or external reproducibility claim is strengthened. `authority_effect` remains NONE.
 
 ## [2.7.0] - 2026-10-23 - `gaig` Only
 

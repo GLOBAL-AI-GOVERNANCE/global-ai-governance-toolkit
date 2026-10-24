@@ -152,7 +152,8 @@ class ContractSpineTests(unittest.TestCase):
         handoff = json.loads((outdir / "governance-handoff.json").read_text(encoding="utf-8"))
         self.assertEqual(machine["human_decision_state"], "PENDING_HUMAN_DECISION")
         self.assertEqual(handoff["authority_effect"], "NONE")
-        self.assertIn("Wave A contracts", result.stdout)
+        self.assertIn("Output contracts and Decision Pack integrity verified.", result.stdout)
+        self.assertNotIn("Wave A", result.stdout)
 
     def test_blocking_finding_returns_one_and_machine_result(self) -> None:
         outdir = self.work / "blocked"
@@ -161,6 +162,20 @@ class ContractSpineTests(unittest.TestCase):
         self.assertTrue((outdir / "governance-findings.json").is_file())
         self.assertEqual(json.loads((outdir / "governance-result.json").read_text(encoding="utf-8"))["governance_gate_state"], "BLOCKED")
         self.assertFalse((outdir / "decision-pack").exists())
+        lines = result.stdout.splitlines()
+        self.assertEqual(lines[0], "Governance validation blocked by CRITICAL findings.")
+        self.assertIn(f"Reports written to: {outdir}", result.stdout)
+        self.assertIn(str(outdir / "governance-findings.json"), result.stdout)
+        self.assertIn("Top findings to fix", result.stdout)
+        self.assertIn("- CRITICAL ", result.stdout)
+        self.assertIn("--fail-on none", result.stdout)
+
+    def test_fail_on_none_still_succeeds_after_blocked_guidance(self) -> None:
+        outdir = self.work / "unblocked"
+        result = self.command(PIPELINE, CRITICAL, "--outdir", outdir, "--fail-on", "none")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("Top findings to fix", result.stdout)
+        self.assertTrue((outdir / "decision-pack" / "manifest.json").is_file())
 
     def test_malformed_evaluation_time_is_configuration_error(self) -> None:
         result = self.command(

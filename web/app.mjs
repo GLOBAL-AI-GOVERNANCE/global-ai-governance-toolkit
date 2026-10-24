@@ -49,7 +49,7 @@ function renderResults(output) {
       : { result: "Current automated checks passed", meaning: "No gap was found by the five bounded rules in this toolkit.", next: "Review the evidence and Decision Pack. An accountable human must still make the decision." };
   byId("gate").innerHTML = `<p>Result</p><h3>${resultCopy.result}</h3><span>Human decision remains pending</span>`;
   byId("result-explanation").innerHTML = `<article><h3>What this means</h3><p>${resultCopy.meaning}</p></article><article><h3>What to do next</h3><p>${resultCopy.next}</p></article>`;
-  const tierCards = Object.entries(tiers).map(([id, tier]) => `<article class="finding"><span class="severity tier">${tier} risk</span><h3>${escapeHtml(id)}</h3><p>Preliminary risk tier from the Wave A calculator.</p></article>`);
+  const tierCards = Object.entries(tiers).map(([id, tier]) => `<article class="finding"><span class="severity tier">${tier} risk</span><h3>${escapeHtml(id)}</h3><p>Preliminary risk tier from the built-in calculator.</p></article>`);
   const findingCards = findings.findings.map((item) => {
     const guidance = guidanceFor(item.rule_id);
     return `<article class="finding"><span class="severity ${item.severity.toLowerCase()}">${item.severity} · ${escapeHtml(item.rule_id)}</span><h3>${guidance.title}</h3><h4>What this means</h4><p>${guidance.meaning}</p><h4>What to do next</h4><p>${guidance.next}</p><details><summary>Technical detail</summary><p>System: ${escapeHtml(item.system_name)} (${escapeHtml(item.system_id)})</p><p>Policy message: ${escapeHtml(item.message)}</p><p>Finding ID: <code>${escapeHtml(item.finding_id)}</code></p></details></article>`;
