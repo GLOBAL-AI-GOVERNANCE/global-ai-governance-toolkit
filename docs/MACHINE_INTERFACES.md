@@ -15,11 +15,11 @@ Organizational maturity evidence is one of those profiles. A human determines th
 ## Commands
 
 ```text
-gag normalize INPUT --output-json FILE [--output-csv FILE]
-gag check INPUT --outdir DIRECTORY [--fail-on none|high|critical]
+gaig normalize INPUT --output-json FILE [--output-csv FILE]
+gaig check INPUT --outdir DIRECTORY [--fail-on none|high|critical]
           [--evaluation-time YYYY-MM-DDTHH:MM:SSZ]
           [--target-repository NAME]
-gag verify OUTPUT_DIRECTORY
+gaig verify OUTPUT_DIRECTORY
 ```
 
 Normalizer output options are exact: `--output-json` is required, `--output-csv` is optional, and bare `--output` is rejected.

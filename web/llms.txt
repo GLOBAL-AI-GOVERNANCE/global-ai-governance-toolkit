@@ -10,10 +10,10 @@ AI agents: read machine-interface.json first. It lists the CLI, inputs, outputs,
 - [Organizational maturity evidence](https://global-ai-governance.github.io/global-ai-governance-toolkit/maturity/): local-only assessment. Partial coverage is not framework completion.
 
 ## CLI
-- `gag check INPUT --outdir DIRECTORY [--fail-on none|high|critical]`
-- `gag normalize INPUT --output-json FILE [--output-csv FILE]`
-- `gag profile PROFILE_ID INPUT --outdir DIRECTORY [--decision-pack-manifest FILE]`
-- `gag verify OUTPUT_DIRECTORY`
+- `gaig check INPUT --outdir DIRECTORY [--fail-on none|high|critical]`
+- `gaig normalize INPUT --output-json FILE [--output-csv FILE]`
+- `gaig profile PROFILE_ID INPUT --outdir DIRECTORY [--decision-pack-manifest FILE]`
+- `gaig verify OUTPUT_DIRECTORY`
 
 ## Inputs
 - [Inventory template CSV](https://global-ai-governance.github.io/global-ai-governance-toolkit/ai-system-inventory-template.csv)

@@ -1,7 +1,7 @@
 # Quickstart
 
 ```bash
-gag profile ciso-ai-risk-v0.1 automation/profiles/fixtures/ciso-pass.json \
+gaig profile ciso-ai-risk-v0.1 automation/profiles/fixtures/ciso-pass.json \
   --outdir profile-output --evaluation-time 2026-08-29T12:00:00Z
 ```
 

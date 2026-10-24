@@ -188,7 +188,7 @@ class ContractSpineTests(unittest.TestCase):
         self.assertEqual(self.command(PIPELINE, VALID, "--outdir", outdir).returncode, 0)
         with (outdir / "decision-pack" / "decision-record.md").open("a", encoding="utf-8") as handle:
             handle.write("tamper\n")
-        verify = self.command("-m", "gag_toolkit.cli", "verify", outdir)
+        verify = self.command("-m", "gaig_toolkit.cli", "verify", outdir)
         self.assertEqual(verify.returncode, 2)
         self.assertIn("digest mismatch", verify.stderr)
 

@@ -10,7 +10,7 @@ Turn an AI system inventory record into policy-driven findings and a reproducibl
 
 **Maturity:** Working public reference toolkit. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
-**Published release:** v2.5.3 — Assurance State Integrity. This corrects current-state profile documentation and Quantum-AI publication-state semantics. Capability, authority, certification, and external reproducibility claims are unchanged. A human determines organizational maturity. The toolkit checks submitted evidence and does not score, certify, or authorize.
+**Published release:** v2.6.0 — Primary Command `gaig`. The installed command is now `gaig`. `gag` remains installed as a deprecated alias of the same command, so existing scripts keep working. Capability, authority, certification, and external reproducibility claims are unchanged. A human determines organizational maturity. The toolkit checks submitted evidence and does not score, certify, or authorize.
 
 ## Start Here
 
@@ -51,11 +51,13 @@ Install from a reviewed checkout in an isolated Python 3.11 environment:
 
 ```bash
 python -m pip install .
-gag check automation/fixtures/valid-ai-inventory.csv \
-  --outdir /tmp/gag-output \
+gaig check automation/fixtures/valid-ai-inventory.csv \
+  --outdir /tmp/gaig-output \
   --evaluation-time 2026-08-29T12:00:00Z
-gag verify /tmp/gag-output
+gaig verify /tmp/gaig-output
 ```
+
+`gaig` is the primary command. `gag` is a deprecated alias installed with the same entry point; it behaves identically and keeps its `gag` usage and error prefix. The `gag_toolkit` import package remains as a deprecated alias of `gaig_toolkit`.
 
 The installed CLI and the repository-relative compatibility script use the same local, network-free reference runtime. See [Machine Interfaces](docs/MACHINE_INTERFACES.md), [Compatibility Policy](docs/COMPATIBILITY.md), and [Local Data Handling](docs/LOCAL_DATA_HANDLING.md).
 
@@ -90,7 +92,7 @@ Default behavior is fail-closed for `CRITICAL` findings:
 
 ### GitHub Action
 
-The repository root provides a composite action that installs the toolkit into an isolated virtual environment and runs `gag check` on an inventory CSV. It is unreleased current-main code; pin it to a full commit SHA from `main`.
+The repository root provides a composite action that installs the toolkit into an isolated virtual environment and runs `gaig check` on an inventory CSV. It ships in release v2.6.0; pin it to that release's full commit SHA or a later commit from `main`.
 
 ```yaml
 - uses: actions/checkout@<commit-sha>
@@ -100,7 +102,7 @@ The repository root provides a composite action that installs the toolkit into a
     fail-on: critical   # critical (default), high, or none
 ```
 
-The step fails on findings at or above `fail-on`, exactly like the CLI, and exposes `report-dir`, `exit-code`, and `gate-state` outputs. The same values are also exported as `GAG_CHECK_REPORT_DIR`, `GAG_CHECK_EXIT_CODE`, and `GAG_CHECK_GATE_STATE` environment variables for later steps. Its job summary is labelled non-authorizing: a passing check does not approve deployment, certify compliance, or replace the pending human decision. Hosted CI runs the action against the valid and critical fixtures on every change.
+The step fails on findings at or above `fail-on`, exactly like the CLI, and exposes `report-dir`, `exit-code`, and `gate-state` outputs. The same values are also exported as `GAIG_CHECK_REPORT_DIR`, `GAIG_CHECK_EXIT_CODE`, and `GAIG_CHECK_GATE_STATE` environment variables for later steps. The deprecated names `GAG_CHECK_REPORT_DIR`, `GAG_CHECK_EXIT_CODE`, and `GAG_CHECK_GATE_STATE` are exported with the same values. Its job summary is labelled non-authorizing: a passing check does not approve deployment, certify compliance, or replace the pending human decision. Hosted CI runs the action against the valid and critical fixtures on every change.
 
 ## AI Sovereignty Control Layer
 
@@ -310,6 +312,7 @@ The repository preserves the following development lineage:
 - v2.5.1: Public Reference Integrity
 - v2.5.2: Release Surface Integrity
 - v2.5.3: Assurance State Integrity
+- v2.6.0: Primary Command `gaig`
 - Current public identity: Global AI Governance Toolkit
 
 Historical version names remain in version-specific release records where appropriate.

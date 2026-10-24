@@ -43,7 +43,7 @@ The current pipeline helps identify:
 Installed:
 
 ```bash
-gag check automation/sample-data/sample-ai-inventory.csv \
+gaig check automation/sample-data/sample-ai-inventory.csv \
   --outdir automation/reports
 ```
 
