@@ -16,6 +16,9 @@ import gaig_toolkit  # noqa: E402
 import gaig_toolkit.cli  # noqa: E402
 
 
+# The import package removed in v2.7.0; this test guards that it stays removed.
+REMOVED_PACKAGE = "gag_toolkit"
+
 class CliCommandTests(unittest.TestCase):
     def test_only_gaig_console_script_is_installed(self) -> None:
         project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
@@ -25,8 +28,8 @@ class CliCommandTests(unittest.TestCase):
         self.assertEqual(gaig_toolkit.cli.build_parser().prog, "gaig")
 
     def test_no_legacy_import_package(self) -> None:
-        self.assertFalse((ROOT / ("ga" + "g_toolkit")).exists())
-        self.assertIsNone(importlib.util.find_spec("ga" + "g_toolkit"))
+        self.assertFalse((ROOT / REMOVED_PACKAGE).exists())
+        self.assertIsNone(importlib.util.find_spec(REMOVED_PACKAGE))
 
     def test_module_path_runs(self) -> None:
         result = subprocess.run(
