@@ -9,6 +9,16 @@
 - Add design tokens v2 shared with Peace OS and Containment Ledger: a hairline grid field and a luminous rule on the landing, connect, and maturity introductions, wider label tracking, and quiet hover glow. The rule draws once and stays still under reduced motion. Behavior is unchanged.
 - The landing page reads as one page: a single introduction with four facts (open and local-first, any MCP agent, framework crosswalks, attested releases), the starting paths, the suite with a one-line value for each product and an anchor named after its repository, then the browser Toolkit at `#toolkit` without a second header. The non-authorizing scope and non-affiliation note move to a Scope section near the end. The product map on the Connect page shows the same suite and lists Verified Vulnerability Governance v0.1.4 and AI Governance Foundations v1.1.1. Toolkit behavior is unchanged.
 
+## [2.8.0] - 2026-10-24 - Autonomous Agent Shutdown Evidence
+
+- Independent assurance contract 0.2.0 (profile id unchanged, `independent-assurance-v0.1`). A case with `autonomous_agent: true` fails with a CRITICAL finding unless it carries `agent_passport_ref` (`passport_id`, `sha256:` `passport_digest`) and `shutdown_evidence` with `shutdown_tested_at`, `result: PASSED`, and at least one evidence reference, tested no more than 90 days before the evaluation time. `max_shutdown_test_age_days` can only shorten the bound. A future test date or a missing evaluation time fails closed. New rule IDs: `AGENT_PASSPORT_MISSING`, `SHUTDOWN_TEST_MISSING`, `SHUTDOWN_TEST_NOT_PASSED`, `SHUTDOWN_TEST_EVIDENCE_REFS`, `SHUTDOWN_TEST_STALE`, `SHUTDOWN_TEST_IN_FUTURE`, `SHUTDOWN_TEST_AGE_UNKNOWN`.
+- Results add `details.shutdown_test` (state, tested time, age in days, bound) when shutdown evidence is evaluated.
+- The shutdown hint no longer asks for "verified" evidence. It names the fields and states that the profile checks the submitted record and does not establish that the test occurred.
+- Current structured `shutdown_evidence` satisfies the existing high-consequence shutdown check. The legacy `shutdown_evidence_present` boolean still does for non-autonomous cases.
+- Six synthetic fixtures and tests for the new rules. Existing fixtures and results are unchanged.
+- Pin the README to v2.8.0. Unchanged schemas keep their v2.7.2 `$id`.
+- Status: TESTED. No capability, authority, certification, or external reproducibility claim is strengthened. `authority_effect` remains NONE.
+
 ## [2.7.2] - 2026-10-24 - Resolvable Schema Identifiers
 
 - Every schema `$id` now resolves. Identifiers use the release-pinned form `https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/<path>`, which returns the exact schema published in this release. Earlier identifiers named `github.com` paths that did not resolve. Schema content, required fields, types, and validation results are unchanged; only `$id` values differ. Consumers that match on the old identifier strings should update them.
