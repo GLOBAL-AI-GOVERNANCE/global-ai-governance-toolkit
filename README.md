@@ -65,7 +65,21 @@ The current automation pipeline:
 
 ### Quick Start
 
-**Prerequisite:** Python 3.11 (the version used in hosted CI) and Git. Reports go to a new temporary directory, so the run changes no tracked file in the checkout.
+**Fastest CLI path, no clone:** install the v2.7.0 release wheel and run the sample with gaps. Requires Python 3.11 or later and `curl`.
+
+```bash
+python3.11 -m venv gaig-venv && . gaig-venv/bin/activate
+python -m pip install https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.7.0/global_ai_governance_toolkit-2.7.0-py3-none-any.whl
+curl -fsSLO https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.0/automation/sample-data/sample-ai-inventory.csv
+OUT="$(mktemp -d)"
+gaig check sample-ai-inventory.csv --outdir "$OUT" --fail-on none
+gaig verify "$OUT"
+grep -m1 "BLOCKED BY CRITICAL FINDINGS" "$OUT/decision-pack/executive-summary.md"
+```
+
+TESTED in a clean environment: both commands exit `0` and the last line prints the blocked-state summary. Verify the wheel against the release `SHA256SUMS`. The package is not on PyPI.
+
+**From a checkout:** Python 3.11 (the version used in hosted CI) and Git. Reports go to a new temporary directory, so the run changes no tracked file in the checkout.
 
 ```bash
 git clone https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit.git
