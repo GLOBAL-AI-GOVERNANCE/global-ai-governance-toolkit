@@ -7,6 +7,7 @@ on:
     paths:
       - "web/**"
       - "docs/AGENT_SETUP.md"
+      - "docs/JOURNEYS.md"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -28,6 +29,8 @@ jobs:
         shell: bash
         run: |
           test -f web/index.html
+          test -f web/start.html
+          test -f web/start.mjs
           test -f web/app.mjs
           test -f web/governance-engine.mjs
           test -f web/finding-guidance.mjs
@@ -46,6 +49,7 @@ jobs:
           python -B automation/scripts/generate_browser_contract_bundle.py --check
           python -B automation/scripts/generate_maturity_catalog.py --check
           node --check web/app.mjs
+          node --check web/start.mjs
           node --check web/governance-engine.mjs
           node --check web/finding-guidance.mjs
           node --check web/maturity/app.mjs
@@ -59,6 +63,7 @@ jobs:
           mkdir _site
           cp -R web/. _site/
           cp docs/AGENT_SETUP.md _site/AGENT_SETUP.md
+          cp docs/JOURNEYS.md _site/JOURNEYS.md
           touch _site/.nojekyll
 
       - name: Upload Pages artifact

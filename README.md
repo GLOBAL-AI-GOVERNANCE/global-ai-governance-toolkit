@@ -3,7 +3,9 @@
 <!-- gaig:nav -->
 **[Global AI Governance](https://ai-governance.solutions/)** · `v2.8.0 · stable` · `authority_effect: NONE`
 
-[Connect your agent](https://ai-governance.solutions/connect.html#agents) · [Specifications](https://ai-governance.solutions/connect.html#spec) · [All products](https://ai-governance.solutions/#products)
+[Start where you are](https://ai-governance.solutions/start.html) · [Connect your agent](https://ai-governance.solutions/connect.html#agents) · [Specifications](https://ai-governance.solutions/connect.html#spec) · [All products](https://ai-governance.solutions/#products)
+
+Suite path, step 2 of 9: check what you run · ← [Peace OS](https://github.com/GLOBAL-AI-GOVERNANCE/peace-os) · [AI Governance MCP](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp) → · [start anywhere](https://ai-governance.solutions/start.html)
 <!-- /gaig:nav -->
 
 Govern AI before it acts. List what you run; the toolkit finds missing owners, monitoring, shutdown paths, and evidence, then prepares a reproducible Decision Pack so the person accountable can decide with care. Free, open source, and runs locally.
@@ -13,6 +15,8 @@ Govern AI before it acts. List what you run; the toolkit finds missing owners, m
 **Latest release:** v2.8.0. The command is `gaig`. A human determines organizational maturity: the toolkit checks the submitted evidence and does not score, certify, or authorize.
 
 ## Start Here
+
+**Start where you are:** [ai-governance.solutions/start.html](https://ai-governance.solutions/start.html) has worked examples for people using AI apps such as ChatGPT, Claude, Grok, Gemini, or Copilot, for builders of AI organizations and agent fleets, for frontier labs, and a map for anyone else. They are examples, not required categories, and nothing asks for an account. Agents read the same steps at [JOURNEYS.md](https://ai-governance.solutions/JOURNEYS.md).
 
 **Fastest path, nothing to install:** open the browser Toolkit and select **Run example with gaps**.
 
