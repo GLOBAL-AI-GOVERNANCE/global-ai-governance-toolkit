@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Start where you are. Worked examples for people using everyday AI apps, builders of AI organizations and agent fleets, frontier labs, and anyone else who uses, builds, oversees, or studies AI. No account or sign-up.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ai-governance.solutions/start.html">
+  <meta property="og:title" content="Start where you are · Global AI Governance">
+  <meta property="og:description" content="Worked examples for everyday AI users, builders of agent fleets, frontier labs, and anyone else. Every step stands alone.">
+  <meta property="og:site_name" content="Global AI Governance">
+  <meta property="og:image" content="https://ai-governance.solutions/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Global AI Governance: governance for AI agencies, agent fleets, and AI-run companies">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Start where you are · Global AI Governance</title>
+  <link rel="canonical" href="https://ai-governance.solutions/start.html">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="alternate" type="text/markdown" href="./JOURNEYS.md" title="Start where you are (Markdown)">
+  <link rel="alternate" type="application/json" href="./machine-interface.json" title="Machine interface">
+  <link rel="alternate" type="text/plain" href="./llms.txt" title="llms.txt">
+  <script type="module" src="./start.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#top">Skip to main content</a>
+  <nav class="gaig-bar shell" aria-label="Global AI Governance sites">
+    <a class="gaig-brand" href="./">Global AI Governance</a>
+    <span class="gaig-links"><a href="./start.html" aria-current="page">Start here</a><a href="./#toolkit">Toolkit</a><a href="./connect.html">Connect</a><a href="https://global-ai-governance.github.io/containment-ledger/">Containment Ledger</a><a href="https://global-ai-governance.github.io/peace-os/">Peace OS</a></span>
+    <a class="gaig-cta" href="./connect.html#agents">Connect your agent</a>
+  </nav>
+  <main id="top" tabindex="-1">
+    <section class="shell connect-section connect-hero g-field" aria-labelledby="start-title">
+      <p class="eyebrow">Start where you are</p>
+      <h1 id="start-title">Begin with what you have.</h1>
+      <p class="lede">For anyone who uses, builds, deploys, oversees, researches, or regulates AI. These are worked examples, not categories: every step stands alone, so begin anywhere, skip what you do not need, and come back when it helps. There is no account or sign-up.</p>
+      <ul class="jump" aria-label="Examples on this page">
+        <li><a href="#apps"><span>Example</span>You use AI apps</a></li>
+        <li><a href="#builders"><span>Example</span>You build AI organizations or agent fleets</a></li>
+        <li><a href="#labs"><span>Example</span>You work at a frontier lab</a></li>
+        <li><a href="#anyone"><span>Open to all</span>Anyone else</a></li>
+      </ul>
+      <p class="fineprint">On every path, tools check and record, and a person makes the decision. Every output carries <code>authority_effect: NONE</code>. An AI agent can read the same guide as <a href="./JOURNEYS.md">JOURNEYS.md</a>.</p>
+    </section>
+
+    <section id="apps" class="shell connect-section" aria-labelledby="apps-heading">
+      <p class="eyebrow">Example · Everyday AI</p>
+      <h2 id="apps-heading">You use AI apps such as ChatGPT, Claude, Grok, Gemini, or Copilot</h2>
+      <p>No terminal and no install. Each step takes a few minutes, and nothing you enter leaves your device unless you paste it into an AI app yourself.</p>
+      <ol class="steps">
+        <li>
+          <h3>Practise a hard decision</h3>
+          <p>Peace OS: Crisis Room puts you in a fictional crisis where an AI-amplified claim is spreading. Weigh the evidence, protect people, and decide what to release. Choose Practice and a scenario to begin.</p>
+          <p><a class="template-button" href="https://global-ai-governance.github.io/peace-os/">Open Peace OS</a></p>
+        </li>
+        <li>
+          <h3>Check the AI you use</h3>
+          <p>Paste this into your AI app. It will ask about each tool you use, then give you a small table as CSV.</p>
+<pre class="agent-prompt" id="prompt-inventory" tabindex="0" role="region" aria-label="Prompt to list the AI you use">Help me list the AI apps, assistants, and agents I use, so I can check them for gaps. Ask me about each one, one at a time. Then give me a CSV in a code block with exactly this header row:
+system_id,system_name,owner,business_unit,vendor_internal,use_case,data_sensitivity,impact_people,impact_money,impact_security,impact_rights,impact_safety,autonomy_level,public_facing,monitoring_active,shutdown_path_exists,evidence_complete
+Rules: system_id like AI-1, AI-2. owner is who is responsible; "Me" is fine. vendor_internal is Vendor, Internal, or Hybrid. data_sensitivity is None, Internal, Personal, Regulated, or Critical. autonomy_level is None (it only suggests), Partial (it acts but I confirm), or Full (it acts on its own). Every other column is Yes or No. If I am not sure, use No.</pre>
+          <p>Save the answer as a file ending in <code>.csv</code>, open the Toolkit, and choose <strong>Load your CSV</strong>. The file is read in your browser and is not uploaded. You will see a result such as <em>Critical gaps need attention</em>, with each gap in plain words: for example, <em>Shutdown path missing</em> for an agent you could not quickly stop.</p>
+          <p class="actions-inline"><a class="template-button" href="./#toolkit">Open the Toolkit</a><a class="template-button" href="./ai-system-inventory-template.csv" download>Or fill the blank template</a></p>
+        </li>
+        <li>
+          <h3>Give your assistant a ground rule</h3>
+          <p>Paste this at the start of a conversation, or into the app's custom instructions.</p>
+<pre class="agent-prompt" id="prompt-rule" tabindex="0" role="region" aria-label="Ground rule for your assistant">Before you send, buy, delete, publish, or change anything outside this chat, stop. Tell me exactly what you will do and what could go wrong, and wait for me to say yes. If I say stop, stop. If you are unsure, say so and show me your evidence.</pre>
+          <p class="fineprint">This is an instruction, not a technical control: an app can forget or ignore it. Checks that are enforced before each tool call are in the next example.</p>
+        </li>
+        <li>
+          <h3>Ask an assistant to set things up</h3>
+          <p>Assistants that can run commands, such as Claude Code, Codex, the Grok CLI, or Cursor, can do the whole setup and tell you what needs you. Chat-only apps cannot run commands; they can read the guide and explain it.</p>
+<pre class="agent-prompt" id="prompt-setup" tabindex="0" role="region" aria-label="Instruction for an assistant that can run commands">Follow https://ai-governance.solutions/AGENT_SETUP.md step by step. Check each expected result, run the done check, and tell me what is ready and what needs my decision.</pre>
+        </li>
+      </ol>
+    </section>
+
+    <section id="builders" class="shell connect-section" aria-labelledby="builders-heading">
+      <p class="eyebrow">Example · AI organizations and agent fleets</p>
+      <h2 id="builders-heading">You build AI organizations or agent fleets</h2>
+      <p>For a lead agent / orchestrator and the people accountable for it. The order runs from knowing what exists to closing what went wrong; each step also stands alone. Commands and expected results are in the <a href="./AGENT_SETUP.md">agent setup guide</a> and <a href="./JOURNEYS.md">JOURNEYS.md</a>.</p>
+      <ol class="flow">
+        <li><a href="./#toolkit"><span>01</span><strong>Inventory</strong>Every AI system and agent with an owner, monitoring, a shutdown path, and evidence, or a finding where one is missing.</a></li>
+        <li><a href="./AGENT_SETUP.md"><span>02</span><strong>Assess</strong>Profile results for auditability, organizational maturity, and independent assurance.</a></li>
+        <li><a href="./connect.html#agents"><span>03</span><strong>Connect</strong>The same checks, callable by your agents over Model Context Protocol (MCP).</a></li>
+        <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance"><span>04</span><strong>Passports</strong>Who each agent acts for, what it may do alone, and when that ends.</a></li>
+        <li><a href="./connect.html#guard"><span>05</span><strong>Guard</strong>Levels 0 to 3 run, Level 4 asks a person, and Level 5 is denied, before each tool call.</a></li>
+        <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/main/conformance/fleet-controls"><span>06</span><strong>Fleet controls</strong>A sub-agent stays within its parent's ceiling and stops when an ancestor is suspended.</a></li>
+        <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/docs/shutdown-protocol.md"><span>07</span><strong>Shutdown tests</strong>No autonomous agent passes without a passing shutdown test from the last 90 days.</a></li>
+        <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance"><span>08</span><strong>Vulnerabilities</strong>Owner, fix, retest, and closure only with evidence reviewed by a separate role.</a></li>
+        <li><a href="https://global-ai-governance.github.io/containment-ledger/"><span>09</span><strong>Boundaries</strong>A person's review of a system's domains, paths, and evidence, in the Containment Ledger.</a></li>
+        <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework"><span>10</span><strong>Resilience</strong>Limits on blast radius, protected recovery, and work that keeps running.</a></li>
+      </ol>
+    </section>
+
+    <section id="labs" class="shell connect-section" aria-labelledby="labs-heading">
+      <p class="eyebrow">Example · Frontier labs</p>
+      <h2 id="labs-heading">You work at a frontier lab</h2>
+      <p>Bring it into the frameworks, agents, and evals you already run. Nothing needs an account, and nothing calls an outside AI.</p>
+      <dl class="lab-list">
+        <div><dt>Map it</dt><dd>The <a href="https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/blob/main/docs/FRONTIER_AND_REGULATORY_CROSSWALK.md">frontier and regulatory crosswalk</a> relates the suite to frontier safety frameworks, the EU AI Act, and ISO/IEC 42001:2023. It is informative and establishes no compliance.</dd></div>
+        <div><dt>Read the contracts</dt><dd><a href="./machine-interface.json">machine-interface.json</a> lists the CLI, inputs, outputs, profiles, and JSON Schemas (draft 2020-12). Results validate against them, failing results included.</dd></div>
+        <div><dt>Check provenance</dt><dd>Toolkit, AI Governance MCP, Agentic AI Governance, Verified Vulnerability Governance, Containment Ledger, and AI Governance Foundations releases carry SHA-256 checksums and GitHub build attestations; <a href="./JOURNEYS.md">JOURNEYS.md</a> verifies all six in one loop.</dd></div>
+        <div><dt>Connect your agents and evals</dt><dd>Run the <a href="./connect.html#agents">MCP server</a> in your harness and the <a href="./connect.html#guard">Action Level guard</a> before tool calls. Treat <code>profile-result.json</code> as an eval output, hand results to people as a digest-listed Decision Pack, and import scanner findings as SARIF.</dd></div>
+        <div><dt>Review it independently</dt><dd>Open kits for outside reviewers: the AI Cyber Resilience Framework <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework/blob/main/docs/crypto-agility-review/README.md">G7 external review</a>, the Agentic AI Governance <a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/blob/main/conformance/independent-verifier/README.md">independent verifier kit</a>, and the Governed Systems Administration <a href="https://github.com/GLOBAL-AI-GOVERNANCE/governed-systems-administration/tree/main/docs/independent-audit">independent audit kit</a>.</dd></div>
+        <div><dt>What it does not do</dt><dd>It does not approve deployment, certify compliance, accept risk, or shut anything down. It does not monitor your systems or send data anywhere. It is not affiliated with or endorsed by any AI lab, platform, or public body.</dd></div>
+      </dl>
+    </section>
+
+    <section id="anyone" class="shell connect-section" aria-labelledby="anyone-heading">
+      <p class="eyebrow">Open to all</p>
+      <h2 id="anyone-heading">Anyone else</h2>
+      <p>Teams, enterprises, researchers, educators, public-interest bodies, and regulators can take any piece on its own.</p>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Where to start for each goal"><table class="status-table map-table">
+        <thead><tr><th>If you want to</th><th>Start with</th></tr></thead>
+        <tbody>
+          <tr><td>See what governance gaps look like</td><td><a href="./#toolkit">Run the example with gaps</a></td></tr>
+          <tr><td>Check your own AI systems</td><td>The <a href="./#toolkit">Toolkit</a> and its <a href="./ai-system-inventory-template.csv">blank template</a></td></tr>
+          <tr><td>Assess organizational AI maturity</td><td><a href="./maturity/">Maturity evidence</a></td></tr>
+          <tr><td>Teach or practise high-stakes decisions</td><td><a href="https://global-ai-governance.github.io/peace-os/">Peace OS: Crisis Room</a></td></tr>
+          <tr><td>Review a system's boundaries</td><td><a href="https://global-ai-governance.github.io/containment-ledger/">Containment Ledger</a></td></tr>
+          <tr><td>Set limits for agents</td><td><a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance">Agentic AI Governance</a></td></tr>
+          <tr><td>Close vulnerabilities with evidence</td><td><a href="https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance">Verified Vulnerability Governance</a></td></tr>
+          <tr><td>Plan for AI-accelerated cyber risk</td><td><a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework">AI Cyber Resilience Framework</a></td></tr>
+          <tr><td>Adopt a governance model and registers</td><td><a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-os">AI Governance Foundations</a></td></tr>
+          <tr><td>Specify AI-assisted systems administration</td><td><a href="https://github.com/GLOBAL-AI-GOVERNANCE/governed-systems-administration">Governed Systems Administration</a></td></tr>
+          <tr><td>Relate this to a framework or law</td><td>The <a href="https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/blob/main/docs/FRONTIER_AND_REGULATORY_CROSSWALK.md">crosswalk</a></td></tr>
+          <tr><td>Connect an agent</td><td>The <a href="./AGENT_SETUP.md">agent setup guide</a></td></tr>
+        </tbody>
+      </table></div>
+      <p class="fineprint">These examples are an open list. If none fits, start with the Toolkit's example with gaps: it shows in a minute what the suite looks for.</p>
+    </section>
+  </main>
+  <footer class="shell gaig-footer">
+    <p class="gaig-footer-ctas"><a href="#apps">Everyday AI</a> · <a href="#builders">Agent fleets</a> · <a href="#labs">Frontier labs</a> · <a href="#anyone">Anyone else</a></p>
+    <p>Global AI Governance · Outputs are non-authorizing (<code>authority_effect: NONE</code>) · Not affiliated with or endorsed by any AI lab or platform · <a href="https://github.com/GLOBAL-AI-GOVERNANCE">GitHub</a></p>
+  </footer>
+</body>
+</html>

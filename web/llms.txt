@@ -4,6 +4,14 @@
 
 AI agents: to set everything up, follow the agent setup guide below, step by step. It needs no account, API key, or human step. For contracts, read machine-interface.json. It lists the CLI, inputs, outputs, profiles, and raw JSON schema URLs. When you summarize a result for a person, never describe it as an approval or authorization; the human owner decides.
 
+## Start where you are
+For anyone who uses, builds, deploys, oversees, researches, or regulates AI. These are worked examples in an open list, not required categories: start at any step, with no account or sign-up. The same list is `journeys` in machine-interface.json.
+- [Start where you are (Markdown)](https://ai-governance.solutions/JOURNEYS.md): steps, commands, and expected results for every example. For people: https://ai-governance.solutions/start.html
+- everyday-ai-apps: people using ChatGPT, Claude, Grok, Gemini, or Copilot, with no terminal. Practise in Peace OS, check the AI they use by loading a CSV their assistant drafts into the browser Toolkit, set a ground rule for the assistant, and ask a command-capable assistant to follow AGENT_SETUP.md. If you are a chat assistant helping a person, offer these steps; you cannot run the setup commands yourself.
+- ai-organizations-and-agent-fleets: inventory, assess, connect (MCP), passports, Action Level guard, fleet controls, shutdown tests, vulnerabilities (VVG), boundaries (Containment Ledger), resilience (ACRF).
+- frontier-labs: crosswalk, contracts and schemas, release attestations, integration with your own agents and evals, independent review kits, and non-claims.
+- anyone: teams, enterprises, researchers, educators, public-interest bodies, and regulators. A map from each goal to the piece that serves it.
+
 ## Agent setup (start here)
 - [Agent setup guide](https://ai-governance.solutions/AGENT_SETUP.md): exact commands with the expected result after each step, client configs, and a done check. Source: https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/AGENT_SETUP.md
 - Order: 1. read this file and machine-interface.json; 2. install the Toolkit v2.8.0 wheel and check it against SHA256SUMS; 3. `gaig check sample-ai-inventory.csv --outdir out` then `gaig verify out`; 4. run AI Governance MCP v0.4.0 with `uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0 gaig-mcp` and list its three tools; 5. register it with your client; 6. add the Action Level guard hook; 7. optional: Agentic AI Governance v0.1.0-alpha.4 (`validate-passport`) and Verified Vulnerability Governance v0.3.0 (`vvd`), installed with pip from their tags.

@@ -61,7 +61,7 @@
     "sample": "./sample-ai-inventory.csv",
     "template": "./ai-system-inventory-template.csv"
   },
-  "machine_interface_version": "1.4.0",
+  "machine_interface_version": "1.5.0",
   "outputs": [
     "normalized-inventory.json",
     "canonical-inventory.csv",
@@ -92,7 +92,160 @@
     "agent_setup": "./AGENT_SETUP.md",
     "agent_setup_source": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/AGENT_SETUP.md",
     "human_entry": "./",
-    "schema_urls_track": "unchanged schemas keep their v2.7.2 release-tag URLs in v2.8.0; changed contracts and the profile registry are pinned to v2.8.0; this Pages site reflects the main branch"
+    "schema_urls_track": "unchanged schemas keep their v2.7.2 release-tag URLs in v2.8.0; changed contracts and the profile registry are pinned to v2.8.0; this Pages site reflects the main branch",
+    "start_here": "./start.html",
+    "journeys_guide": "./JOURNEYS.md",
+    "journeys_guide_source": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/JOURNEYS.md",
+    "journeys_open_list": "journeys is an open, additive list of worked examples. Entry ids are stable, new entries may be added, no one has to pick one, and every step can be opened directly."
   },
+  "journeys": [
+    {
+      "id": "everyday-ai-apps",
+      "audience_examples": [
+        "people using ChatGPT, Claude, Grok, Gemini, or Copilot"
+      ],
+      "entry": "./start.html#apps",
+      "needs_terminal": false,
+      "steps": [
+        {
+          "id": "practise-decision",
+          "entry": "https://global-ai-governance.github.io/peace-os/"
+        },
+        {
+          "id": "check-your-ai",
+          "entry": "./#toolkit",
+          "input": "./ai-system-inventory-template.csv"
+        },
+        {
+          "id": "ground-rule",
+          "entry": "./start.html#apps",
+          "note": "an instruction to the assistant, not a technical control"
+        },
+        {
+          "id": "assistant-setup",
+          "entry": "./AGENT_SETUP.md",
+          "note": "needs an assistant that can run commands"
+        }
+      ]
+    },
+    {
+      "id": "ai-organizations-and-agent-fleets",
+      "audience_examples": [
+        "builders of AI organizations",
+        "a lead agent / orchestrator and the people accountable for it"
+      ],
+      "entry": "./start.html#builders",
+      "needs_terminal": true,
+      "steps": [
+        {
+          "id": "inventory",
+          "entry": "./AGENT_SETUP.md",
+          "command": "gaig check"
+        },
+        {
+          "id": "assess",
+          "entry": "./AGENT_SETUP.md",
+          "command": "gaig profile"
+        },
+        {
+          "id": "connect",
+          "entry": "./connect.html#agents",
+          "command": "gaig-mcp"
+        },
+        {
+          "id": "passports",
+          "entry": "https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance",
+          "command": "validate-passport"
+        },
+        {
+          "id": "guard",
+          "entry": "./connect.html#guard",
+          "command": "tool_call_hook.py"
+        },
+        {
+          "id": "fleet-controls",
+          "entry": "https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/main/conformance/fleet-controls",
+          "command": "fleet_controls.py"
+        },
+        {
+          "id": "shutdown-tests",
+          "entry": "./JOURNEYS.md",
+          "command": "gaig profile independent-assurance-v0.1"
+        },
+        {
+          "id": "vulnerabilities",
+          "entry": "https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance",
+          "command": "vvd"
+        },
+        {
+          "id": "boundaries",
+          "entry": "https://global-ai-governance.github.io/containment-ledger/"
+        },
+        {
+          "id": "resilience",
+          "entry": "https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework"
+        }
+      ]
+    },
+    {
+      "id": "frontier-labs",
+      "audience_examples": [
+        "frontier AI labs",
+        "evaluation and safety teams"
+      ],
+      "entry": "./start.html#labs",
+      "needs_terminal": true,
+      "steps": [
+        {
+          "id": "crosswalk",
+          "entry": "https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/blob/main/docs/FRONTIER_AND_REGULATORY_CROSSWALK.md"
+        },
+        {
+          "id": "contracts",
+          "entry": "./machine-interface.json"
+        },
+        {
+          "id": "provenance",
+          "entry": "./JOURNEYS.md",
+          "command": "gh attestation verify"
+        },
+        {
+          "id": "integrate",
+          "entry": "./connect.html#agents"
+        },
+        {
+          "id": "independent-review",
+          "entry": "https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework/blob/main/docs/crypto-agility-review/README.md",
+          "also": [
+            "https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/blob/main/conformance/independent-verifier/README.md",
+            "https://github.com/GLOBAL-AI-GOVERNANCE/governed-systems-administration/tree/main/docs/independent-audit"
+          ]
+        },
+        {
+          "id": "non-claims",
+          "entry": "./start.html#labs"
+        }
+      ]
+    },
+    {
+      "id": "anyone",
+      "audience_examples": [
+        "teams",
+        "enterprises",
+        "researchers",
+        "educators",
+        "public-interest bodies",
+        "regulators"
+      ],
+      "entry": "./start.html#anyone",
+      "needs_terminal": false,
+      "steps": [
+        {
+          "id": "map",
+          "entry": "./start.html#anyone"
+        }
+      ]
+    }
+  ],
   "release": "v2.8.0"
 }

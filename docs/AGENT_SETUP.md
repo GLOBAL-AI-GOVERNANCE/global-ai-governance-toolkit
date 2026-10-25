@@ -48,7 +48,7 @@ curl -fsSL https://ai-governance.solutions/machine-interface.json \
   | python -c "import json,sys; d=json.load(sys.stdin); print(d['machine_interface_version'], d['release'])"
 ```
 
-Expect the llms.txt title `# Global AI Governance Toolkit` and its `## Agent setup (start here)` section, then `1.4.0 v2.8.0`.
+Expect the llms.txt title `# Global AI Governance Toolkit` and its `## Agent setup (start here)` section, then `1.5.0 v2.8.0`.
 
 The schema URLs in llms.txt and machine-interface.json point at the `v2.7.2` tag on purpose: those schemas did not change in v2.8.0, and their `$id` values name v2.7.2.
 
@@ -343,6 +343,7 @@ Then tell the person you work for what is ready, and what is waiting on them: re
 ## More
 
 - [llms.txt](https://ai-governance.solutions/llms.txt) and [machine-interface.json](https://ai-governance.solutions/machine-interface.json)
+- [Start where you are](https://ai-governance.solutions/start.html) and its Markdown copy, [JOURNEYS.md](https://ai-governance.solutions/JOURNEYS.md)
 - [Connect page](https://ai-governance.solutions/connect.html)
 - [Toolkit README](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit#quick-start)
 - [AI Governance MCP](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.4.0)
