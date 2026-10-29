@@ -36,7 +36,9 @@ curl -fsSLO https://ai-governance.solutions/bootstrap.sh && bash bootstrap.sh
 | Agentic AI Governance (`validate-passport`) | v0.1.0-alpha.5 | `pip` from the tag |
 | Verified Vulnerability Governance (`vvd`) | v0.4.0 | `pip` from the tag |
 
-`gaig-mcp` v0.5.1 bundles the Toolkit at v2.8.2 (commit `0ab38c6`) and Agentic AI Governance at commit `58bdfb2`. Its outputs report those commits in `source`.
+<!-- gaig:mcp-bundle -->
+`gaig-mcp` v0.5.1 bundles the Toolkit at v2.8.1 (commit `0ab38c6a94a705e4423bfc9bb19ef2137f59f5c5`) and Agentic AI Governance at commit `58bdfb291df0de7c9437b4476e370a609c4b1d5f`. Its outputs report those commits in `source`. Bundle pins come from MCP `UPSTREAM_LOCK.json`, not from the Toolkit release tag.
+<!-- /gaig:mcp-bundle -->
 
 ## 0. Requirements
 

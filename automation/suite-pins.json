@@ -7,6 +7,9 @@
   "toolkit_wheel": "global_ai_governance-2.8.2-py3-none-any.whl",
   "mcp": "v0.5.1",
   "mcp_naked": "0.5.1",
+  "mcp_bundled_toolkit": "v2.8.1",
+  "mcp_bundled_toolkit_sha": "0ab38c6a94a705e4423bfc9bb19ef2137f59f5c5",
+  "mcp_bundled_agentic_sha": "58bdfb291df0de7c9437b4476e370a609c4b1d5f",
   "peace_os": "v0.3.0-rc3",
   "agentic": "v0.1.0-alpha.5",
   "agentic_naked": "0.1.0-alpha.5"
