@@ -108,14 +108,14 @@ A failing case exits 1, so a pipeline stops for review. How to run and record a 
    done
    ```
 
-   Expect six `attested` lines. Peace OS `v0.3.0` ships a `SHA256SUMS.txt`, a provenance file, and an SBOM instead of a GitHub attestation. AI Cyber Resilience Framework `v0.1.1` is a tagged document release with no assets.
+   Expect six `attested` lines. Peace OS `v0.3.0` ships a `SHA256SUMS.txt`, a provenance file, and an SBOM instead of a GitHub attestation. AI Cyber Resilience Framework `v0.2.0` is a tagged document release with attested release assets.
 4. **Connect it to your own agents and evals.**
    - Put the [AI Governance MCP](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp) server in your agent harness, and the Action Level guard in front of tool calls ([AGENT_SETUP steps 4 to 6](https://ai-governance.solutions/AGENT_SETUP.md#4-run-the-mcp-server)).
    - Treat `profile-result.json` and `governance-result.json` as eval outputs: each has a schema, a status, finding IDs, and `authority_effect: NONE`.
    - Hand results to people through the Decision Pack, whose `manifest.json` lists a digest for each file, and `gaig verify` checks it.
    - Import findings from your own scanners as SARIF with `vvd finding import --sarif` ([AGENT_SETUP step 8](https://ai-governance.solutions/AGENT_SETUP.md#8-verified-vulnerability-governance)).
 5. **Review it independently.** Each of these is open to an outside reviewer:
-   - AI Cyber Resilience Framework: the [G7 external review kit](https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework/blob/main/docs/crypto-agility-review/README.md) and the [v0.2.0 release gate](https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework/blob/main/docs/release-gate-v0.2.0.md). G7 is waiting for an external review.
+   - AI Cyber Resilience Framework: the [crypto-agility review kit](https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework/blob/main/docs/crypto-agility-review/README.md) (released with v0.2.0).
    - Agentic AI Governance: the [independent verifier kit](https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/blob/main/conformance/independent-verifier/README.md). Independent verification is not yet established.
    - Governed Systems Administration: the [independent audit kit](https://github.com/GLOBAL-AI-GOVERNANCE/governed-systems-administration/tree/main/docs/independent-audit).
 6. **Know what it does not do.** It does not approve deployment, certify compliance, accept risk, or shut anything down. It does not monitor your systems, call an outside AI, or send data anywhere. It is not affiliated with or endorsed by any AI lab, platform, or public body.
