@@ -1,6 +1,12 @@
 # Changelog
 ## [Unreleased]
 
+## [2.8.2] - 2026-10-29 - Suite version automation
+
+- Add `automation/suite-pins.json`, `automation/scripts/sync_site_from_manifest.py`, and `.github/workflows/sync-site-versions.yml` so site, docs, machine-interface, llms.txt, AGENT_SETUP, and JOURNEYS pins refresh from the profile `suite-manifest.json` (GitHub release tags) without hand-edits.
+- Document the flow in `RELEASING.md`. Scheduled and `workflow_dispatch` runs open a squash auto-merge PR when pins drift; CI `--check` verifies pins against the generated manifest.
+- No governance rule, schema, or CLI behavior change. Status: TESTED. `authority_effect` remains NONE.
+
 ## [2.8.1] - 2026-10-29 - Maturity integrity and Full-autonomy finding
 
 - Organizational maturity: reject XSS-prone HTML rendering via text/escaping; evaluate with a current UTC instant (optional labeled fixed-time override); validate nested evidence arrays, category/pillar bindings, and optional objects before any state change so a malformed import leaves the prior assessment unchanged.
