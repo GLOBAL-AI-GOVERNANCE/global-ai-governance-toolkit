@@ -1,5 +1,26 @@
 import { MATURITY_CATALOG, evaluateMaturity, buildProfileResult, LEVEL_LABELS } from "./maturity-engine.mjs";
-import { renderResult, gapRegister, reviewMarkdown } from "./maturity-viewer.mjs";
+import { renderResult, gapRegister, reviewMarkdown, escapeHtml } from "./maturity-viewer.mjs";
+
+const TIME_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+
+function isStrictUtcTimestamp(value) {
+  if (!TIME_PATTERN.test(value)) return false;
+  const [datePart, timePart] = value.slice(0, -1).split("T");
+  const [year, month, day] = datePart.split("-").map(Number);
+  const [hour, minute, second] = timePart.split(":").map(Number);
+  const instant = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  return instant.getUTCFullYear() === year
+    && instant.getUTCMonth() === month - 1
+    && instant.getUTCDate() === day
+    && instant.getUTCHours() === hour
+    && instant.getUTCMinutes() === minute
+    && instant.getUTCSeconds() === second;
+}
+
+function nowUtc() {
+  return new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+}
+
 
 const state = {
   framework_id: "unesco-ai-maturity-2025",
@@ -17,6 +38,8 @@ const pillarNav = document.querySelector("#pillar-nav");
 const editor = document.querySelector("#editor");
 const result = document.querySelector("#result");
 const count = document.querySelector("#count");
+const evaluationTimeInput = document.querySelector("#evaluation-time");
+if (evaluationTimeInput && !evaluationTimeInput.value) evaluationTimeInput.value = nowUtc();
 
 function blankCategory(pillarId, categoryId) {
   return {
@@ -38,54 +61,112 @@ function current(categoryId) {
 
 function renderNav() {
   const query = document.querySelector("#filter").value.trim().toLowerCase();
-  pillarNav.innerHTML = MATURITY_CATALOG.pillars.map((pillar) => {
-    const items = pillar.categories.filter((category) => category.label.toLowerCase().includes(query)).map((category) => {
+  pillarNav.replaceChildren();
+  for (const pillar of MATURITY_CATALOG.pillars) {
+    const items = pillar.categories.filter((category) => category.label.toLowerCase().includes(query));
+    if (!items.length) continue;
+    const section = document.createElement("section");
+    const heading = document.createElement("h2");
+    heading.textContent = pillar.label;
+    section.append(heading);
+    for (const category of items) {
       const present = current(category.id);
-      return `<button class="category" type="button" data-pillar="${pillar.id}" data-category="${category.id}" aria-current="${selected === category.id}">${category.label}${present ? " · assessed" : ""}</button>`;
-    }).join("");
-    return items ? `<section><h2>${pillar.label}</h2>${items}</section>` : "";
-  }).join("");
+      const button = document.createElement("button");
+      button.className = "category";
+      button.type = "button";
+      button.dataset.pillar = pillar.id;
+      button.dataset.category = category.id;
+      button.setAttribute("aria-current", String(selected === category.id));
+      button.textContent = `${category.label}${present ? " · assessed" : ""}`;
+      section.append(button);
+    }
+    pillarNav.append(section);
+  }
   const missing = MATURITY_CATALOG.pillars.flatMap((pillar) => pillar.categories).filter((category) => !current(category.id));
   count.textContent = `${state.categories.length} assessed / ${MATURITY_CATALOG.pillars.reduce((sum, pillar) => sum + pillar.categories.length, 0)}. ${state.assessment_coverage === "FULL_FRAMEWORK" && missing.length ? `Full-framework coverage is incomplete: ${missing.length} categories remain.` : `Unassessed categories: ${missing.length}. Partial coverage is not framework completion.`}`;
 }
 
-function field(label, html) {
-  return `<label>${label}${html}</label>`;
+function field(label, control) {
+  const wrap = document.createElement("label");
+  wrap.append(label);
+  wrap.append(control);
+  return wrap;
+}
+
+function inputControl(id, value, multiline = false) {
+  const node = document.createElement(multiline ? "textarea" : "input");
+  node.id = id;
+  if (multiline) node.value = value ?? "";
+  else {
+    node.type = "text";
+    node.value = value ?? "";
+  }
+  return node;
+}
+
+function selectControl(id, options, selectedValue) {
+  const node = document.createElement("select");
+  node.id = id;
+  for (const option of options) {
+    const opt = document.createElement("option");
+    if (typeof option === "string") {
+      opt.value = option;
+      opt.textContent = option || "None";
+      if (selectedValue === option) opt.selected = true;
+    } else {
+      opt.value = option.value;
+      opt.textContent = option.label;
+      if (selectedValue === option.value) opt.selected = true;
+    }
+    node.append(opt);
+  }
+  return node;
 }
 
 function renderEditor() {
   const category = MATURITY_CATALOG.pillars.flatMap((pillar) => pillar.categories.map((item) => ({ ...item, pillar }))).find((item) => item.id === selected);
+  editor.replaceChildren();
   if (!category) {
-    editor.innerHTML = "<p>Select a category.</p>";
+    const p = document.createElement("p");
+    p.textContent = "Select a category.";
+    editor.append(p);
     return;
   }
   const record = current(category.id) || blankCategory(category.pillar.id, category.id);
   const evidence = record.evidence[0] || {};
   const human = record.human_determination || {};
-  const options = LEVEL_LABELS.map((level) => `<option ${record.claimed_level === level ? "selected" : ""}>${level}</option>`).join("");
-  const targets = LEVEL_LABELS.map((level) => `<option ${record.target_level === level ? "selected" : ""}>${level}</option>`).join("");
-  const humanLevels = ["", ...LEVEL_LABELS].map((level) => `<option value="${level}" ${human.level === level ? "selected" : ""}>${level || "None"}</option>`).join("");
-  const statuses = ["", "PENDING", "ACCEPTED", "ACCEPTED_WITH_CONDITIONS", "REJECTED", "RETURNED_FOR_REASSESSMENT"].map((status) => `<option value="${status}" ${human.status === status ? "selected" : ""}>${status || "None"}</option>`).join("");
-  editor.innerHTML = `<h2>${category.label}</h2><p>${category.pillar.label}</p>
-    ${field("Claimed level", `<select id="claimed">${options}</select>`)}
-    ${field("Target level", `<select id="target">${targets}</select>`)}
-    ${field("Human-determined level", `<select id="human-level">${humanLevels}</select>`)}
-    ${field("Determination status", `<select id="human-status">${statuses}</select>`)}
-    ${field("Accountable role", `<input id="role" value="${human.accountable_role || ""}">`)}
-    ${field("Determined at", `<input id="determined" value="${human.determined_at || ""}" placeholder="YYYY-MM-DDTHH:MM:SSZ">`)}
-    ${field("Conditions", `<input id="conditions" value="${(human.conditions || []).join("; ")}">`)}
-    ${field("Evidence reference", `<input id="reference" value="${evidence.reference || ""}">`)}
-    ${field("Evidence class", `<select id="class">${["OPERATING", "POLICY", "PILOT", "SYNTHETIC", "OTHER"].map((item) => `<option ${evidence.evidence_class === item ? "selected" : ""}>${item}</option>`).join("")}</select>`)}
-    ${field("Evidence scope", `<input id="evidence-scope" value="${evidence.scope || state.assessment_scope}">`)}
-    ${field("Representative", `<select id="representative"><option value="false">No</option><option value="true" ${evidence.is_representative ? "selected" : ""}>Yes</option></select>`)}
-    ${field("Valid through", `<input id="valid" value="${evidence.valid_through || ""}">`)}
-    ${field("Integrity digest", `<input id="digest" value="${evidence.sha256 || ""}">`)}
-    ${field("Contradictions", `<textarea id="contradictions">${(record.contradictions || []).join("\n")}</textarea>`)}
-    ${field("Material-change events", `<textarea id="changes">${(record.material_change_events || []).join("\n")}</textarea>`)}
-    ${field("Gaps", `<textarea id="gaps">${(record.gaps || []).join("\n")}</textarea>`)}
-    ${field("Corrective action", `<input id="action" value="${(record.corrective_actions[0] || {}).action || ""}">`)}
-    <button id="save-category" type="button">Save category</button>`;
-  document.querySelector("#save-category").addEventListener("click", () => {
+
+  const title = document.createElement("h2");
+  title.textContent = category.label;
+  const pillar = document.createElement("p");
+  pillar.textContent = category.pillar.label;
+  editor.append(title, pillar);
+
+  editor.append(
+    field("Claimed level", selectControl("claimed", LEVEL_LABELS, record.claimed_level)),
+    field("Target level", selectControl("target", LEVEL_LABELS, record.target_level)),
+    field("Human-determined level", selectControl("human-level", ["", ...LEVEL_LABELS], human.level || "")),
+    field("Determination status", selectControl("human-status", ["", "PENDING", "ACCEPTED", "ACCEPTED_WITH_CONDITIONS", "REJECTED", "RETURNED_FOR_REASSESSMENT"], human.status || "")),
+    field("Accountable role", inputControl("role", human.accountable_role || "")),
+    field("Determined at", (() => { const n = inputControl("determined", human.determined_at || ""); n.placeholder = "YYYY-MM-DDTHH:MM:SSZ"; return n; })()),
+    field("Conditions", inputControl("conditions", (human.conditions || []).join("; "))),
+    field("Evidence reference", inputControl("reference", evidence.reference || "")),
+    field("Evidence class", selectControl("class", ["OPERATING", "POLICY", "PILOT", "SYNTHETIC", "OTHER"], evidence.evidence_class || "OPERATING")),
+    field("Evidence scope", inputControl("evidence-scope", evidence.scope || state.assessment_scope)),
+    field("Representative", selectControl("representative", [{ value: "false", label: "No" }, { value: "true", label: "Yes" }], evidence.is_representative ? "true" : "false")),
+    field("Valid through", inputControl("valid", evidence.valid_through || "")),
+    field("Integrity digest", inputControl("digest", evidence.sha256 || "")),
+    field("Contradictions", inputControl("contradictions", (record.contradictions || []).join("\n"), true)),
+    field("Material-change events", inputControl("changes", (record.material_change_events || []).join("\n"), true)),
+    field("Gaps", inputControl("gaps", (record.gaps || []).join("\n"), true)),
+    field("Corrective action", inputControl("action", (record.corrective_actions[0] || {}).action || "")),
+  );
+  const save = document.createElement("button");
+  save.id = "save-category";
+  save.type = "button";
+  save.textContent = "Save category";
+  editor.append(save);
+  save.addEventListener("click", () => {
     const lines = (id) => document.querySelector(id).value.split("\n").map((item) => item.trim()).filter(Boolean);
     const saved = {
       pillar_id: category.pillar.id,
@@ -128,11 +209,33 @@ function readSetup() {
   state.assessment_coverage = document.querySelector("#coverage").value;
 }
 
+function readEvaluationTime() {
+  const raw = (evaluationTimeInput?.value || "").trim() || nowUtc();
+  if (evaluationTimeInput && !evaluationTimeInput.value.trim()) evaluationTimeInput.value = raw;
+  if (!isStrictUtcTimestamp(raw)) {
+    throw new Error("Evaluation time must be a real UTC timestamp such as 2026-08-29T12:00:00Z.");
+  }
+  return raw;
+}
+
 async function evaluate() {
   readSetup();
-  const evaluated = evaluateMaturity(state, "2026-10-23T00:00:00Z");
+  let evaluationTime;
+  try {
+    evaluationTime = readEvaluationTime();
+  } catch (error) {
+    result.replaceChildren();
+    const p = document.createElement("p");
+    p.className = "error";
+    p.setAttribute("role", "alert");
+    p.textContent = error.message;
+    result.append(p);
+    document.querySelector("#live").textContent = error.message;
+    return null;
+  }
+  const evaluated = evaluateMaturity(state, evaluationTime);
   result.innerHTML = renderResult(evaluated.details);
-  document.querySelector("#live").textContent = `Evaluated ${evaluated.details.assessed_category_count} categories. ${evaluated.details.coverage_status}.`;
+  document.querySelector("#live").textContent = `Evaluated ${evaluated.details.assessed_category_count} categories at ${evaluationTime}. ${evaluated.details.coverage_status}.`;
   return evaluated;
 }
 
@@ -156,15 +259,36 @@ pillarNav.addEventListener("click", (event) => {
 document.querySelector("#evaluate").addEventListener("click", evaluate);
 document.querySelector("#export-result").addEventListener("click", async () => {
   readSetup();
-  const output = await buildProfileResult(state, "2026-10-23T00:00:00Z");
+  let evaluationTime;
+  try {
+    evaluationTime = readEvaluationTime();
+  } catch (error) {
+    showImportStatus(error.message, true);
+    return;
+  }
+  const output = await buildProfileResult(state, evaluationTime);
   delete output.canonical_details;
   download("profile-result.json", `${JSON.stringify(output, null, 2)}\n`, "application/json");
 });
 document.querySelector("#export-gaps").addEventListener("click", () => {
-  download("maturity-gap-register.json", `${JSON.stringify(gapRegister(evaluateMaturity(state, "2026-10-23T00:00:00Z").details), null, 2)}\n`, "application/json");
+  let evaluationTime;
+  try {
+    evaluationTime = readEvaluationTime();
+  } catch (error) {
+    showImportStatus(error.message, true);
+    return;
+  }
+  download("maturity-gap-register.json", `${JSON.stringify(gapRegister(evaluateMaturity(state, evaluationTime).details), null, 2)}\n`, "application/json");
 });
 document.querySelector("#export-review").addEventListener("click", () => {
-  download("maturity-review.md", reviewMarkdown(evaluateMaturity(state, "2026-10-23T00:00:00Z").details), "text/markdown");
+  let evaluationTime;
+  try {
+    evaluationTime = readEvaluationTime();
+  } catch (error) {
+    showImportStatus(error.message, true);
+    return;
+  }
+  download("maturity-review.md", reviewMarkdown(evaluateMaturity(state, evaluationTime).details), "text/markdown");
 });
 
 function showImportStatus(message, isError) {
@@ -211,13 +335,6 @@ function validateMaturityImport(value) {
 document.querySelector("#import-file").addEventListener("change", async (event) => {
   const file = event.target.files[0];
   if (!file) return;
-  const previous = {
-    assessment_id: state.assessment_id,
-    assessment_scope: state.assessment_scope,
-    accountable_owner: state.accountable_owner,
-    assessment_coverage: state.assessment_coverage,
-    categories: state.categories,
-  };
   let imported;
   try {
     imported = JSON.parse(await file.text());
@@ -244,11 +361,13 @@ document.querySelector("#import-file").addEventListener("change", async (event) 
   document.querySelector("#scope").value = state.assessment_scope;
   document.querySelector("#owner").value = state.accountable_owner;
   document.querySelector("#coverage").value = state.assessment_coverage;
+  if (imported.evaluation_time && isStrictUtcTimestamp(imported.evaluation_time) && evaluationTimeInput) {
+    evaluationTimeInput.value = imported.evaluation_time;
+  }
   renderNav();
   evaluate();
   showImportStatus(`Imported ${file.name}: ${state.categories.length} categor${state.categories.length === 1 ? "y" : "ies"}.`, false);
   event.target.value = "";
-  void previous;
 });
 document.querySelector("#sample").addEventListener("click", () => {
   const sample = {

@@ -80,7 +80,7 @@ class BrowserParityTests(unittest.TestCase):
         self.assertEqual(browser["result"]["human_decision_state"], "PENDING_HUMAN_DECISION")
         self.assertEqual(browser["handoff"]["authority_effect"], "NONE")
         rules = {item["rule_id"] for item in browser["findings"]["findings"]}
-        self.assertTrue({"GAI-AUTO-001", "GAI-AUTO-002", "GAI-AUTO-003", "GAI-AUTO-004"} <= rules, rules)
+        self.assertTrue({"GAI-AUTO-001", "GAI-AUTO-002", "GAI-AUTO-003", "GAI-AUTO-004", "GAI-AUTO-005"} <= rules, rules)
         bundle = (ROOT / "web/contracts.generated.mjs").read_text(encoding="utf-8")
         self.assertIn(json.dumps(GAPS_SAMPLE.read_text(encoding="utf-8")), bundle)
         page = (ROOT / "web/index.html").read_text(encoding="utf-8")

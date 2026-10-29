@@ -2,7 +2,7 @@
 
 A human process selects maturity. This evaluator checks whether submitted
 evidence can carry that determination. It does not decide organizational maturity.
-Unregistered. authority_effect remains NONE.
+Registered as organizational-ai-maturity-v0.1. authority_effect remains NONE.
 """
 
 from __future__ import annotations

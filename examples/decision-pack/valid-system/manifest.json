@@ -66,7 +66,7 @@
     {
       "path": "governance-rules.yaml",
       "role": "Runtime governance policy",
-      "sha256": "090ec2d15989e678a1ab07cff8569a075c0df037cb26f370b78e569491a0d912"
+      "sha256": "121507781ac02c918e203209fb0f8bdec4a5e7823e5cdfdd1fe92d0fea7db3b7"
     },
     {
       "path": "normalized-inventory.json",
