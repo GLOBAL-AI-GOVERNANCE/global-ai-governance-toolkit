@@ -57,7 +57,7 @@ async def main():
         async with ClientSession(r, w) as s:
             init = await s.initialize()
             tools = await s.list_tools()
-            print(f"server {init.serverInfo.name} {init.serverInfo.version}")
+            print(f"server {init.server_info.name} {init.server_info.version}")
             print("tools", ", ".join(sorted(t.name for t in tools.tools)))
 asyncio.run(main())
 PY
