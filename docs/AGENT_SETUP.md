@@ -32,11 +32,11 @@ curl -fsSLO https://ai-governance.solutions/bootstrap.sh && bash bootstrap.sh
 | Component | Version | Install |
 |---|---|---|
 | Toolkit (`gaig` CLI) | v2.8.1 | release wheel |
-| AI Governance MCP (`gaig-mcp`) | v0.5.0 | `uvx` from the tag |
+| AI Governance MCP (`gaig-mcp`) | v0.5.1 | `uvx` from the tag |
 | Agentic AI Governance (`validate-passport`) | v0.1.0-alpha.5 | `pip` from the tag |
 | Verified Vulnerability Governance (`vvd`) | v0.4.0 | `pip` from the tag |
 
-`gaig-mcp` v0.5.0 bundles the Toolkit at v2.7.2 (commit `cc5f599`) and Agentic AI Governance at commit `58bdfb2`. Its outputs report those commits in `source`.
+`gaig-mcp` v0.5.1 bundles the Toolkit at v2.8.1 (commit `0ab38c6`) and Agentic AI Governance at commit `58bdfb2`. Its outputs report those commits in `source`.
 
 ## 0. Requirements
 
@@ -129,10 +129,10 @@ The independent assurance case is dated. Without `--evaluation-time` it is judge
 
 ```bash
 command -v uvx >/dev/null || python -m pip install --quiet uv
-uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0 gaig-mcp --version
+uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.1 gaig-mcp --version
 ```
 
-The first run builds the package from the tag in a few seconds. Expect `0.5.0`. The server speaks stdio by default. Add `--http --port 8000` for Streamable HTTP at `/mcp`.
+The first run builds the package from the tag in a few seconds. Expect `0.5.1`. The server speaks stdio by default. Add `--http --port 8000` for Streamable HTTP at `/mcp`.
 
 Check it the way an MCP client would. This script starts the server, lists its tools, and calls each read-only tool once:
 
@@ -142,7 +142,7 @@ cat > mcp_check.py <<'PY'
 import json, subprocess
 
 CMD = ["uvx", "--from",
-       "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0", "gaig-mcp"]
+       "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.1", "gaig-mcp"]
 proc = subprocess.Popen(CMD, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                         stderr=subprocess.DEVNULL, text=True)
 next_id = 0
@@ -185,7 +185,7 @@ python mcp_check.py
 Expect:
 
 ```text
-server gaig-mcp 0.5.0
+server gaig-mcp 0.5.1
 tools ['build_decision_pack', 'check_inventory', 'validate_passport']
 check_inventory VALID BLOCKED authority_effect NONE
 validate_passport signed-unrevoked VALID exit 0
@@ -202,13 +202,13 @@ Claude Code:
 
 ```text
 claude mcp add gaig --scope project -- \
-  uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0 gaig-mcp
+  uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.1 gaig-mcp
 ```
 
 Grok CLI:
 
 ```text
-grok mcp add gaig -- uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0 gaig-mcp
+grok mcp add gaig -- uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.1 gaig-mcp
 ```
 
 Codex (`~/.codex/config.toml`):
@@ -216,7 +216,7 @@ Codex (`~/.codex/config.toml`):
 ```toml
 [mcp_servers.gaig]
 command = "uvx"
-args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0", "gaig-mcp"]
+args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.1", "gaig-mcp"]
 ```
 
 Claude Desktop, Cursor (`.cursor/mcp.json`), or a project `.mcp.json`:
@@ -226,15 +226,15 @@ Claude Desktop, Cursor (`.cursor/mcp.json`), or a project `.mcp.json`:
   "mcpServers": {
     "gaig": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0", "gaig-mcp"]
+      "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.1", "gaig-mcp"]
     }
   }
 }
 ```
 
-Gemini CLI (`.gemini/settings.json`): the same entry under `mcpServers`, as in [`gemini-cli.settings.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.0/examples/client-configs/gemini-cli.settings.json). Keep the server alias free of underscores; the Gemini CLI names its tools `mcp_gaig_check_inventory`.
+Gemini CLI (`.gemini/settings.json`): the same entry under `mcpServers`, as in [`gemini-cli.settings.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.1/examples/client-configs/gemini-cli.settings.json). Keep the server alias free of underscores; the Gemini CLI names its tools `mcp_gaig_check_inventory`.
 
-VS Code uses the same entry under `servers` in `.vscode/mcp.json`. Ready-made files for each client are in [`examples/client-configs/`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.5.0/examples/client-configs). After a restart, the client should list `check_inventory`, `build_decision_pack`, and `validate_passport`. Remote platforms (ChatGPT, the OpenAI, Anthropic, and xAI APIs, grok.com) cannot reach stdio or localhost; they need an HTTPS server you host, as described in the [MCP README](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.0/README.md).
+VS Code uses the same entry under `servers` in `.vscode/mcp.json`. Ready-made files for each client are in [`examples/client-configs/`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.5.1/examples/client-configs). After a restart, the client should list `check_inventory`, `build_decision_pack`, and `validate_passport`. Remote platforms (ChatGPT, the OpenAI, Anthropic, and xAI APIs, grok.com) cannot reach stdio or localhost; they need an HTTPS server you host, as described in the [MCP README](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.1/README.md).
 
 ## 6. Guard tool calls with Action Levels
 
@@ -243,7 +243,7 @@ The Action Level guard is a `PreToolUse` hook for Claude Code and the Grok CLI, 
 ```bash
 HOOKS=.claude/hooks   # for the Grok CLI, use .grok/hooks
 mkdir -p "$HOOKS"
-STACKS=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/v0.5.0/examples/agent-stacks
+STACKS=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/v0.5.1/examples/agent-stacks
 for f in tool_call_hook.py action_level_guard.py passport_tool_call_hook.py; do
   curl -fsSL -o "$HOOKS/$f" "$STACKS/$f"
 done
@@ -259,7 +259,7 @@ done
 
 Expect an empty decision (allow) for `mcp__gaig__check_inventory`, `"permissionDecision": "ask"` for `send_external_email`, and `"permissionDecision": "deny"` for `delete_records`. List your own tools and levels in `action-levels.json`; one entry covers the plain name and its `mcp__server__` (Claude Code) or `server__` (Grok CLI) form.
 
-To turn the hook on, merge [`claude-code.settings.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.0/examples/client-configs/claude-code.settings.json) into `.claude/settings.json`, and add `--policy "$CLAUDE_PROJECT_DIR/.claude/hooks/action-levels.json"` to its command. For the Grok CLI, put [`grok-cli.hooks.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.0/examples/client-configs/grok-cli.hooks.json) in `.grok/hooks/` and trust it with `/hooks-trust`. For the Gemini CLI, use [`gemini-cli.settings.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.0/examples/client-configs/gemini-cli.settings.json) and put the hook files in `.gemini/hooks/`. These hook entries are TESTED with documented-format input, not inside any of the three clients.
+To turn the hook on, merge [`claude-code.settings.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.1/examples/client-configs/claude-code.settings.json) into `.claude/settings.json`, and add `--policy "$CLAUDE_PROJECT_DIR/.claude/hooks/action-levels.json"` to its command. For the Grok CLI, put [`grok-cli.hooks.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.1/examples/client-configs/grok-cli.hooks.json) in `.grok/hooks/` and trust it with `/hooks-trust`. For the Gemini CLI, use [`gemini-cli.settings.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.1/examples/client-configs/gemini-cli.settings.json) and put the hook files in `.gemini/hooks/`. These hook entries are TESTED with documented-format input, not inside any of the three clients.
 
 ### Run Level 4 unattended (operator safety setting)
 
@@ -267,7 +267,7 @@ A policy file can name an automated approver that the operator runs, and list th
 
 ```bash
 curl -fsSL -o "$HOOKS/action-levels.approver.json" \
-  https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/v0.5.0/examples/policies/action-levels.automated-approver.json
+  https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/v0.5.1/examples/policies/action-levels.automated-approver.json
 for t in mcp__gh__open_pull_request mcp__crm__send_external_email mcp__crm__delete_records; do
   printf '%s -> ' "$t"
   printf '{"tool_name": "%s"}' "$t" | python "$HOOKS/tool_call_hook.py" --policy "$HOOKS/action-levels.approver.json"
@@ -282,7 +282,7 @@ Expect `"permissionDecision": "allow"` with the reason `Level 4: approved by the
 `check_tool_call` combines the passport check, the revocation check, and the Action Level, at the server's own clock. It is a Python function and a hook, not an MCP tool. The bundled example passports are dated, so at today's clock they are expired, and the check denies. That is the expected result:
 
 ```bash
-python -m pip install --quiet "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0"
+python -m pip install --quiet "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.1"
 python -c "
 from gaig_mcp.core import check_tool_call
 r = check_tool_call('send_external_email', tool_level=4, example='signed-unrevoked')['result']
@@ -400,7 +400,7 @@ Run this from the `gaig-setup` folder. Every line should end in `ok`:
 check() { if eval "$2" >/dev/null 2>&1; then echo "$1 ok"; else echo "$1 FAILED"; fi; }
 check "toolkit 2.8.1      " "gaig --version | grep -qx '2.8.1'"
 check "decision pack      " "gaig verify out"
-check "mcp server 0.5.0   " "python mcp_check.py | grep -q 'server gaig-mcp 0.5.0'"
+check "mcp server 0.5.1   " "python mcp_check.py | grep -q 'server gaig-mcp 0.5.1'"
 check "action level guard " "printf '{\"tool_name\": \"x__delete_records\"}' | python .claude/hooks/tool_call_hook.py --policy .claude/hooks/action-levels.json | grep -q deny"
 check "passport validator " "validate-passport --example signed-unrevoked"
 check "fleet controls     " "python agentic/tools/fleet_controls.py agentic/examples/fleet-controls/sub-agent-spawn-permitted.json"
@@ -433,6 +433,6 @@ Then report what ran and its outputs. Nothing above waits on a person. Level 4 t
 - [Interoperability](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/INTEROP.md): which agent stacks are tested, and how
 - [Lead agent console](https://ai-governance.solutions/lead-agent/) and the one-command [bootstrap.sh](https://ai-governance.solutions/bootstrap.sh)
 - [Toolkit README](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit#quick-start)
-- [AI Governance MCP](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.5.0)
+- [AI Governance MCP](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.5.1)
 - [Agentic AI Governance](https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/v0.1.0-alpha.5)
 - [Verified Vulnerability Governance](https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance/tree/v0.4.0)

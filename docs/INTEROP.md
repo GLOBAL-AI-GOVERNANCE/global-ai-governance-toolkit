@@ -15,19 +15,20 @@ Live matrix: [ai-governance.solutions/interoperability.html](https://ai-governan
 | Stack | Works with | How tested | Status |
 | --- | --- | --- | --- |
 | Model Context Protocol | `gaig-mcp` server; Claude Code / Claude Desktop / Cursor / VS Code / Codex / Gemini CLI / LangGraph recipes | stdio ClientSession; tools list; authority_effect NONE | TESTED |
-| MCP registry | `server.json` on ai-governance-mcp | schema fields present; launch args pin v0.5.0 | AVAILABLE |
-| OpenAI Agents SDK | Guardrails adapter + hooks pattern in MCP examples | Offline mock; deny Level 5, approve Level 4 via automated operator | AVAILABLE |
+| MCP registry | `server.json` on ai-governance-mcp | validated against registry schema; launch args pin v0.5.1 | TESTED |
+| OpenAI Agents SDK | `openai_agents_guard.py` | Offline with openai-agents 0.24.0, real gaig-mcp stdio, scripted model | TESTED |
 | OpenAI Codex CLI | `~/.codex/config.toml` recipe | One recorded local stdio run (Codex CLI 0.151.0) | TESTED |
 | OpenAI AGENTS.md | Toolkit / MCP / Agentic / VVG AGENTS.md | Machine front door + suite path | AVAILABLE |
 | Anthropic MCP | Spec-shaped server; Claude Code PreToolUse hooks | Hook dry-run offline; not inside Claude Code | TESTED (launch) / AVAILABLE (hooks) |
-| Anthropic Claude Agent SDK | Passport + Action Level hook pattern | Offline against published hook contract | AVAILABLE |
+| Anthropic Claude Agent SDK | `claude_agent_sdk_guard.py` | Offline with claude-agent-sdk 0.2.174; hook contract | TESTED |
 | Anthropic SKILL.md | Agent skill files in MCP and Agentic | File present; not run inside Claude | AVAILABLE |
 | Google A2A | A2A passport extension + agent card notes | Schema + docs; offline | AVAILABLE |
 | Google ADK / Gemini CLI | Gemini CLI MCP recipe; ADK tool-wrapper notes | Launch command; not inside Gemini | AVAILABLE |
 | Microsoft Agent Framework / AutoGen / Semantic Kernel | MCP stdio client pattern | Documented; VS Code mcp.json launch tested | AVAILABLE |
 | VS Code MCP | `.vscode/mcp.json` | Launch command tested; not inside VS Code | AVAILABLE |
-| LangGraph | MCP tool node example | Offline graph with mock model | AVAILABLE |
-| CrewAI / LlamaIndex / smolagents | Tool-call guard wrapper | Offline mock | AVAILABLE |
+| LangGraph | `langgraph_passport_gate.py` | Offline with langgraph 1.2.17; synthetic passports | TESTED |
+| CrewAI | `crewai_guard.py` | Offline with crewai 1.15.33; real ToolCallHookContext; not live model | TESTED |
+| LlamaIndex / smolagents | Same Action Level guard pattern | Pattern only; no dedicated adapter yet | DOCUMENTED |
 | AWS Strands / AgentCore | MCP client notes | Documented only | DOCUMENTED |
 | OpenTelemetry GenAI | Span attributes for check calls | Example exporter; offline | AVAILABLE |
 | AAIF / AGNTCY | Alignment notes | Research only | DOCUMENTED |
