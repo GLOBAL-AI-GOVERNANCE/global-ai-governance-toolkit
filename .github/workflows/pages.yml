@@ -114,12 +114,7 @@ jobs:
             curl -fsS http://127.0.0.1:8799/lead-agent/ >/dev/null && break
             sleep 0.5
           done
-          CHROME_PATH="$(python - <<'PY2'
-from pathlib import Path
-cands = list(Path.home().joinpath(".cache/ms-playwright").glob("chromium-*/chrome-linux*/chrome"))
-print(cands[0] if cands else "")
-PY2
-)"
+          CHROME_PATH="$(python -c 'from pathlib import Path; cands=list(Path.home().joinpath(".cache/ms-playwright").glob("chromium-*/chrome-linux*/chrome")); print(cands[0] if cands else "")')"
           test -n "$CHROME_PATH"
           node web/tests/lead-agent-e2e.mjs http://127.0.0.1:8799/ "$CHROME_PATH"
           kill "$(cat /tmp/site.pid)" || true
