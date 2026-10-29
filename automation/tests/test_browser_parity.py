@@ -123,10 +123,13 @@ class BrowserParityTests(unittest.TestCase):
         blank = (ROOT / "web/ai-system-inventory-template.csv").read_text(encoding="utf-8-sig")
         canonical_blank = (ROOT / "spreadsheets/ai-system-inventory-template.csv").read_text(encoding="utf-8-sig")
         self.assertEqual(blank, canonical_blank)
+        header = blank.splitlines()[0]
+        self.assertTrue(header.startswith("Schema Version,"))
+        # A completed copy replaces the example row (or fills a header-only sheet).
         row = "1.0.0,TEST-BEGINNER-001,Beginner Example,Casey Owner,Operations,Internal,Document search,Internal,No,No,No,No,No,None,No,Yes,Yes,Yes\n"
         with tempfile.TemporaryDirectory() as temporary:
             completed_template = Path(temporary) / "completed-template.csv"
-            completed_template.write_text(blank + row, encoding="utf-8")
+            completed_template.write_text(header + "\n" + row, encoding="utf-8")
             browser = self.browser(completed_template)
         self.assertEqual(browser["normalized"]["records"][0]["system_id"], "TEST-BEGINNER-001")
         self.assertEqual(browser["result"]["governance_gate_state"], "PASSED_CURRENT_AUTOMATED_CHECKS")
