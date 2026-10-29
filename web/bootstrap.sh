@@ -5,8 +5,8 @@
 set -euo pipefail
 
 SITE="${GAIG_SITE:-https://ai-governance.solutions}"
-TOOLKIT_TAG=v2.8.0
-MCP_TAG=v0.5.0
+TOOLKIT_TAG=v2.8.1
+MCP_TAG=v0.5.1
 AGENTIC_TAG=v0.1.0-alpha.5
 VVG_TAG=v0.4.0
 ROOT="$(pwd)/gaig-setup"
@@ -30,15 +30,15 @@ source .venv/bin/activate
 echo "== 0. machine front door =="
 curl -fsSL "$SITE/llms.txt" | head -n 1 | grep -q 'Global AI Governance Toolkit'
 curl -fsSL "$SITE/machine-interface.json" \
-  | python -c "import json,sys; d=json.load(sys.stdin); assert d['machine_interface_version']>='1.6.0' and d['release']=='v2.8.0'; print(d['machine_interface_version'], d['release'])"
+  | python -c "import json,sys; d=json.load(sys.stdin); assert d['machine_interface_version']>='1.6.0' and d['release']=='v2.8.1'; print(d['machine_interface_version'], d['release'])"
 
 echo "== 1. toolkit =="
-WHL="global_ai_governance-2.8.0-py3-none-any.whl"
+WHL="global_ai_governance-2.8.1-py3-none-any.whl"
 curl -fsSLO "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/${TOOLKIT_TAG}/${WHL}"
 curl -fsSLO "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/${TOOLKIT_TAG}/SHA256SUMS"
 grep " ${WHL}\$" SHA256SUMS | sha256sum -c -
 "$PIP" install --quiet "./${WHL}"
-gaig --version | grep -qx '2.8.0'
+gaig --version | grep -qx '2.8.1'
 
 echo "== 2. inventory check =="
 curl -fsSLO "$SITE/sample-ai-inventory.csv"
@@ -52,7 +52,7 @@ import asyncio, json
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 async def main():
-    params = StdioServerParameters(command="uvx", args=["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0", "gaig-mcp"])
+    params = StdioServerParameters(command="uvx", args=["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.1", "gaig-mcp"])
     async with stdio_client(params) as (r, w):
         async with ClientSession(r, w) as s:
             init = await s.initialize()
@@ -63,7 +63,7 @@ asyncio.run(main())
 PY
 "$PIP" install --quiet "mcp>=1.0"
 python mcp_check.py | tee mcp_out.txt
-grep -q 'server gaig-mcp 0.5.0' mcp_out.txt
+grep -q 'server gaig-mcp 0.5.1' mcp_out.txt
 
 echo "== 6. Action Level guard + automated Level 4 approver =="
 HOOKS=.claude/hooks
@@ -110,9 +110,9 @@ cd ..
 
 echo "== done check =="
 check() { if eval "$2" >/dev/null 2>&1; then echo "$1 ok"; else echo "$1 FAILED"; exit 1; fi; }
-check "toolkit 2.8.0      " "gaig --version | grep -qx '2.8.0'"
+check "toolkit 2.8.1      " "gaig --version | grep -qx '2.8.1'"
 check "decision pack      " "gaig verify out"
-check "mcp server 0.5.0   " "grep -q 'server gaig-mcp 0.5.0' mcp_out.txt"
+check "mcp server 0.5.1   " "grep -q 'server gaig-mcp 0.5.1' mcp_out.txt"
 check "action level guard " "printf '{\"tool_name\": \"x__delete_records\"}' | python .claude/hooks/tool_call_hook.py --policy .claude/hooks/action-levels.json | grep -q deny"
 check "passport validator " "validate-passport --example signed-unrevoked"
 check "fleet controls     " "python agentic/tools/fleet_controls.py agentic/examples/fleet-controls/sub-agent-spawn-permitted.json"

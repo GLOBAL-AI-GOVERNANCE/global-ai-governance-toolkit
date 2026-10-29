@@ -97,7 +97,7 @@ A failing case exits 1, so a pipeline stops for review. How to run and record a 
 
    ```bash
    for rt in global-ai-governance-toolkit:v2.8.1:global_ai_governance-2.8.1-py3-none-any.whl \
-             ai-governance-mcp:v0.5.0:gaig_mcp-0.5.0-py3-none-any.whl \
+             ai-governance-mcp:v0.5.1:gaig_mcp-0.5.1-py3-none-any.whl \
              agentic-ai-governance:v0.1.0-alpha.5:agentic-ai-governance-v0.1.0-alpha.5.zip \
              verified-vulnerability-governance:v0.4.0:verified-vulnerability-governance-v0.4.0.zip \
              containment-ledger:v1.0.0:containment-ledger-v1.0.0-site.zip \
@@ -108,7 +108,7 @@ A failing case exits 1, so a pipeline stops for review. How to run and record a 
    done
    ```
 
-   Expect six `attested` lines. Peace OS `v0.3.0-rc2` ships a `SHA256SUMS.txt`, a provenance file, and an SBOM instead of a GitHub attestation. AI Cyber Resilience Framework `v0.1.1` is a tagged document release with no assets.
+   Expect six `attested` lines. Peace OS `v0.3.0-rc3` ships a `SHA256SUMS.txt`, a provenance file, and an SBOM instead of a GitHub attestation. AI Cyber Resilience Framework `v0.1.1` is a tagged document release with no assets.
 4. **Connect it to your own agents and evals.**
    - Put the [AI Governance MCP](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp) server in your agent harness, and the Action Level guard in front of tool calls ([AGENT_SETUP steps 4 to 6](https://ai-governance.solutions/AGENT_SETUP.md#4-run-the-mcp-server)).
    - Treat `profile-result.json` and `governance-result.json` as eval outputs: each has a schema, a status, finding IDs, and `authority_effect: NONE`.
