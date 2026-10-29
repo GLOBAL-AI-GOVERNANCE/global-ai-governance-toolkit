@@ -49,6 +49,11 @@ jobs:
       - name: Check schema identifiers name their published release path
         run: |
           python -B automation/scripts/check_schema_ids.py
+      - name: Check site pins match suite-manifest
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -B automation/scripts/sync_site_from_manifest.py --check
 
       - name: Install and verify flagship CLI
         run: |
