@@ -31,12 +31,12 @@ curl -fsSLO https://ai-governance.solutions/bootstrap.sh && bash bootstrap.sh
 
 | Component | Version | Install |
 |---|---|---|
-| Toolkit (`gaig` CLI) | v2.8.1 | release wheel |
+| Toolkit (`gaig` CLI) | v2.8.2 | release wheel |
 | AI Governance MCP (`gaig-mcp`) | v0.5.1 | `uvx` from the tag |
 | Agentic AI Governance (`validate-passport`) | v0.1.0-alpha.5 | `pip` from the tag |
 | Verified Vulnerability Governance (`vvd`) | v0.4.0 | `pip` from the tag |
 
-`gaig-mcp` v0.5.1 bundles the Toolkit at v2.8.1 (commit `0ab38c6`) and Agentic AI Governance at commit `58bdfb2`. Its outputs report those commits in `source`.
+`gaig-mcp` v0.5.1 bundles the Toolkit at v2.8.2 (commit `0ab38c6`) and Agentic AI Governance at commit `58bdfb2`. Its outputs report those commits in `source`.
 
 ## 0. Requirements
 
@@ -58,27 +58,27 @@ curl -fsSL https://ai-governance.solutions/machine-interface.json \
   | python -c "import json,sys; d=json.load(sys.stdin); print(d['machine_interface_version'], d['release'])"
 ```
 
-Expect the llms.txt title `# Global AI Governance Toolkit` and its `## Agent setup (start here)` section, then `1.6.0 v2.8.1`.
+Expect the llms.txt title `# Global AI Governance Toolkit` and its `## Agent setup (start here)` section, then `1.6.0 v2.8.2`.
 
-The schema URLs in llms.txt and machine-interface.json point at the `v2.7.2` tag on purpose: those schemas did not change in v2.8.1, and their `$id` values name v2.7.2.
+The schema URLs in llms.txt and machine-interface.json point at the `v2.7.2` tag on purpose: those schemas did not change in v2.8.2, and their `$id` values name v2.7.2.
 
 ## 2. Install the Toolkit CLI
 
 ```bash
-REL=https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.1
-curl -fsSLO "$REL/global_ai_governance-2.8.1-py3-none-any.whl"
+REL=https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.2
+curl -fsSLO "$REL/global_ai_governance-2.8.2-py3-none-any.whl"
 curl -fsSLO "$REL/SHA256SUMS"
-grep ' global_ai_governance-2.8.1-py3-none-any.whl$' SHA256SUMS | sha256sum -c -
-python -m pip install --quiet ./global_ai_governance-2.8.1-py3-none-any.whl
+grep ' global_ai_governance-2.8.2-py3-none-any.whl$' SHA256SUMS | sha256sum -c -
+python -m pip install --quiet ./global_ai_governance-2.8.2-py3-none-any.whl
 gaig --version
 ```
 
-Expect: `global_ai_governance-2.8.1-py3-none-any.whl: OK`, then `2.8.1`. On macOS, use `shasum -a 256 -c -` in place of `sha256sum -c -`.
+Expect: `global_ai_governance-2.8.2-py3-none-any.whl: OK`, then `2.8.2`. On macOS, use `shasum -a 256 -c -` in place of `sha256sum -c -`.
 
 Optional build-provenance check, if the GitHub CLI is installed and signed in:
 
 ```text
-gh attestation verify global_ai_governance-2.8.1-py3-none-any.whl --owner GLOBAL-AI-GOVERNANCE
+gh attestation verify global_ai_governance-2.8.2-py3-none-any.whl --owner GLOBAL-AI-GOVERNANCE
 ```
 
 Expect exit code 0.
@@ -97,7 +97,7 @@ Expect `Governance automation complete.` with a list of outputs, then `Output co
 The site's sample is the clean inventory. To see what a check finds, run the example with gaps:
 
 ```bash
-curl -fsSL -o sample-with-gaps.csv https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.1/automation/sample-data/sample-ai-inventory.csv
+curl -fsSL -o sample-with-gaps.csv https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.2/automation/sample-data/sample-ai-inventory.csv
 gaig check sample-with-gaps.csv --outdir out-gaps --fail-on none >/dev/null
 python -c "import json; r=json.load(open('out-gaps/governance-result.json')); print(r['governance_gate_state'], r['finding_count'])"
 ```
@@ -108,10 +108,10 @@ To check your own systems, download the blank template from <https://ai-governan
 
 ### Optional: assurance profiles
 
-`gaig profile` reads a JSON case file, not the inventory CSV. These synthetic cases are from the v2.8.1 tag:
+`gaig profile` reads a JSON case file, not the inventory CSV. These synthetic cases are from the v2.8.2 tag:
 
 ```bash
-RAW=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.1
+RAW=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.2
 curl -fsSL -o auditable.json "$RAW/automation/assurance/auditable-ai/fixtures/pass.json"
 curl -fsSL -o maturity.json "$RAW/automation/profiles/fixtures/maturity-supported.json"
 curl -fsSL -o assurance.json "$RAW/automation/assurance/independent-assurance/fixtures/agent_pass.json"
@@ -398,7 +398,7 @@ Run this from the `gaig-setup` folder. Every line should end in `ok`:
 
 ```bash
 check() { if eval "$2" >/dev/null 2>&1; then echo "$1 ok"; else echo "$1 FAILED"; fi; }
-check "toolkit 2.8.1      " "gaig --version | grep -qx '2.8.1'"
+check "toolkit 2.8.2      " "gaig --version | grep -qx '2.8.2'"
 check "decision pack      " "gaig verify out"
 check "mcp server 0.5.1   " "python mcp_check.py | grep -q 'server gaig-mcp 0.5.1'"
 check "action level guard " "printf '{\"tool_name\": \"x__delete_records\"}' | python .claude/hooks/tool_call_hook.py --policy .claude/hooks/action-levels.json | grep -q deny"
@@ -423,7 +423,7 @@ Then report what ran and its outputs. Nothing above waits on a person. Level 4 t
 | `check_tool_call` returns `deny`, status `EXPIRED` | Expected for the bundled examples. Issue current passports from a policy file (step 7). |
 | Every tool asks for approval | No level is set for it, so it counts as Level 4. Add it to `action-levels.json`, or list it under `level_4_approver.approve` if it is Level 4 and the operator wants it unattended. |
 | `uvx: command not found` in a client | Use the absolute path from `command -v uvx` in the client config. |
-| Schema URLs name `v2.7.2` | Intended. Those schemas did not change in v2.8.1. |
+| Schema URLs name `v2.7.2` | Intended. Those schemas did not change in v2.8.2. |
 
 ## More
 
