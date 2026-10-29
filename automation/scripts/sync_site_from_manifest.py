@@ -157,6 +157,69 @@ def rewrite_mcp_bundle_block(text: str, pins: dict) -> str:
 
 
 
+
+
+def apply_journey_badges(text: str, badges: dict[str, str], *, html: bool) -> str:
+    """Rewrite product badge labels from suite-manifest journey_badges."""
+    import re
+
+    if not badges or not html:
+        return text
+
+    for slug, label in badges.items():
+        slug_pat = re.escape(slug)
+        id_re = re.compile(
+            rf'(<li\b[^>]*\bid="{slug_pat}"[^>]*>)(.*?)(</li>)',
+            re.DOTALL | re.IGNORECASE,
+        )
+
+        def id_sub(m, label=label):
+            inner = re.sub(
+                r'(<span class="g-badge"[^>]*>)(.*?)(</span>)',
+                rf'\g<1>{label}\g<3>',
+                m.group(2),
+                count=1,
+                flags=re.DOTALL,
+            )
+            return m.group(1) + inner + m.group(3)
+
+        text2, n = id_re.subn(id_sub, text, count=1)
+        if n:
+            text = text2
+            continue
+
+        li_re = re.compile(r'(<li\b[^>]*>)(.*?)(</li>)', re.DOTALL | re.IGNORECASE)
+        replaced = False
+        parts: list[str] = []
+        last = 0
+        for m in li_re.finditer(text):
+            parts.append(text[last : m.start()])
+            block = m.group(0)
+            href_m = re.search(r'<a\b[^>]*\bhref="([^"]+)"', block, re.IGNORECASE)
+            href = href_m.group(1) if href_m else ''
+            hit = (
+                f"github.com/GLOBAL-AI-GOVERNANCE/{slug}" in href
+                or f"global-ai-governance.github.io/{slug}" in href
+                or href.rstrip("/").endswith(f"/{slug}")
+                or (slug == "global-ai-governance-toolkit" and "#toolkit" in href)
+            )
+            if hit and not replaced:
+                block = re.sub(
+                    r'(<span class="g-badge"[^>]*>)(.*?)(</span>)',
+                    rf"\g<1>{label}\g<3>",
+                    block,
+                    count=1,
+                    flags=re.DOTALL,
+                )
+                replaced = True
+            parts.append(block)
+            last = m.end()
+        parts.append(text[last:])
+        text = "".join(parts)
+    return text
+
+
+
 def sync(*, manifest_url: str, check_only: bool) -> int:
     manifest = load_json(manifest_url)
     new_pins = pins_from_manifest(manifest)
@@ -173,6 +236,10 @@ def sync(*, manifest_url: str, check_only: bool) -> int:
         updated = apply_replacements(original, pairs) if pairs else original
         if rel == "docs/AGENT_SETUP.md":
             updated = rewrite_mcp_bundle_block(updated, new_pins)
+        if rel in ("web/index.html", "web/connect.html"):
+            updated = apply_journey_badges(
+                updated, manifest.get("journey_badges") or {}, html=True
+            )
         if rel == "web/machine-interface.json":
             data = json.loads(updated)
             data["release"] = new_pins["toolkit"]
