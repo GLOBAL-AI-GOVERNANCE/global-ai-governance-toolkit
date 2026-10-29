@@ -10,7 +10,7 @@
   "governance_handoff": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/automation/contracts/governance-decision-handoff.schema.json",
   "profiles": {
     "result_contract": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/automation/contracts/v1/profile-result.schema.json",
-    "registry": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.1/automation/profiles/registry.json",
+    "registry": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.2/automation/profiles/registry.json",
     "viewer": "./profile-viewer.mjs",
     "maturity": {
       "profile_id": "organizational-ai-maturity-v0.1",
@@ -45,7 +45,7 @@
     "independent_assurance": {
       "profile_id": "independent-assurance-v0.1",
       "contract_version": "0.2.0",
-      "case_contract": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.1/automation/contracts/profiles/independent-assurance-case.schema.json",
+      "case_contract": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.2/automation/contracts/profiles/independent-assurance-case.schema.json",
       "autonomous_agent_requires": [
         "agent_passport_ref",
         "shutdown_evidence"
@@ -261,5 +261,5 @@
       ]
     }
   ],
-  "release": "v2.8.1"
+  "release": "v2.8.2"
 }
