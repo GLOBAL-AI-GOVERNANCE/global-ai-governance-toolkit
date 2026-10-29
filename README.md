@@ -1,7 +1,7 @@
 # Global AI Governance Toolkit
 
 <!-- gaig:nav -->
-**[Global AI Governance](https://ai-governance.solutions/)** · `v2.8.0 · stable` · `authority_effect: NONE`
+**[Global AI Governance](https://ai-governance.solutions/)** · `v2.8.1 · stable` · `authority_effect: NONE`
 
 [Start where you are](https://ai-governance.solutions/start.html) · [Connect your agent](https://ai-governance.solutions/connect.html#agents) · [Specifications](https://ai-governance.solutions/connect.html#spec) · [All products](https://ai-governance.solutions/#products)
 
@@ -10,9 +10,9 @@ Suite path, step 2 of 9: check what you run · ← [Peace OS](https://github.com
 
 Govern AI before it acts. List what you run; the toolkit finds missing owners, monitoring, shutdown paths, and evidence, then prepares a reproducible Decision Pack so the person accountable can decide with care. Free, open source, and runs locally.
 
-**Status:** Stable · `v2.8.0`. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
+**Status:** Stable · `v2.8.1`. The automation path is tested in GitHub Actions and blocks critical governance findings by default. This repository is not a certification, legal opinion, regulatory determination, or guarantee of production readiness.
 
-**Latest release:** v2.8.0. The command is `gaig`. A human determines organizational maturity: the toolkit checks the submitted evidence and does not score, certify, or authorize.
+**Latest release:** v2.8.1. The command is `gaig`. A human determines organizational maturity: the toolkit checks the submitted evidence and does not score, certify, or authorize.
 
 ## Start Here
 
@@ -35,7 +35,7 @@ Neither example is a real security assessment, and a passing result does not aut
 
 The browser uses the same generated contract and policy bundle as the CLI. Parity tests protect normalization, findings, result states, and the non-authorizing handoff boundary.
 
-First-time users can run the sample, download the contract-generated blank CSV template, load a completed inventory, review plain-language guidance alongside stable technical rule IDs, and download the Decision Pack. Agents and technical integrations can begin with [`web/machine-interface.json`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/web/machine-interface.json) instead of scraping prose.
+First-time users can run the sample, download the contract-generated blank CSV template, load a completed inventory, review plain-language guidance alongside stable technical rule IDs, and download the Decision Pack. Agents and technical integrations can begin with [`web/machine-interface.json`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/web/machine-interface.json) instead of scraping prose.
 
 For a reviewed local copy:
 
@@ -47,7 +47,7 @@ Then open `http://127.0.0.1:8000/web/`.
 
 ### Static hosting boundary
 
-The browser is deployed through the repository-native [GitHub Pages workflow](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/.github/workflows/pages.yml), with GitHub Actions as the Pages source.
+The browser is deployed through the repository-native [GitHub Pages workflow](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/.github/workflows/pages.yml), with GitHub Actions as the Pages source.
 
 Static hosting does not change the data boundary: CSV content is read by the browser on the local device, processing occurs in browser memory, and downloads are generated locally. The site has no backend, upload path, application login, telemetry, service worker, or runtime network request. Organizations should still serve a reviewed commit and apply their own browser, device, and data-handling controls.
 
@@ -55,7 +55,7 @@ To install the command-line tool, follow the [Quick Start](#quick-start) below.
 
 The command is `gaig` and the import package is `gaig_toolkit`.
 
-The installed CLI and the repository-relative compatibility script use the same local, network-free reference runtime. See [Machine Interfaces](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/docs/MACHINE_INTERFACES.md), [Compatibility Policy](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/docs/COMPATIBILITY.md), and [Local Data Handling](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/docs/LOCAL_DATA_HANDLING.md).
+The installed CLI and the repository-relative compatibility script use the same local, network-free reference runtime. See [Machine Interfaces](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/docs/MACHINE_INTERFACES.md), [Compatibility Policy](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/docs/COMPATIBILITY.md), and [Local Data Handling](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/docs/LOCAL_DATA_HANDLING.md).
 
 The current automation pipeline:
 
@@ -69,19 +69,19 @@ The current automation pipeline:
 
 ### Quick Start
 
-**Fastest CLI path, no clone:** install the v2.8.0 release wheel and run the sample with gaps. Requires Python 3.11 or later and `curl`.
+**Fastest CLI path, no clone:** install the v2.8.1 release wheel and run the sample with gaps. Requires Python 3.11 or later and `curl`.
 
 ```bash
 python3 -m venv gaig-venv && . gaig-venv/bin/activate   # Python 3.11 or later
-python -m pip install https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.0/global_ai_governance-2.8.0-py3-none-any.whl
-curl -fsSLO https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.0/automation/sample-data/sample-ai-inventory.csv
+python -m pip install https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.1/global_ai_governance-2.8.1-py3-none-any.whl
+curl -fsSLO https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.1/automation/sample-data/sample-ai-inventory.csv
 OUT="$(mktemp -d)"
 gaig check sample-ai-inventory.csv --outdir "$OUT" --fail-on none
 gaig verify "$OUT"
 grep -m1 "BLOCKED BY CRITICAL FINDINGS" "$OUT/decision-pack/executive-summary.md"
 ```
 
-TESTED in a clean environment: both commands exit `0` and the last line prints the blocked-state summary. To check the wheel, download `SHA256SUMS` from the same release and run `grep ' global_ai_governance-2.8.0-py3-none-any.whl$' SHA256SUMS | sha256sum -c -`; with the GitHub CLI, `gh attestation verify global_ai_governance-2.8.0-py3-none-any.whl --owner GLOBAL-AI-GOVERNANCE` checks build provenance. The package is not on PyPI.
+TESTED in a clean environment: both commands exit `0` and the last line prints the blocked-state summary. To check the wheel, download `SHA256SUMS` from the same release and run `grep ' global_ai_governance-2.8.1-py3-none-any.whl$' SHA256SUMS | sha256sum -c -`; with the GitHub CLI, `gh attestation verify global_ai_governance-2.8.1-py3-none-any.whl --owner GLOBAL-AI-GOVERNANCE` checks build provenance. The package is not on PyPI.
 
 **From a checkout:** Python 3.11 (the version used in hosted CI) and Git. Reports go to a new temporary directory, so the run changes no tracked file in the checkout.
 
@@ -96,9 +96,9 @@ gaig verify "$OUT"
 grep -m1 "BLOCKED BY CRITICAL FINDINGS" "$OUT/decision-pack/executive-summary.md"
 ```
 
-Expected: both commands exit `0`, and the last line prints the `BLOCKED BY CRITICAL FINDINGS` status line from the Decision Pack summary. Open `"$OUT/decision-pack/"` to review the pack. To use the published release instead of current `main`, add `--branch v2.8.0` to `git clone`.
+Expected: both commands exit `0`, and the last line prints the `BLOCKED BY CRITICAL FINDINGS` status line from the Decision Pack summary. Open `"$OUT/decision-pack/"` to review the pack. To use the published release instead of current `main`, add `--branch v2.8.1` to `git clone`.
 
-The bundled sample intentionally includes systems with critical control gaps. The quick start therefore uses explicit report-only mode so the toolkit can generate a blocked-state Decision Pack for review. Remove `--fail-on none` to exercise the default fail-closed gate. To check your own systems, download the [blank template](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/web/ai-system-inventory-template.csv), fill one row per AI system or agent, and pass that file instead of the sample. The repository-relative script `python automation/scripts/run_governance_checks.py` accepts the same arguments.
+The bundled sample intentionally includes systems with critical control gaps. The quick start therefore uses explicit report-only mode so the toolkit can generate a blocked-state Decision Pack for review. Remove `--fail-on none` to exercise the default fail-closed gate. To check your own systems, download the [blank template](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/web/ai-system-inventory-template.csv), fill one row per AI system or agent, and pass that file instead of the sample. The repository-relative script `python automation/scripts/run_governance_checks.py` accepts the same arguments.
 
 Default behavior is fail-closed for `CRITICAL` findings:
 
@@ -108,7 +108,7 @@ Default behavior is fail-closed for `CRITICAL` findings:
 
 ### GitHub Action
 
-The repository root provides a composite action that installs the toolkit into an isolated virtual environment and runs `gaig check` on an inventory CSV. It first shipped in release v2.6.0. Pin it to the full commit SHA of the v2.8.0 tag (`958c9753cfb34cded253ee56bf103561e2ee22d0`) or a later commit from `main`.
+The repository root provides a composite action that installs the toolkit into an isolated virtual environment and runs `gaig check` on an inventory CSV. It first shipped in release v2.6.0. Pin it to the full commit SHA of the v2.8.1 tag (shown on the release page) or a later commit from `main`.
 
 ```yaml
 - uses: actions/checkout@<commit-sha>
@@ -138,11 +138,11 @@ The sovereignty checker is additive to the primary Decision Pack runtime. `gover
 
 ## Advanced Profiles
 
-The current registry contains the released optional profile set. v2.3.0 introduced Auditable AI, the synthetic Quantum-AI exercise, and CISO accountability. v2.4.0 added independent assurance, mission assurance, and machine-learning assurance. v2.5.0 added organizational AI maturity evidence. v2.8.0 makes independent assurance require an agent passport reference and a passing shutdown test no older than 90 days for an autonomous agent. Organizational maturity has its own local-first maturity route. [`automation/profiles/registry.json`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/automation/profiles/registry.json) is the discovery source of truth for registered and browser-supported profiles. They follow one additive path:
+The current registry contains the released optional profile set. v2.3.0 introduced Auditable AI, the synthetic Quantum-AI exercise, and CISO accountability. v2.4.0 added independent assurance, mission assurance, and machine-learning assurance. v2.5.0 added organizational AI maturity evidence. v2.8.1 makes independent assurance require an agent passport reference and a passing shutdown test no older than 90 days for an autonomous agent. Organizational maturity has its own local-first maturity route. [`automation/profiles/registry.json`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/automation/profiles/registry.json) is the discovery source of truth for registered and browser-supported profiles. They follow one additive path:
 
 Decision Pack → optional advanced profile → profile result + evidence → accountable human review → optional non-authorizing handoff.
 
-Profiles emit the common deterministic `profile-result.json` with `authority_effect: NONE`. They may reference a Decision Pack but never rewrite it, approve deployment, accept risk, certify compliance, attest provider behavior, establish safety, or transfer authority. See [`automation/profiles/registry.json`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/automation/profiles/registry.json).
+Profiles emit the common deterministic `profile-result.json` with `authority_effect: NONE`. They may reference a Decision Pack but never rewrite it, approve deployment, accept risk, certify compliance, attest provider behavior, establish safety, or transfer authority. See [`automation/profiles/registry.json`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/automation/profiles/registry.json).
 
 ## Current Outputs
 
@@ -332,25 +332,25 @@ The repository preserves the following development lineage:
 - v2.6.1: First-Run Experience
 - v2.7.0: `gaig` Only
 - v2.7.1: Plain Run Output
-- v2.8.0: Resolvable Schema Identifiers
+- v2.8.1: Resolvable Schema Identifiers
 - Current public identity: Global AI Governance Toolkit
 
 Historical version names remain in version-specific release records where appropriate.
 
 ## Release Verification
 
-- Review [v2.4.0 release notes](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/release-notes/v2.4.0.md).
-- Review [v2.3.0 release readiness](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/docs/release-readiness-v2.3.0.md).
-- Review the [v2.3.0 release notes](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/release-notes/v2.3.0-assurance-accountability-profiles.md).
-- Review the [v2.4.0 release gate](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/docs/release-readiness-v2.4.0.md).
-- Release assets (wheel, sdist, and `SHA256SUMS`) are built from the release tag and attached by the [Release Assets workflow](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/.github/workflows/release-assets.yml). For releases published after v2.7.0, the workflow also attaches a CycloneDX SBOM (`*.cdx.json`) and records a GitHub build-provenance attestation for every asset listed in `SHA256SUMS`; check one with `gh attestation verify <file> --repo GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit`. Releases up to and including v2.7.0 have no SBOM or attestation. From v2.8.0, the wheel and sdist are named after the distribution `global-ai-governance` (for example `global_ai_governance-2.8.0-py3-none-any.whl`); earlier releases keep their file names, and the `gaig` command is the same.
+- Review [v2.4.0 release notes](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/release-notes/v2.4.0.md).
+- Review [v2.3.0 release readiness](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/docs/release-readiness-v2.3.0.md).
+- Review the [v2.3.0 release notes](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/release-notes/v2.3.0-assurance-accountability-profiles.md).
+- Review the [v2.4.0 release gate](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/docs/release-readiness-v2.4.0.md).
+- Release assets (wheel, sdist, and `SHA256SUMS`) are built from the release tag and attached by the [Release Assets workflow](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/.github/workflows/release-assets.yml). For releases published after v2.7.0, the workflow also attaches a CycloneDX SBOM (`*.cdx.json`) and records a GitHub build-provenance attestation for every asset listed in `SHA256SUMS`; check one with `gh attestation verify <file> --repo GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit`. Releases up to and including v2.7.0 have no SBOM or attestation. From v2.8.1, the wheel and sdist are named after the distribution `global-ai-governance` (for example `global_ai_governance-2.8.1-py3-none-any.whl`); earlier releases keep their file names, and the `gaig` command is the same.
 - Run `python -B automation/scripts/validate_repository.py`.
 - Run `python -B automation/scripts/build_decision_pack_example.py --check`.
 
 ## Security and License
 
-- Security boundary: [SECURITY.md](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/SECURITY.md).
-- Licensed under the [MIT License](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/LICENSE).
+- Security boundary: [SECURITY.md](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/SECURITY.md).
+- Licensed under the [MIT License](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/LICENSE).
 
 <!-- gaig:footer -->
 ## Part of Global AI Governance
