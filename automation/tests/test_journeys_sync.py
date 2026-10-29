@@ -117,11 +117,11 @@ class JourneysSyncTests(unittest.TestCase):
             self.assertTrue(badge.group(1).startswith(tag + " "), (repo, tag, badge.group(1)))
 
     def test_start_is_linked_from_every_page_and_listed_in_the_sitemap(self) -> None:
-        for page, href in (("index.html", "./start.html"), ("connect.html", "./start.html"), ("maturity/index.html", "../start.html"), ("start.html", "./start.html")):
+        for page, href in (("index.html", "./start.html"), ("connect.html", "./start.html"), ("maturity/index.html", "../start.html"), ("start.html", "./start.html"), ("lead-agent/index.html", "../start.html"), ("interoperability.html", "./start.html")):
             nav = re.search(r'<span class="gaig-links">(.*?)</span>', read(f"web/{page}"), re.S).group(1)
             self.assertIn(f'<a href="{href}"', nav, page)
         sitemap = read("web/sitemap.xml")
-        for url in ("start.html", "JOURNEYS.md"):
+        for url in ("start.html", "JOURNEYS.md", "lead-agent/", "interoperability.html"):
             self.assertIn(f"<loc>{SITE}{url}</loc>", sitemap)
         pages = read(".github/workflows/pages.yml")
         self.assertIn('- "docs/JOURNEYS.md"', pages)

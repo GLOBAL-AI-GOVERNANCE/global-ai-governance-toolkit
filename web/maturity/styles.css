@@ -120,3 +120,9 @@ button.category[aria-current="true"] { font-weight: 700; color: var(--g-text); }
 @media (max-width: 520px) { .shell { width: calc(100% - 32px); } .gaig-links { order: 3; flex: 1 1 100%; gap: 18px; } header { padding-block: 40px 28px; } }
 .file-button { gap: .75rem; background: transparent; color: var(--g-text); border-color: var(--g-line-strong); }
 .file-button input { width: auto; border: 0; padding: 0; background: transparent; color: var(--g-text-muted); font-size: var(--g-text-sm); }
+
+html { scroll-padding-top: 6rem; }
+[id] { scroll-margin-top: 6rem; }
+
+#import-status { margin: .75em 0 0; max-width: 42rem; color: var(--g-text-2); }
+#import-status[data-state="error"] { color: var(--g-signal); font-weight: 600; }

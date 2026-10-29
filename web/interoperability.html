@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="How Global AI Governance works with public agent stacks and protocols. Tested statuses, honest gaps, no endorsement implied.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ai-governance.solutions/interoperability.html">
+  <meta property="og:title" content="Interoperability · Global AI Governance">
+  <meta property="og:description" content="Works-with matrix for MCP, OpenAI, Anthropic, Google A2A, Microsoft, LangGraph, CrewAI, and more. Tested, not verified.">
+  <meta property="og:site_name" content="Global AI Governance">
+  <meta property="og:image" content="https://ai-governance.solutions/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Global AI Governance: governance for AI agencies, agent fleets, and AI-run companies">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Interoperability · Global AI Governance</title>
+  <link rel="canonical" href="https://ai-governance.solutions/interoperability.html">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="alternate" type="application/json" href="./machine-interface.json" title="Machine interface">
+  <link rel="alternate" type="text/plain" href="./llms.txt" title="llms.txt">
+</head>
+<body>
+  <a class="skip-link" href="#top">Skip to main content</a>
+  <nav class="gaig-bar shell" aria-label="Global AI Governance sites">
+    <a class="gaig-brand" href="./">Global AI Governance</a>
+    <span class="gaig-links"><a href="./start.html">Start here</a><a href="./#toolkit">Toolkit</a><a href="./connect.html">Connect</a><a href="./lead-agent/">Lead Agent</a><a href="./interoperability.html" aria-current="page">Interop</a><a href="https://global-ai-governance.github.io/containment-ledger/">Containment Ledger</a><a href="https://global-ai-governance.github.io/peace-os/">Peace OS</a></span>
+    <a class="gaig-cta" href="./connect.html#agents">Connect your agent</a>
+  </nav>
+  <main id="top" tabindex="-1">
+    <section class="shell connect-section connect-hero g-field" aria-labelledby="interop-title">
+      <p class="eyebrow">Works with</p>
+      <h1 id="interop-title">Interoperability</h1>
+      <p class="lede">Connect the suite to the agent stacks and protocols you already use. Statuses are what we tested. No logos. No implied endorsement or affiliation.</p>
+      <p><a href="./start.html">Start where you are</a> · <a href="./lead-agent/">Lead Agent</a> · <a href="https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/INTEROP.md">Source doc</a></p>
+    </section>
+    <section class="shell connect-section" aria-labelledby="how-heading">
+      <h2 id="how-heading">How to read a row</h2>
+      <ul>
+        <li><strong>TESTED</strong> — we ran the path against the published open-source tool or config (usually with a mock model).</li>
+        <li><strong>AVAILABLE</strong> — a recipe, adapter, or file ships; launch or offline coverage only.</li>
+        <li><strong>DOCUMENTED</strong> — research notes; no adapter yet, or an honest gap.</li>
+      </ul>
+      <p>Our runs are TESTED, never VERIFIED. Product use does not wait on external reviews.</p>
+    </section>
+    <section class="shell connect-section" aria-labelledby="matrix-heading">
+      <h2 id="matrix-heading">Matrix</h2>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Interoperability matrix">
+        <table class="status-table">
+          <thead>
+            <tr><th scope="col">Stack</th><th scope="col">Works with</th><th scope="col">How tested</th><th scope="col">Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Model Context Protocol</th><td><code>gaig-mcp</code>; Claude Code, Desktop, Cursor, VS Code, Codex, Gemini CLI, LangGraph</td><td>stdio ClientSession; tools list; <code>authority_effect: NONE</code></td><td><span class="g-badge" data-g-status="done">TESTED</span></td></tr>
+            <tr><th scope="row">MCP registry</th><td><code>server.json</code> on ai-governance-mcp</td><td>Schema fields; launch args pin v0.5.0</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">OpenAI Agents SDK</th><td>Guardrails adapter + hooks pattern</td><td>Offline mock; deny Level 5; Level 4 via automated operator</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">OpenAI Codex CLI</th><td><code>~/.codex/config.toml</code></td><td>One recorded local stdio run (Codex CLI 0.151.0)</td><td><span class="g-badge" data-g-status="done">TESTED</span></td></tr>
+            <tr><th scope="row">OpenAI AGENTS.md</th><td>Suite AGENTS.md files</td><td>Machine front door + suite path</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">Anthropic MCP / Claude Code</th><td>Spec-shaped server; PreToolUse hooks</td><td>Hook dry-run offline; launch tested</td><td><span class="g-badge" data-g-status="done">TESTED / AVAILABLE</span></td></tr>
+            <tr><th scope="row">Anthropic Claude Agent SDK</th><td>Passport + Action Level hook</td><td>Offline against published hook contract</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">Anthropic SKILL.md</th><td>Skill files in MCP and Agentic</td><td>File present; not run inside Claude</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">Google A2A</th><td>A2A passport extension + agent card notes</td><td>Schema + docs; offline</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">Google ADK / Gemini CLI</th><td>Gemini CLI MCP recipe</td><td>Launch command; not inside Gemini</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">Microsoft Agent Framework / AutoGen / Semantic Kernel</th><td>MCP stdio client pattern</td><td>Documented; VS Code mcp.json launch tested</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">VS Code MCP</th><td><code>.vscode/mcp.json</code></td><td>Launch tested; not inside VS Code</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">LangGraph</th><td>MCP tool node example</td><td>Offline graph with mock model</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">CrewAI / LlamaIndex / smolagents</th><td>Tool-call guard wrapper</td><td>Offline mock</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">AWS Strands / AgentCore</th><td>MCP client notes</td><td>Research only</td><td><span class="g-badge" data-g-status="pending">DOCUMENTED</span></td></tr>
+            <tr><th scope="row">OpenTelemetry GenAI</th><td>Span attributes for check calls</td><td>Example exporter; offline</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">AAIF / AGNTCY</th><td>Alignment notes</td><td>Research only</td><td><span class="g-badge" data-g-status="pending">DOCUMENTED</span></td></tr>
+            <tr><th scope="row">xAI</th><td>OpenAI-compatible Lead Agent serve; Grok CLI MCP recipe</td><td>Launch + mock; not inside Grok</td><td><span class="g-badge" data-g-status="done">AVAILABLE</span></td></tr>
+            <tr><th scope="row">SpaceX</th><td>—</td><td>No public agent SDK found</td><td><span class="g-badge" data-g-status="pending">DOCUMENTED (gap)</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="shell connect-section" aria-labelledby="lead-heading">
+      <h2 id="lead-heading">Lead Agent</h2>
+      <p>The browser <a href="./lead-agent/">Lead Agent</a> runs a deterministic mock model with no account or key. Optional local serve from Agentic AI Governance talks to OpenAI-, Anthropic-, or xAI-compatible endpoints when keys sit in the local environment. Keys never enter the browser.</p>
+    </section>
+    <section class="shell connect-section" aria-labelledby="limits-heading">
+      <h2 id="limits-heading">Limitations</h2>
+      <ul>
+        <li>Adapters wrap Action Levels and passports; they do not authorize any action.</li>
+        <li>Client-inside sessions are mostly launch-tested, not session-tested.</li>
+        <li>Evidence gates that wait on outside parties stay unchanged and are not required for these paths.</li>
+      </ul>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="shell">
+      <p class="gaig-footer-ctas"><a href="./start.html">Start where you are</a> · <a href="./JOURNEYS.md">Journeys</a> · <a href="./connect.html#agents">Connect your agent</a> · <a href="./lead-agent/">Lead Agent</a></p>
+      <p>Global AI Governance · open, local-first, non-authorizing</p>
+    </div>
+  </footer>
+</body>
+</html>

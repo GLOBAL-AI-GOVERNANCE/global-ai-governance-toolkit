@@ -4,29 +4,39 @@ This guide is for an AI agent, or a lead agent / orchestrator, that has been ask
 
 Live copy: <https://ai-governance.solutions/AGENT_SETUP.md>. Source: [`docs/AGENT_SETUP.md`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/AGENT_SETUP.md).
 
-Status: TESTED end to end in a clean Linux environment (Python 3.13, uv) by running the commands below in order. It is not independently verified, and it has not been run inside Claude Code, Claude Desktop, Cursor, VS Code, or the Grok CLI; the client configs are launch-tested only.
+Status: TESTED end to end in a clean Linux environment (Python 3.13, uv) by running the commands below in order. It is not independently verified, and it has not been run inside Claude Code, Claude Desktop, Cursor, VS Code, the Grok CLI, or the Gemini CLI; the client configs are launch-tested only.
 
-What an agent can set up alone, and what stays with people:
+Every step runs unattended. Nothing in this guide waits for a person. Two kinds of item are not steps:
 
-| An agent can do this unattended | This stays with an accountable person |
-|---|---|
-| Install the CLI, the MCP server, and the guards | Approve, deploy, accept risk, or shut down a system |
-| Run checks and build a Decision Pack | Decide on the Decision Pack |
-| Validate an Agent Trust Passport | Issue a passport and hold its signing key |
-| Record vulnerability evidence | Approve a closure proof |
+| Runs unattended | Operator safety setting (default: a person) | External gates (not run here, not claimed) |
+|---|---|---|
+| Install the CLI, the MCP server, and the guards | Level 4 tool calls: ask a person by default, or go to the operator's automated approver for the tools its policy lists (step 6) | Independent review of the AI Cyber Resilience Framework (G7) |
+| Run checks and build a Decision Pack | Risk acceptance (`approved_exception`) and `manual_review` closure proofs | Independent verification of Agentic AI Governance |
+| Issue, validate, revoke, and refresh passports from a policy file (step 7) | Level 5 tool calls: always denied, with no setting to change that | Independent audit of Governed Systems Administration |
+| Guard every tool call by passport and Action Level | | Human validation of Peace OS |
+| Run the reference lead agent / orchestrator and its shutdown tests (step 7) | | |
+| Close a vulnerability when a fresh rescan no longer reports it (step 8) | | |
 
 Every output carries `authority_effect: NONE`. A passing check means no check stopped the work; it is not an approval.
+
+## Fastest path: one command
+
+```text
+curl -fsSLO https://ai-governance.solutions/bootstrap.sh && bash bootstrap.sh
+```
+
+[`bootstrap.sh`](https://ai-governance.solutions/bootstrap.sh) runs steps 0 to 8 below without a prompt: it installs every component from its release tag into `gaig-setup/.venv`, issues passports for a sample fleet, guards three tool calls, runs the lead agent demo, closes a vulnerability from a rescan, and ends with a done check where every line ends in `ok`. Exit code 0 means every check passed. Read it before you run it; it is short. Run it again in the same folder and it repeats the checks. The steps below do the same thing one at a time.
 
 ## Current versions
 
 | Component | Version | Install |
 |---|---|---|
 | Toolkit (`gaig` CLI) | v2.8.0 | release wheel |
-| AI Governance MCP (`gaig-mcp`) | v0.4.0 | `uvx` from the tag |
-| Agentic AI Governance (`validate-passport`) | v0.1.0-alpha.4 | `pip` from the tag |
-| Verified Vulnerability Governance (`vvd`) | v0.3.0 | `pip` from the tag |
+| AI Governance MCP (`gaig-mcp`) | v0.5.0 | `uvx` from the tag |
+| Agentic AI Governance (`validate-passport`) | v0.1.0-alpha.5 | `pip` from the tag |
+| Verified Vulnerability Governance (`vvd`) | v0.4.0 | `pip` from the tag |
 
-`gaig-mcp` v0.4.0 bundles the Toolkit at v2.7.2 (commit `cc5f599`) and Agentic AI Governance at commit `58bdfb2`. Its outputs report those commits in `source`.
+`gaig-mcp` v0.5.0 bundles the Toolkit at v2.7.2 (commit `cc5f599`) and Agentic AI Governance at commit `58bdfb2`. Its outputs report those commits in `source`.
 
 ## 0. Requirements
 
@@ -48,7 +58,7 @@ curl -fsSL https://ai-governance.solutions/machine-interface.json \
   | python -c "import json,sys; d=json.load(sys.stdin); print(d['machine_interface_version'], d['release'])"
 ```
 
-Expect the llms.txt title `# Global AI Governance Toolkit` and its `## Agent setup (start here)` section, then `1.5.0 v2.8.0`.
+Expect the llms.txt title `# Global AI Governance Toolkit` and its `## Agent setup (start here)` section, then `1.6.0 v2.8.0`.
 
 The schema URLs in llms.txt and machine-interface.json point at the `v2.7.2` tag on purpose: those schemas did not change in v2.8.0, and their `$id` values name v2.7.2.
 
@@ -92,7 +102,7 @@ gaig check sample-with-gaps.csv --outdir out-gaps --fail-on none >/dev/null
 python -c "import json; r=json.load(open('out-gaps/governance-result.json')); print(r['governance_gate_state'], r['finding_count'])"
 ```
 
-Expect `BLOCKED 5`: five findings for a person to review. Without `--fail-on none`, `gaig check` exits nonzero when findings meet the threshold, which is how a pipeline stops for review.
+Expect `BLOCKED 5`: five findings to resolve. Without `--fail-on none`, `gaig check` exits nonzero when findings meet the threshold, which is how a pipeline stops for review.
 
 To check your own systems, download the blank template from <https://ai-governance.solutions/ai-system-inventory-template.csv>, fill one row per AI system or agent, and run `gaig check` on it. `gaig verify` works on `gaig check` output folders only.
 
@@ -119,10 +129,10 @@ The independent assurance case is dated. Without `--evaluation-time` it is judge
 
 ```bash
 command -v uvx >/dev/null || python -m pip install --quiet uv
-uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0 gaig-mcp --version
+uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0 gaig-mcp --version
 ```
 
-The first run builds the package from the tag in a few seconds. Expect `0.4.0`. The server speaks stdio by default. Add `--http --port 8000` for Streamable HTTP at `/mcp`.
+The first run builds the package from the tag in a few seconds. Expect `0.5.0`. The server speaks stdio by default. Add `--http --port 8000` for Streamable HTTP at `/mcp`.
 
 Check it the way an MCP client would. This script starts the server, lists its tools, and calls each read-only tool once:
 
@@ -132,7 +142,7 @@ cat > mcp_check.py <<'PY'
 import json, subprocess
 
 CMD = ["uvx", "--from",
-       "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0", "gaig-mcp"]
+       "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0", "gaig-mcp"]
 proc = subprocess.Popen(CMD, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                         stderr=subprocess.DEVNULL, text=True)
 next_id = 0
@@ -175,14 +185,14 @@ python mcp_check.py
 Expect:
 
 ```text
-server gaig-mcp 0.4.0
+server gaig-mcp 0.5.0
 tools ['build_decision_pack', 'check_inventory', 'validate_passport']
 check_inventory VALID BLOCKED authority_effect NONE
 validate_passport signed-unrevoked VALID exit 0
 validate_passport signed-revoked REVOKED exit 1
 ```
 
-The server's sample inventory is the one with gaps, so `BLOCKED` is the expected result: the check found missing owners, monitoring, or shutdown paths for a person to review.
+The server's sample inventory is the one with gaps, so `BLOCKED` is the expected result: the check found missing owners, monitoring, or shutdown paths.
 
 ## 5. Register the server with your agent client
 
@@ -192,13 +202,13 @@ Claude Code:
 
 ```text
 claude mcp add gaig --scope project -- \
-  uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0 gaig-mcp
+  uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0 gaig-mcp
 ```
 
 Grok CLI:
 
 ```text
-grok mcp add gaig -- uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0 gaig-mcp
+grok mcp add gaig -- uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0 gaig-mcp
 ```
 
 Codex (`~/.codex/config.toml`):
@@ -206,7 +216,7 @@ Codex (`~/.codex/config.toml`):
 ```toml
 [mcp_servers.gaig]
 command = "uvx"
-args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0", "gaig-mcp"]
+args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0", "gaig-mcp"]
 ```
 
 Claude Desktop, Cursor (`.cursor/mcp.json`), or a project `.mcp.json`:
@@ -216,22 +226,24 @@ Claude Desktop, Cursor (`.cursor/mcp.json`), or a project `.mcp.json`:
   "mcpServers": {
     "gaig": {
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0", "gaig-mcp"]
+      "args": ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0", "gaig-mcp"]
     }
   }
 }
 ```
 
-VS Code uses the same entry under `servers` in `.vscode/mcp.json`. Ready-made files for each client are in [`examples/client-configs/`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.4.0/examples/client-configs). After a restart, the client should list `check_inventory`, `build_decision_pack`, and `validate_passport`. Remote platforms (ChatGPT, the OpenAI, Anthropic, and xAI APIs, grok.com) cannot reach stdio or localhost; they need an HTTPS server you host, as described in the [MCP README](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.4.0/README.md).
+Gemini CLI (`.gemini/settings.json`): the same entry under `mcpServers`, as in [`gemini-cli.settings.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.0/examples/client-configs/gemini-cli.settings.json). Keep the server alias free of underscores; the Gemini CLI names its tools `mcp_gaig_check_inventory`.
+
+VS Code uses the same entry under `servers` in `.vscode/mcp.json`. Ready-made files for each client are in [`examples/client-configs/`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.5.0/examples/client-configs). After a restart, the client should list `check_inventory`, `build_decision_pack`, and `validate_passport`. Remote platforms (ChatGPT, the OpenAI, Anthropic, and xAI APIs, grok.com) cannot reach stdio or localhost; they need an HTTPS server you host, as described in the [MCP README](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.0/README.md).
 
 ## 6. Guard tool calls with Action Levels
 
-The Action Level guard is a `PreToolUse` hook for Claude Code and the Grok CLI. Levels 0 to 3 run, Level 4 asks an accountable person (Claude Code) or is denied (the Grok CLI, whose hooks cannot ask), and Level 5 is denied. A tool without a level counts as Level 4. The hook files are not in the package, so fetch them from the tag:
+The Action Level guard is a `PreToolUse` hook for Claude Code and the Grok CLI, and a `BeforeTool` hook for the Gemini CLI. Levels 0 to 3 run, and Level 5 is denied. Level 4 is an operator safety setting: by default it asks a person (Claude Code) or is denied (the Grok and Gemini CLIs, whose hooks cannot ask); the operator can instead route listed Level 4 tools to an automated approver, below. A tool without a level counts as Level 4. The hook files are not in the package, so fetch them from the tag:
 
 ```bash
 HOOKS=.claude/hooks   # for the Grok CLI, use .grok/hooks
 mkdir -p "$HOOKS"
-STACKS=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/v0.4.0/examples/agent-stacks
+STACKS=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/v0.5.0/examples/agent-stacks
 for f in tool_call_hook.py action_level_guard.py passport_tool_call_hook.py; do
   curl -fsSL -o "$HOOKS/$f" "$STACKS/$f"
 done
@@ -247,14 +259,30 @@ done
 
 Expect an empty decision (allow) for `mcp__gaig__check_inventory`, `"permissionDecision": "ask"` for `send_external_email`, and `"permissionDecision": "deny"` for `delete_records`. List your own tools and levels in `action-levels.json`; one entry covers the plain name and its `mcp__server__` (Claude Code) or `server__` (Grok CLI) form.
 
-To turn the hook on, merge [`claude-code.settings.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.4.0/examples/client-configs/claude-code.settings.json) into `.claude/settings.json`, and add `--policy "$CLAUDE_PROJECT_DIR/.claude/hooks/action-levels.json"` to its command. For the Grok CLI, put [`grok-cli.hooks.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.4.0/examples/client-configs/grok-cli.hooks.json) in `.grok/hooks/` and trust it with `/hooks-trust`. These hook entries are TESTED with recorded-format input, not inside either client.
+To turn the hook on, merge [`claude-code.settings.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.0/examples/client-configs/claude-code.settings.json) into `.claude/settings.json`, and add `--policy "$CLAUDE_PROJECT_DIR/.claude/hooks/action-levels.json"` to its command. For the Grok CLI, put [`grok-cli.hooks.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.0/examples/client-configs/grok-cli.hooks.json) in `.grok/hooks/` and trust it with `/hooks-trust`. For the Gemini CLI, use [`gemini-cli.settings.json`](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.0/examples/client-configs/gemini-cli.settings.json) and put the hook files in `.gemini/hooks/`. These hook entries are TESTED with documented-format input, not inside any of the three clients.
+
+### Run Level 4 unattended (operator safety setting)
+
+A policy file can name an automated approver that the operator runs, and list the Level 4 tools it approves. Those calls then run with no person in the loop, and every decision records `approved_by`. Every other Level 4 call still asks; unknown tools are never auto-approved; Level 5 is always denied; and the approver can only list tools the same policy puts at Level 4.
+
+```bash
+curl -fsSL -o "$HOOKS/action-levels.approver.json" \
+  https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/v0.5.0/examples/policies/action-levels.automated-approver.json
+for t in mcp__gh__open_pull_request mcp__crm__send_external_email mcp__crm__delete_records; do
+  printf '%s -> ' "$t"
+  printf '{"tool_name": "%s"}' "$t" | python "$HOOKS/tool_call_hook.py" --policy "$HOOKS/action-levels.approver.json"
+  echo
+done
+```
+
+Expect `"permissionDecision": "allow"` with the reason `Level 4: approved by the operator's automated approver operator.ci-approver (listed in policy)` for `open_pull_request`, `"permissionDecision": "ask"` for `send_external_email`, and `"permissionDecision": "deny"` for `delete_records`. Point `--policy` at this file to use it. Edit `level_4_approver.approve` to choose which Level 4 tools run unattended; remove `level_4_approver` to send every Level 4 call to a person.
 
 ### Check the passport too
 
 `check_tool_call` combines the passport check, the revocation check, and the Action Level, at the server's own clock. It is a Python function and a hook, not an MCP tool. The bundled example passports are dated, so at today's clock they are expired, and the check denies. That is the expected result:
 
 ```bash
-python -m pip install --quiet "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.4.0"
+python -m pip install --quiet "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.0"
 python -c "
 from gaig_mcp.core import check_tool_call
 r = check_tool_call('send_external_email', tool_level=4, example='signed-unrevoked')['result']
@@ -263,12 +291,12 @@ print(r['call_disposition']); print(r['reasons'][0])"
 
 Expect `deny`, then `Passport did not verify at the server clock time (status EXPIRED).`
 
-An `allow` or `ask` needs a real passport, its trusted key, a current signed revocation list, and the evidence bundle. An accountable person issues the passport and holds the signing key; an agent cannot issue its own. With those files in place, run `passport_tool_call_hook.py` with `--passport`, `--trusted-key`, `--revocation-list`, `--bundle-manifest`, and `--bundle-root`, as described in the [MCP README](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.4.0/README.md#check-the-passport-and-the-action-level-before-each-tool-call).
+An `allow` needs a current passport, its trusted key, a current signed revocation list, and the evidence bundle. Step 7 issues all of them from a policy file, with no manual step, and runs this hook against them.
 
 ## 7. Agent Trust Passports and fleet controls
 
 ```bash
-python -m pip install --quiet "git+https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance@v0.1.0-alpha.4"
+python -m pip install --quiet "git+https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance@v0.1.0-alpha.5"
 validate-passport --example signed-unrevoked >/dev/null; echo "exit $?"
 validate-passport --example signed-revoked >/dev/null; echo "exit $?"
 ```
@@ -278,22 +306,52 @@ Each run also prints, on stderr, that verification is not authorization. Expect 
 The fleet controls reference tool runs from a checkout at the tag:
 
 ```bash
-git -c advice.detachedHead=false clone --quiet --depth 1 --branch v0.1.0-alpha.4 https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance agentic
+git -c advice.detachedHead=false clone --quiet --depth 1 --branch v0.1.0-alpha.5 https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance agentic
 python agentic/tools/fleet_controls.py agentic/examples/fleet-controls/sub-agent-spawn-permitted.json >/dev/null; echo "exit $?"
 python agentic/tools/fleet_controls.py agentic/examples/fleet-controls/ancestor-suspended.json >/dev/null; echo "exit $?"
 ```
 
 Expect `exit 0` (a sub-agent within its parent's ceiling: `PERMITTED`), then `exit 3` (an ancestor's passport is suspended: `NOT_PERMITTED`). Other cases are in `agentic/examples/fleet-controls/`.
 
+### Issue passports from a policy file
+
+`issue-passports` turns a fleet policy into signed passports, a trusted key, a signed revocation list, and an evidence bundle for each agent. It runs unattended, so CI or the operator's own provisioning can issue, revoke, and reissue with no manual step. The policy, not the agent, sets each agent's ceiling, and an agent cannot raise its own.
+
+```bash
+issue-passports issue agentic/examples/fleet-issuance/fleet-policy.json --out fleet/ >/dev/null
+python -c "import json; [print(a['agent_id'], a['verification_primary_status']) for a in json.load(open('fleet/fleet.json'))['agents']]"
+A=fleet/agents/agent.example.researcher
+for t in mcp__gh__open_pull_request mcp__crm__send_external_email mcp__db__delete_records; do
+  printf '%s -> ' "$t"
+  printf '{"tool_name": "%s", "hook_event_name": "PreToolUse"}' "$t" | python "$HOOKS/passport_tool_call_hook.py" \
+    --policy "$HOOKS/action-levels.approver.json" --passport "$A/passport.json" --trusted-key fleet/trusted-key.json \
+    --revocation-list fleet/revocation-list.json --bundle-manifest "$A/bundle-manifest.json" --bundle-root "$A/bundle"
+  echo
+done
+```
+
+Expect three agents, each `VALID`. Then, for the researcher's passport: an empty decision (allow) for `open_pull_request`, `"permissionDecision": "ask"` for `send_external_email`, and `"permissionDecision": "deny"` for `delete_records`. `fleet/signing-key.json` is the issuer's private key: keep it out of version control and out of the agents' reach. `issue-passports --help` lists `revoke` and the other subcommands.
+
+### Run the reference lead agent / orchestrator
+
+The [lead agent](https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/v0.1.0-alpha.5/examples/lead-agent) plans a task, hands parts to sub-agents, and checks every tool call against the passports and Action Levels above. Its demo uses an offline model, needs no API key, and runs its own shutdown tests:
+
+```bash
+lead-agent demo > lead-agent-demo.json; echo "exit $?"
+python -c "import json; d=json.load(open('lead-agent-demo.json')); print('passed', d['passed'], len(d['checks']), 'checks')"
+```
+
+Expect `exit 0`, then `passed True` and the number of checks. A failed check exits 1. A browser version is at [ai-governance.solutions/lead-agent/](https://ai-governance.solutions/lead-agent/); it runs the same offline model on the page.
+
 ## 8. Verified Vulnerability Governance
 
 ```bash
-python -m pip install --quiet "git+https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance@v0.3.0"
+python -m pip install --quiet "git+https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance@v0.4.0"
 mkdir vvg && cd vvg
 vvd init >/dev/null
 vvd asset create --name demo-repo --owner-team appsec >/dev/null
 ASSET_ID=$(vvd asset list | python -c "import json,sys; print(json.loads(sys.stdin.readline())['asset_id'])")
-curl -fsSL -o sample.sarif https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance/v0.3.0/examples/sarif/sample.sarif
+curl -fsSL -o sample.sarif https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance/v0.4.0/examples/sarif/sample.sarif
 vvd finding import --sarif sample.sarif --asset-id "$ASSET_ID"
 vvd finding demo >/dev/null
 vvd close-check --finding-id finding-demo-001; echo "exit $?"
@@ -305,11 +363,34 @@ cd ..
 
 Expect the new finding ID and `Imported 1 finding(s).`, then `Blocked: no approved closure proof exists.` with `exit 1`, then `Closure allowed using manual_review proof.` with `exit 0`, then `Audit chain intact: 7 event(s)` and the chain head.
 
-The demo proof is synthetic test data. For a real finding, an agent records evidence with `vvd evidence add`; the closure proof is approved by a reviewer in a separate role, with `vvd proof add --reviewer ... --decision approved`. An agent should not record that approval for itself.
+### Close a finding from a rescan
 
-## 9. Browser-only tools
+When a fresh scan no longer reports a finding, that rescan is the proof, and closure needs no person. The finding stays open if the rescan still reports it.
 
-[Containment Ledger](https://global-ai-governance.github.io/containment-ledger/) and [Peace OS: Crisis Room](https://global-ai-governance.github.io/peace-os/) run in a browser with no install. They are made for a person to review and decide, so an agent's part is to point the right person to them.
+```bash
+mkdir vvg-rescan && cd vvg-rescan
+for f in before.sarif after-fixed.sarif rescan_closure.py; do
+  curl -fsSLO https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance/v0.4.0/examples/automated-closure/$f
+done
+vvd init >/dev/null
+vvd asset create --name demo-repo --owner-team appsec >/dev/null
+ASSETS=$(vvd asset list)
+ASSET_ID=$(python -c "import json,sys; print(json.loads(sys.argv[1].splitlines()[0])['asset_id'])" "$ASSETS")
+IMPORTED=$(vvd finding import --sarif before.sarif --asset-id "$ASSET_ID")
+FINDING_ID=${IMPORTED%%$'\n'*}
+vvd evidence add --finding-id "$FINDING_ID" --type source_to_sink_trace --summary "Request parameter reaches the HTML response" >/dev/null
+python rescan_closure.py --finding-id "$FINDING_ID" --rescan after-fixed.sarif
+vvd audit verify
+cd ..
+```
+
+Expect a JSON result with `"recorded": true` and `"close_check_exit": 0`, then `Audit chain intact`.
+
+The demo proof in the first block is synthetic test data. For a real finding, a rescan proof (above) closes it unattended. A `manual_review` or `approved_exception` proof is an operator safety setting: it is recorded by a reviewer in a separate role with `vvd proof add --reviewer ... --decision approved`, and the agent that fixed the finding does not record it for itself.
+
+## 9. Browser tools
+
+[Containment Ledger](https://global-ai-governance.github.io/containment-ledger/) and [Peace OS: Crisis Room](https://global-ai-governance.github.io/peace-os/) run in a browser with no install. They are made for review and decision practice. Both are static sites, so an agent can open them in a headless browser; neither records a decision for anyone.
 
 ## Done check
 
@@ -319,14 +400,18 @@ Run this from the `gaig-setup` folder. Every line should end in `ok`:
 check() { if eval "$2" >/dev/null 2>&1; then echo "$1 ok"; else echo "$1 FAILED"; fi; }
 check "toolkit 2.8.0      " "gaig --version | grep -qx '2.8.0'"
 check "decision pack      " "gaig verify out"
-check "mcp server 0.4.0   " "python mcp_check.py | grep -q 'server gaig-mcp 0.4.0'"
+check "mcp server 0.5.0   " "python mcp_check.py | grep -q 'server gaig-mcp 0.5.0'"
 check "action level guard " "printf '{\"tool_name\": \"x__delete_records\"}' | python .claude/hooks/tool_call_hook.py --policy .claude/hooks/action-levels.json | grep -q deny"
 check "passport validator " "validate-passport --example signed-unrevoked"
 check "fleet controls     " "python agentic/tools/fleet_controls.py agentic/examples/fleet-controls/sub-agent-spawn-permitted.json"
 check "vulnerability audit" "cd vvg && vvd audit verify"
+check "fleet passports    " "python -c \"import json,sys; sys.exit(any(a['verification_primary_status']!='VALID' for a in json.load(open('fleet/fleet.json'))['agents']))\""
+check "level 4 approver   " "printf '{\"tool_name\": \"x__open_pull_request\"}' | python .claude/hooks/tool_call_hook.py --policy .claude/hooks/action-levels.approver.json | grep -q allow"
+check "lead agent demo    " "lead-agent demo"
+check "rescan closure     " "cd vvg-rescan && vvd audit verify"
 ```
 
-Then tell the person you work for what is ready, and what is waiting on them: reviewing the Decision Pack, issuing a passport if they want pre-call passport checks, and approving any Level 4 action.
+Then report what ran and its outputs. Nothing above waits on a person. Level 4 tools the operator has not listed for the automated approver still ask a person, Level 5 is always denied, and the external gates in the first table are not run or claimed.
 
 ## If something differs
 
@@ -335,8 +420,8 @@ Then tell the person you work for what is ready, and what is waiting on them: re
 | `input is not valid JSON` from `gaig profile` | Profiles read a JSON case file, not the CSV. Use the cases in step 3. |
 | `independent-assurance-v0.1 ... FAIL`, exit 1 | The case is dated. Pass `--evaluation-time`. |
 | `gaig verify` reports a missing `normalized-inventory.json` | `verify` reads `gaig check` output, not profile output. |
-| `check_tool_call` returns `deny`, status `EXPIRED` | Expected for the bundled examples. A real decision needs a human-issued passport. |
-| Every tool asks for approval | No level is set for it, so it counts as Level 4. Add it to `action-levels.json`. |
+| `check_tool_call` returns `deny`, status `EXPIRED` | Expected for the bundled examples. Issue current passports from a policy file (step 7). |
+| Every tool asks for approval | No level is set for it, so it counts as Level 4. Add it to `action-levels.json`, or list it under `level_4_approver.approve` if it is Level 4 and the operator wants it unattended. |
 | `uvx: command not found` in a client | Use the absolute path from `command -v uvx` in the client config. |
 | Schema URLs name `v2.7.2` | Intended. Those schemas did not change in v2.8.0. |
 
@@ -344,8 +429,10 @@ Then tell the person you work for what is ready, and what is waiting on them: re
 
 - [llms.txt](https://ai-governance.solutions/llms.txt) and [machine-interface.json](https://ai-governance.solutions/machine-interface.json)
 - [Start where you are](https://ai-governance.solutions/start.html) and its Markdown copy, [JOURNEYS.md](https://ai-governance.solutions/JOURNEYS.md)
-- [Connect page](https://ai-governance.solutions/connect.html)
+- [Connect page](https://ai-governance.solutions/connect.html) and its [works-with matrix](https://ai-governance.solutions/connect.html#works-with)
+- [Interoperability](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/INTEROP.md): which agent stacks are tested, and how
+- [Lead agent console](https://ai-governance.solutions/lead-agent/) and the one-command [bootstrap.sh](https://ai-governance.solutions/bootstrap.sh)
 - [Toolkit README](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit#quick-start)
-- [AI Governance MCP](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.4.0)
-- [Agentic AI Governance](https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/v0.1.0-alpha.4)
-- [Verified Vulnerability Governance](https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance/tree/v0.3.0)
+- [AI Governance MCP](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.5.0)
+- [Agentic AI Governance](https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/v0.1.0-alpha.5)
+- [Verified Vulnerability Governance](https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance/tree/v0.4.0)

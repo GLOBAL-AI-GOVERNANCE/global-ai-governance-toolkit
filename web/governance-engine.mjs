@@ -4,6 +4,19 @@ const SCHEMA_VERSION = "1.0.0";
 const GENERATOR_VERSION = "1.0.0";
 const NORMALIZATION_VERSION = "1.0.0";
 const TIME_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+function isStrictUtcTimestamp(value) {
+  if (!TIME_PATTERN.test(value)) return false;
+  const [datePart, timePart] = value.slice(0, -1).split("T");
+  const [year, month, day] = datePart.split("-").map(Number);
+  const [hour, minute, second] = timePart.split(":").map(Number);
+  const instant = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+  return instant.getUTCFullYear() === year
+    && instant.getUTCMonth() === month - 1
+    && instant.getUTCDate() === day
+    && instant.getUTCHours() === hour
+    && instant.getUTCMinutes() === minute
+    && instant.getUTCSeconds() === second;
+}
 
 export class GovernanceInputError extends Error {
   constructor(code, sourceColumn, suppliedValue, expected, remediation) {
@@ -88,8 +101,11 @@ export async function normalizeCsv(text, sourceName = "inventory.csv") {
   if (new Set(canonicalHeaders).size !== canonicalHeaders.length) throw new GovernanceInputError("DUPLICATE_CANONICAL_COLUMN", null, null, [], "Remove source columns that map to the same canonical field.");
   const versionIndex = mapped.indexOf("schema_version");
   if (versionIndex >= 0) {
-    const versions = [...new Set(rawRows.slice(1).map((row) => (row[versionIndex] || "").trim()))];
-    if (versions.length !== 1 || versions[0] !== SCHEMA_VERSION) throw new GovernanceInputError("UNSUPPORTED_SCHEMA_VERSION", headers[versionIndex], versions.join(","), [SCHEMA_VERSION], "Use a supported canonical inventory schema version.");
+    const versions = [...new Set(rawRows.slice(1).map((row) => {
+      const raw = (row[versionIndex] || "").trim();
+      return raw || SCHEMA_VERSION;
+    }))];
+    if (versions.length !== 1 || versions[0] !== SCHEMA_VERSION) throw new GovernanceInputError("UNSUPPORTED_SCHEMA_VERSION", headers[versionIndex], versions.join(","), [SCHEMA_VERSION], "Use schema version 1.0.0, or leave the Schema Version cell blank to use 1.0.0.");
   }
   const required = contracts.canonicalSchema.required.filter((field) => field !== "schema_version");
   const missing = required.filter((field) => !canonicalHeaders.includes(field));
@@ -158,7 +174,7 @@ function markdownDocuments(records, findings, tiers, result) {
 }
 
 export async function evaluateCsv(text, { sourceName = "inventory.csv", evaluationTime = null, failOn = "none", targetRepository = "agentic-ai-governance" } = {}) {
-  if (evaluationTime && !TIME_PATTERN.test(evaluationTime)) throw new GovernanceInputError("INVALID_EVALUATION_TIME", "evaluation_time", evaluationTime, ["YYYY-MM-DDTHH:MM:SSZ"], "Use a UTC timestamp such as 2026-08-29T12:00:00Z.");
+  if (evaluationTime && !isStrictUtcTimestamp(evaluationTime)) throw new GovernanceInputError("INVALID_EVALUATION_TIME", "evaluation_time", evaluationTime, ["YYYY-MM-DDTHH:MM:SSZ"], "Use a real UTC timestamp such as 2026-08-29T12:00:00Z.");
   const normalized = await normalizeCsv(text, sourceName);
   const tiered = normalized.records.map((record) => ({ ...record, calculated_risk_tier: riskTier(record) }));
   const tiers = Object.fromEntries(tiered.map((record) => [record.system_id, record.calculated_risk_tier]));

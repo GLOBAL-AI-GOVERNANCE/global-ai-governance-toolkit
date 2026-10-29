@@ -71,6 +71,8 @@ code, pre, kbd, samp, .g-badge { font-variant-numeric: tabular-nums slashed-zero
 * { box-sizing:border-box; }
 @media (prefers-reduced-motion: no-preference) { html:focus-within { scroll-behavior:smooth; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } }
+html { scroll-padding-top: 6rem; }
+[id] { scroll-margin-top: 6rem; }
 body { margin:0; background:var(--g-bg); color:var(--g-text); font:400 var(--g-text-base)/var(--g-leading-body) var(--g-font-sans); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility; }
 ::selection { background:var(--g-invert-bg); color:var(--g-invert-text); }
 button, input { font:inherit; }
@@ -228,3 +230,9 @@ pre:focus-visible,.table-wrap:focus-visible,.panel:focus-visible,.tab:focus-visi
 @media (max-width:960px) { .jump { grid-template-columns:repeat(2,minmax(0,1fr)); } .flow { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:640px) { .lab-list { grid-template-columns:1fr; } .connect-section .steps > li { padding-left:0; padding-top:52px; } .steps > li::before { top:26px; } }
 @media (max-width:560px) { .jump,.flow { grid-template-columns:1fr; } }
+
+.finding-system { margin: .15em 0 .75em; color: var(--g-text-2); font: 500 var(--g-text-sm)/1.4 var(--g-font-sans); }
+.finding-system code { font-size: .9em; }
+.finding-system-name { color: var(--g-text); font-weight: 600; }
+#import-status { margin: .75em 0 0; max-width: 42rem; color: var(--g-text-2); }
+#import-status[data-state="error"] { color: var(--g-signal); font-weight: 600; }
