@@ -64,6 +64,7 @@ def pins_from_manifest(manifest: dict) -> dict:
     mcp = pins["ai-governance-mcp"]
     peace = pins["peace-os"]
     agentic = pins["agentic-ai-governance"]
+    mcp_bundle = mcp.get("bundled_toolkit") or {}
     return {
         "schema_version": "1.0.0",
         "source_manifest": DEFAULT_MANIFEST,
@@ -73,6 +74,9 @@ def pins_from_manifest(manifest: dict) -> dict:
         "toolkit_wheel": toolkit["wheel"],
         "mcp": mcp["tag"],
         "mcp_naked": mcp["version_naked"],
+        "mcp_bundled_toolkit": mcp_bundle.get("tag") or "",
+        "mcp_bundled_toolkit_sha": mcp_bundle.get("commit_sha") or "",
+        "mcp_bundled_agentic_sha": (mcp.get("bundled_agentic") or {}).get("commit_sha") or "",
         "peace_os": peace["tag"],
         "agentic": agentic["tag"],
         "agentic_naked": agentic["version_naked"],
@@ -106,6 +110,28 @@ def apply_replacements(text: str, pairs: list[tuple[str, str]]) -> str:
     return text
 
 
+def rewrite_mcp_bundle_block(text: str, pins: dict) -> str:
+    """Keep the MCP UPSTREAM_LOCK sentence accurate after toolkit pin rewrites."""
+    begin, end = "<!-- gaig:mcp-bundle -->", "<!-- /gaig:mcp-bundle -->"
+    if begin not in text or end not in text:
+        return text
+    bundled = pins.get("mcp_bundled_toolkit") or ""
+    bundled_sha = pins.get("mcp_bundled_toolkit_sha") or ""
+    agentic_sha = pins.get("mcp_bundled_agentic_sha") or ""
+    if not (bundled and bundled_sha and agentic_sha):
+        return text
+    body = (
+        f"`gaig-mcp` {pins['mcp']} bundles the Toolkit at {bundled} "
+        f"(commit `{bundled_sha}`) and Agentic AI Governance at commit "
+        f"`{agentic_sha}`. Its outputs report those commits in `source`. "
+        "Bundle pins come from MCP `UPSTREAM_LOCK.json`, not from the Toolkit release tag."
+    )
+    start = text.index(begin) + len(begin)
+    stop = text.index(end)
+    return text[:start] + "\n" + body + "\n" + text[stop:]
+
+
+
 def sync(*, manifest_url: str, check_only: bool) -> int:
     manifest = load_json(manifest_url)
     new_pins = pins_from_manifest(manifest)
@@ -120,6 +146,8 @@ def sync(*, manifest_url: str, check_only: bool) -> int:
             continue
         original = path.read_text(encoding="utf-8")
         updated = apply_replacements(original, pairs) if pairs else original
+        if rel == "docs/AGENT_SETUP.md":
+            updated = rewrite_mcp_bundle_block(updated, new_pins)
         if rel == "web/machine-interface.json":
             data = json.loads(updated)
             data["release"] = new_pins["toolkit"]
