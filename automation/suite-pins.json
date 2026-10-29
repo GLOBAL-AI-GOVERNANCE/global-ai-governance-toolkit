@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "source_manifest": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/main/suite-manifest.json",
+  "toolkit": "v2.8.1",
+  "toolkit_naked": "2.8.1",
+  "toolkit_sha": "0ab38c6a94a705e4423bfc9bb19ef2137f59f5c5",
+  "toolkit_wheel": "global_ai_governance-2.8.1-py3-none-any.whl",
+  "mcp": "v0.5.1",
+  "mcp_naked": "0.5.1",
+  "peace_os": "v0.3.0-rc3",
+  "agentic": "v0.1.0-alpha.5",
+  "agentic_naked": "0.1.0-alpha.5"
+}
