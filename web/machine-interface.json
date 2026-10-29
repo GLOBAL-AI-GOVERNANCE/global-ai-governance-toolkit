@@ -10,7 +10,7 @@
   "governance_handoff": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/automation/contracts/governance-decision-handoff.schema.json",
   "profiles": {
     "result_contract": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/automation/contracts/v1/profile-result.schema.json",
-    "registry": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.0/automation/profiles/registry.json",
+    "registry": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.1/automation/profiles/registry.json",
     "viewer": "./profile-viewer.mjs",
     "maturity": {
       "profile_id": "organizational-ai-maturity-v0.1",
@@ -45,7 +45,7 @@
     "independent_assurance": {
       "profile_id": "independent-assurance-v0.1",
       "contract_version": "0.2.0",
-      "case_contract": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.0/automation/contracts/profiles/independent-assurance-case.schema.json",
+      "case_contract": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.1/automation/contracts/profiles/independent-assurance-case.schema.json",
       "autonomous_agent_requires": [
         "agent_passport_ref",
         "shutdown_evidence"
@@ -92,7 +92,7 @@
     "agent_setup": "./AGENT_SETUP.md",
     "agent_setup_source": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/AGENT_SETUP.md",
     "human_entry": "./",
-    "schema_urls_track": "unchanged schemas keep their v2.7.2 release-tag URLs in v2.8.0; changed contracts and the profile registry are pinned to v2.8.0; this Pages site reflects the main branch",
+    "schema_urls_track": "unchanged schemas keep their v2.7.2 release-tag URLs in v2.8.1; changed contracts and the profile registry are pinned to v2.8.1; this Pages site reflects the main branch",
     "start_here": "./start.html",
     "journeys_guide": "./JOURNEYS.md",
     "journeys_guide_source": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/JOURNEYS.md",
@@ -261,5 +261,5 @@
       ]
     }
   ],
-  "release": "v2.8.0"
+  "release": "v2.8.1"
 }

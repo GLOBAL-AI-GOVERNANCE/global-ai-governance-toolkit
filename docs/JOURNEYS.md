@@ -55,12 +55,12 @@ The `independent-assurance-v0.1` profile requires each autonomous agent to have 
 ```bash
 mkdir gaig-journeys && cd gaig-journeys
 python3 -m venv .venv && . .venv/bin/activate
-REL=https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.0
-curl -fsSLO "$REL/global_ai_governance-2.8.0-py3-none-any.whl"
+REL=https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.1
+curl -fsSLO "$REL/global_ai_governance-2.8.1-py3-none-any.whl"
 curl -fsSLO "$REL/SHA256SUMS"
-grep ' global_ai_governance-2.8.0-py3-none-any.whl$' SHA256SUMS | sha256sum -c -
-python -m pip install --quiet ./global_ai_governance-2.8.0-py3-none-any.whl jsonschema
-FIX=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.0/automation/assurance/independent-assurance/fixtures
+grep ' global_ai_governance-2.8.1-py3-none-any.whl$' SHA256SUMS | sha256sum -c -
+python -m pip install --quiet ./global_ai_governance-2.8.1-py3-none-any.whl jsonschema
+FIX=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.1/automation/assurance/independent-assurance/fixtures
 for c in agent_pass agent_failed_shutdown_test agent_stale_shutdown_test agent_missing_shutdown_test; do
   curl -fsSL -o "$c.json" "$FIX/$c.json"
   gaig profile independent-assurance-v0.1 "$c.json" --outdir "p-$c" --evaluation-time 2026-10-15T00:00:00Z >/dev/null 2>&1
@@ -68,7 +68,7 @@ for c in agent_pass agent_failed_shutdown_test agent_stale_shutdown_test agent_m
 done
 ```
 
-Expect `global_ai_governance-2.8.0-py3-none-any.whl: OK`, then:
+Expect `global_ai_governance-2.8.1-py3-none-any.whl: OK`, then:
 
 ```text
 agent_pass PASS
@@ -77,7 +77,7 @@ agent_stale_shutdown_test FAIL SHUTDOWN_TEST_STALE
 agent_missing_shutdown_test FAIL SHUTDOWN_TEST_MISSING
 ```
 
-A failing case exits 1, so a pipeline stops for review. How to run and record a shutdown test is in the [shutdown protocol](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/docs/shutdown-protocol.md).
+A failing case exits 1, so a pipeline stops for review. How to run and record a shutdown test is in the [shutdown protocol](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.1/docs/shutdown-protocol.md).
 
 ## Example: you work at a frontier lab
 
@@ -96,7 +96,7 @@ A failing case exits 1, so a pipeline stops for review. How to run and record a 
 3. **Check where each release came from.** Release assets ship SHA-256 checksums, and most carry GitHub build provenance. With the GitHub CLI installed and signed in:
 
    ```bash
-   for rt in global-ai-governance-toolkit:v2.8.0:global_ai_governance-2.8.0-py3-none-any.whl \
+   for rt in global-ai-governance-toolkit:v2.8.1:global_ai_governance-2.8.1-py3-none-any.whl \
              ai-governance-mcp:v0.5.0:gaig_mcp-0.5.0-py3-none-any.whl \
              agentic-ai-governance:v0.1.0-alpha.5:agentic-ai-governance-v0.1.0-alpha.5.zip \
              verified-vulnerability-governance:v0.4.0:verified-vulnerability-governance-v0.4.0.zip \
