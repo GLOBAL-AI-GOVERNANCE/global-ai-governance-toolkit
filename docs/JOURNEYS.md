@@ -21,7 +21,7 @@ No terminal and no install. Each step takes a few minutes.
    Rules: system_id like AI-1, AI-2. owner is who is responsible; "Me" is fine. vendor_internal is Vendor, Internal, or Hybrid. data_sensitivity is None, Internal, Personal, Regulated, or Critical. autonomy_level is None (it only suggests), Partial (it acts but I confirm), or Full (it acts on its own). Every other column is Yes or No. If I am not sure, use No.
    ```
 
-   Save the CSV it gives you as a file ending in `.csv`, open the [Toolkit](https://ai-governance.solutions/#toolkit), and choose **Load your CSV**. The file is read on your device and is not uploaded. Expect a result such as `Critical gaps need attention` with each gap explained in plain words, for example `Shutdown path missing` for an agent you could not quickly stop. You can also fill the [blank template](https://ai-governance.solutions/ai-system-inventory-template.csv) in any spreadsheet app.
+   Save the CSV it gives you as a file ending in `.csv`, open the [Toolkit](https://ai-governance.solutions/#toolkit), and choose **Load your CSV**. The file is read on your device and is not uploaded. Expect a result such as `Critical gaps need attention` with each gap explained in plain words, for example `Shutdown path missing` for an agent you could not quickly stop. Each gap card names the system it applies to. You can also fill the [blank template](https://ai-governance.solutions/ai-system-inventory-template.csv) in any spreadsheet app: keep Schema Version `1.0.0`, leave that cell blank to default to `1.0.0`, or replace the example row. The prompt CSV has no Schema Version column and is accepted as `1.0.0`.
 3. **Give your assistant a ground rule.** Paste this at the start of a conversation, or into the app's custom instructions:
 
    ```text
@@ -41,7 +41,7 @@ For a lead agent / orchestrator and the people accountable for it. The order run
 | 2. Assess | Profile results for auditability, maturity, and independent assurance | `gaig profile`, [AGENT_SETUP step 3](https://ai-governance.solutions/AGENT_SETUP.md#optional-assurance-profiles) |
 | 3. Connect | The same checks callable by your agents over MCP | [AGENT_SETUP steps 4 and 5](https://ai-governance.solutions/AGENT_SETUP.md#4-run-the-mcp-server) |
 | 4. Passports | Who an agent acts for and what it may do alone | `validate-passport`, [AGENT_SETUP step 7](https://ai-governance.solutions/AGENT_SETUP.md#7-agent-trust-passports-and-fleet-controls) |
-| 5. Guard | Levels 0 to 3 run, Level 4 asks a person, Level 5 is denied | [AGENT_SETUP step 6](https://ai-governance.solutions/AGENT_SETUP.md#6-guard-tool-calls-with-action-levels) |
+| 5. Guard | Levels 0 to 3 run, Level 5 is denied, Level 4 asks a person by default or follows the operator's automated approver when the policy lists the tool | [AGENT_SETUP step 6](https://ai-governance.solutions/AGENT_SETUP.md#6-guard-tool-calls-with-action-levels) |
 | 6. Fleet controls | A sub-agent stays within its parent's ceiling and stops when an ancestor is suspended | `fleet_controls.py`, [AGENT_SETUP step 7](https://ai-governance.solutions/AGENT_SETUP.md#7-agent-trust-passports-and-fleet-controls) |
 | 7. Shutdown tests | No autonomous agent passes without a recent, passing shutdown test | below |
 | 8. Vulnerabilities | Owner, fix, retest, and closure only with evidence reviewed by a separate role | `vvd`, [AGENT_SETUP step 8](https://ai-governance.solutions/AGENT_SETUP.md#8-verified-vulnerability-governance) |
@@ -97,9 +97,9 @@ A failing case exits 1, so a pipeline stops for review. How to run and record a 
 
    ```bash
    for rt in global-ai-governance-toolkit:v2.8.0:global_ai_governance-2.8.0-py3-none-any.whl \
-             ai-governance-mcp:v0.4.0:gaig_mcp-0.4.0-py3-none-any.whl \
-             agentic-ai-governance:v0.1.0-alpha.4:agentic-ai-governance-v0.1.0-alpha.4.zip \
-             verified-vulnerability-governance:v0.3.0:verified-vulnerability-governance-v0.3.0.zip \
+             ai-governance-mcp:v0.5.0:gaig_mcp-0.5.0-py3-none-any.whl \
+             agentic-ai-governance:v0.1.0-alpha.5:agentic-ai-governance-v0.1.0-alpha.5.zip \
+             verified-vulnerability-governance:v0.4.0:verified-vulnerability-governance-v0.4.0.zip \
              containment-ledger:v1.0.0:containment-ledger-v1.0.0-site.zip \
              ai-governance-os:v1.1.1:ai-governance-os-v1.1.1.zip; do
      IFS=: read -r repo tag asset <<< "$rt"
@@ -128,6 +128,8 @@ Teams, enterprises, researchers, educators, public-interest bodies, and regulato
 |---|---|
 | See what governance gaps look like | [Run the example with gaps](https://ai-governance.solutions/#toolkit) in the browser |
 | Check your own AI systems | The [Toolkit](https://ai-governance.solutions/#toolkit) and its [blank template](https://ai-governance.solutions/ai-system-inventory-template.csv) |
+| Watch a governed lead agent / orchestrator | The browser [Lead Agent](https://ai-governance.solutions/lead-agent/) (mock model; no account or key) |
+| See what stacks this works with | The [interoperability matrix](https://ai-governance.solutions/interoperability.html) |
 | Assess organizational AI maturity | [Maturity evidence](https://ai-governance.solutions/maturity/) |
 | Teach or practise high-stakes decisions | [Peace OS: Crisis Room](https://global-ai-governance.github.io/peace-os/) |
 | Review a system's boundaries | [Containment Ledger](https://global-ai-governance.github.io/containment-ledger/) |

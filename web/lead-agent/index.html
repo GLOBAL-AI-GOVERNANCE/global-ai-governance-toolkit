@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lead Agent: a reference lead agent / orchestrator that runs in your browser. Give it a goal and watch every plan, sub-agent passport, guard decision and audit record. No account, no key, nothing sent.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ai-governance.solutions/lead-agent/">
+  <meta property="og:title" content="Lead Agent · Global AI Governance">
+  <meta property="og:description" content="A governed lead agent / orchestrator, live in your browser. Every tool call passes a guard; every step lands in a tamper-evident audit ledger.">
+  <meta property="og:site_name" content="Global AI Governance">
+  <meta property="og:image" content="https://ai-governance.solutions/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Global AI Governance: governance for AI agencies, agent fleets, and AI-run companies">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Lead Agent · Global AI Governance</title>
+  <link rel="canonical" href="https://ai-governance.solutions/lead-agent/">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="./lead-agent.css">
+  <link rel="alternate" type="application/json" href="../machine-interface.json" title="Machine interface">
+  <link rel="alternate" type="text/plain" href="../llms.txt" title="llms.txt">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body class="la-body">
+  <a class="skip-link" href="#top">Skip to main content</a>
+  <nav class="gaig-bar shell" aria-label="Global AI Governance sites">
+    <a class="gaig-brand" href="../">Global AI Governance</a>
+    <span class="gaig-links"><a href="../start.html">Start here</a><a href="../#toolkit">Toolkit</a><a href="../connect.html">Connect</a><a href="./" aria-current="page">Lead Agent</a><a href="../interoperability.html">Interop</a><a href="https://global-ai-governance.github.io/containment-ledger/">Containment Ledger</a><a href="https://global-ai-governance.github.io/peace-os/">Peace OS</a></span>
+    <a class="gaig-cta" href="../connect.html#agents">Connect your agent</a>
+  </nav>
+  <main id="top" tabindex="-1">
+    <header class="shell la-hero">
+      <p class="eyebrow">Lead Agent · reference lead agent / orchestrator</p>
+      <h1>Give it a goal. Every step is governed.</h1>
+      <p class="lede">The lead agent plans, starts sub-agents with passports bound to it, and sends every tool call through a guard. You can suspend, reinstate or revoke any agent, run a shutdown test, and verify the audit ledger yourself.</p>
+      <p class="la-live" id="live-status"><span class="la-pulse" aria-hidden="true"></span><span id="live-text">Live in this tab · deterministic model · no account, no key, nothing sent</span></p>
+    </header>
+
+    <section class="shell la-console" aria-label="Lead Agent console">
+      <div class="la-grid">
+        <section class="la-panel la-chat" aria-labelledby="chat-h">
+          <div class="la-panel-head"><h2 id="chat-h">Conversation</h2><span class="la-meta" id="mode-label">Mock model · this tab</span></div>
+          <div class="la-log" id="log" role="log" aria-live="polite" aria-label="Conversation" tabindex="0">
+            <div class="la-msg la-msg-agent"><p class="la-who">Lead agent</p><p>Tell me what you want done. I will plan it, start governed sub-agents, and show you each guard decision. Try a suggestion below.</p></div>
+          </div>
+          <div class="la-suggest" aria-label="Suggested goals" role="group">
+            <button type="button" class="la-chip" data-goal="Research agent governance on docs.example.org and draft a summary">Research and draft</button>
+            <button type="button" class="la-chip" data-goal="Buy a $500 dataset licence">Spend $500</button>
+            <button type="button" class="la-chip" data-goal="Delegate further: chain research sub-agents as deep as allowed">Delegate deeply</button>
+            <button type="button" class="la-chip" data-goal="Publish the summary to the public site">Publish</button>
+          </div>
+          <form class="la-form" id="chat-form">
+            <label class="visually-hidden" for="goal">Your goal</label>
+            <input id="goal" name="goal" type="text" autocomplete="off" maxlength="500" placeholder="Describe a goal in plain language" required>
+            <button type="submit" class="primary" id="send">Send</button>
+          </form>
+        </section>
+
+        <section class="la-panel la-fleet" aria-labelledby="fleet-h">
+          <div class="la-panel-head"><h2 id="fleet-h">Fleet</h2><span class="la-meta" id="fleet-meta">Depth cap 3</span></div>
+          <div class="la-scroll la-tree" id="fleet" role="region" aria-label="Fleet tree" tabindex="0"><p class="la-empty">Starting the lead agent…</p></div>
+          <div class="la-fleet-foot">
+            <button type="button" class="template-button" id="shutdown">Run shutdown test</button>
+            <p class="la-meta" id="shutdown-result" aria-live="polite">Suspends the whole fleet, checks nothing can act, then reinstates it.</p>
+          </div>
+        </section>
+      </div>
+
+      <div class="la-grid la-grid-2">
+        <section class="la-panel" aria-labelledby="calls-h">
+          <div class="la-panel-head"><h2 id="calls-h">Guard decisions</h2><span class="la-meta" id="calls-meta">0 tool calls</span></div>
+          <ol class="la-scroll la-calls" id="calls" aria-label="Guard decisions, newest first" tabindex="0"><li class="la-empty">Each tool call appears here with its Action Level and decision.</li></ol>
+        </section>
+
+        <section class="la-panel" aria-labelledby="audit-h">
+          <div class="la-panel-head"><h2 id="audit-h">Audit ledger</h2><span class="la-meta">SHA-256 hash chain</span></div>
+          <dl class="la-stats">
+            <div><dt>Records</dt><dd id="audit-length">0</dd></div>
+            <div><dt>Head</dt><dd><code id="audit-head">none yet</code></dd></div>
+          </dl>
+          <div class="la-actions">
+            <button type="button" class="template-button" id="verify">Verify ledger</button>
+            <button type="button" class="template-button" id="export">Export JSON</button>
+            <label class="template-button la-file" for="check-file">Check a file</label>
+            <input class="visually-hidden" type="file" id="check-file" accept="application/json,.json">
+          </div>
+          <p class="la-meta la-result" id="audit-result" aria-live="polite">Every record holds the hash of the one before it. Change any byte and verification fails.</p>
+          <p class="fineprint">Offline check: <code>lead-agent verify-audit lead-agent-audit.json</code> verifies an export from this page with the same rules.</p>
+        </section>
+      </div>
+    </section>
+
+    <section class="shell connect-section" aria-labelledby="how-h">
+      <p class="eyebrow">How the guard decides</p>
+      <h2 id="how-h">One order, every call.</h2>
+      <ol class="steps la-steps">
+        <li><strong>Level 5 is denied.</strong> Spending money or deleting records is never an agent action here, whoever asks.</li>
+        <li><strong>Passport and lineage.</strong> The agent and every parent above it must be active. Suspending or revoking a parent stops all its descendants.</li>
+        <li><strong>Inventory and ceiling.</strong> The tool must be in the agent's passport, and its Action Level at or under the passport ceiling.</li>
+        <li><strong>Agent Fleet Controls.</strong> Spawning, network calls and spending must be granted to this agent, and no spawn may exceed delegation depth 3.</li>
+        <li><strong>Level 4 approver.</strong> The operator's automated approver clears listed Level 4 actions. Anything else at Level 4 waits for a person.</li>
+        <li><strong>Levels 1 to 3 run unattended.</strong> Every decision, result and control lands in the audit ledger.</li>
+      </ol>
+    </section>
+
+    <section class="shell connect-section" aria-labelledby="own-h">
+      <p class="eyebrow">Optional</p>
+      <h2 id="own-h">Use your own models.</h2>
+      <p>Run the same lead agent on your machine. It uses the same governance code with signed passports, and calls OpenAI, Anthropic or xAI only when you set that provider's key in its environment.</p>
+      <pre class="la-cmd"><code>pip install "agentic-ai-governance @ git+https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance@main"
+export OPENAI_API_KEY=…   # or ANTHROPIC_API_KEY, or XAI_API_KEY
+lead-agent serve --port 8765</code></pre>
+      <form class="la-form la-connect" id="connect-form">
+        <label for="server-url">Local server</label>
+        <input id="server-url" type="url" value="http://127.0.0.1:8765" autocomplete="off" spellcheck="false">
+        <button type="submit" class="template-button" id="connect">Connect</button>
+        <button type="button" class="template-button" id="disconnect" hidden>Use this tab</button>
+      </form>
+      <p class="la-meta" id="connect-result" aria-live="polite">Not connected. The page runs on its own until you connect.</p>
+      <p class="fineprint"><strong>Keys stay out of the browser.</strong> This page never asks for, stores or sends an API key. Keys live only in the server's environment on your machine, and the server sends each one only to the provider you chose. The page talks only to the address above.</p>
+    </section>
+
+    <section class="shell connect-section" aria-labelledby="bounds-h">
+      <p class="eyebrow">Boundaries</p>
+      <h2 id="bounds-h">What this is, and is not.</h2>
+      <p>A reference implementation and a demonstration. In this tab, passports are simulated and unsigned and tools are simulated; nothing leaves the page. The local server issues signed passports and validates them with the published tools. Results are non-authorizing (<code>authority_effect: NONE</code>): they do not certify an agent, grant permission, or replace an accountable person.</p>
+      <p><a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/main/examples/lead-agent">Source and tests</a> · <a href="../connect.html#works-with">Works with</a> · <a href="../start.html">Start here</a></p>
+    </section>
+    <noscript><p class="shell la-noscript">The live console needs JavaScript. Everything it does is available offline: <code>lead-agent demo</code> runs the same scenario and writes a verifiable audit ledger.</p></noscript>
+  </main>
+  <footer class="shell gaig-footer">
+    <p>Global AI Governance · Outputs are non-authorizing (<code>authority_effect: NONE</code>) · Not affiliated with or endorsed by any AI lab or platform · <a href="https://github.com/GLOBAL-AI-GOVERNANCE">GitHub</a></p>
+  </footer>
+</body>
+</html>

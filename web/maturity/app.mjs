@@ -166,17 +166,89 @@ document.querySelector("#export-gaps").addEventListener("click", () => {
 document.querySelector("#export-review").addEventListener("click", () => {
   download("maturity-review.md", reviewMarkdown(evaluateMaturity(state, "2026-10-23T00:00:00Z").details), "text/markdown");
 });
+
+function showImportStatus(message, isError) {
+  let node = document.querySelector("#import-status");
+  if (!node) {
+    node = document.createElement("p");
+    node.id = "import-status";
+    node.setAttribute("role", "status");
+    node.setAttribute("aria-live", "polite");
+    const input = document.querySelector("#import-file");
+    input.insertAdjacentElement("afterend", node);
+  }
+  node.textContent = message;
+  node.dataset.state = isError ? "error" : "ok";
+  node.setAttribute("role", isError ? "alert" : "status");
+  node.setAttribute("aria-live", isError ? "assertive" : "polite");
+}
+
+function validateMaturityImport(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return "Import must be a JSON object exported from this page or a matching assessment.";
+  }
+  if (value.framework_id !== "unesco-ai-maturity-2025") {
+    return "Import rejected: framework_id must be unesco-ai-maturity-2025.";
+  }
+  if (value.framework_version !== "2025") {
+    return "Import rejected: framework_version must be 2025.";
+  }
+  if (value.authority_effect !== "NONE") {
+    return "Import rejected: authority_effect must be NONE.";
+  }
+  if (!Array.isArray(value.categories)) {
+    return "Import rejected: categories must be an array.";
+  }
+  const known = new Set(MATURITY_CATALOG.pillars.flatMap((pillar) => pillar.categories.map((category) => category.id)));
+  for (const category of value.categories) {
+    if (!category || typeof category !== "object") return "Import rejected: each category must be an object.";
+    if (!known.has(category.category_id)) return `Import rejected: unknown category_id ${category.category_id}.`;
+    if (!category.pillar_id) return "Import rejected: each category needs pillar_id.";
+  }
+  return null;
+}
+
 document.querySelector("#import-file").addEventListener("change", async (event) => {
   const file = event.target.files[0];
   if (!file) return;
-  const imported = JSON.parse(await file.text());
-  Object.assign(state, imported);
-  document.querySelector("#assessment-id").value = state.assessment_id || "";
-  document.querySelector("#scope").value = state.assessment_scope || "";
-  document.querySelector("#owner").value = state.accountable_owner || "";
-  document.querySelector("#coverage").value = state.assessment_coverage || "PARTIAL";
+  const previous = {
+    assessment_id: state.assessment_id,
+    assessment_scope: state.assessment_scope,
+    accountable_owner: state.accountable_owner,
+    assessment_coverage: state.assessment_coverage,
+    categories: state.categories,
+  };
+  let imported;
+  try {
+    imported = JSON.parse(await file.text());
+  } catch {
+    showImportStatus("Import failed: the file is not valid JSON. Your current assessment was left unchanged.", true);
+    event.target.value = "";
+    return;
+  }
+  const problem = validateMaturityImport(imported);
+  if (problem) {
+    showImportStatus(problem + " Your current assessment was left unchanged.", true);
+    event.target.value = "";
+    return;
+  }
+  state.assessment_id = imported.assessment_id || "";
+  state.assessment_scope = imported.assessment_scope || "";
+  state.accountable_owner = imported.accountable_owner || "";
+  state.assessment_coverage = imported.assessment_coverage || "PARTIAL";
+  state.authority_effect = "NONE";
+  state.framework_id = imported.framework_id;
+  state.framework_version = imported.framework_version;
+  state.categories = imported.categories;
+  document.querySelector("#assessment-id").value = state.assessment_id;
+  document.querySelector("#scope").value = state.assessment_scope;
+  document.querySelector("#owner").value = state.accountable_owner;
+  document.querySelector("#coverage").value = state.assessment_coverage;
   renderNav();
   evaluate();
+  showImportStatus(`Imported ${file.name}: ${state.categories.length} categor${state.categories.length === 1 ? "y" : "ies"}.`, false);
+  event.target.value = "";
+  void previous;
 });
 document.querySelector("#sample").addEventListener("click", () => {
   const sample = {

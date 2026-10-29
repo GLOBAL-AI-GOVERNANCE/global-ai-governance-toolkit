@@ -28,7 +28,7 @@
   <a class="skip-link" href="#top">Skip to main content</a>
   <nav class="gaig-bar shell" aria-label="Global AI Governance sites">
     <a class="gaig-brand" href="./">Global AI Governance</a>
-    <span class="gaig-links"><a href="./start.html" aria-current="page">Start here</a><a href="./#toolkit">Toolkit</a><a href="./connect.html">Connect</a><a href="https://global-ai-governance.github.io/containment-ledger/">Containment Ledger</a><a href="https://global-ai-governance.github.io/peace-os/">Peace OS</a></span>
+    <span class="gaig-links"><a href="./start.html" aria-current="page">Start here</a><a href="./#toolkit">Toolkit</a><a href="./connect.html">Connect</a><a href="./lead-agent/">Lead Agent</a><a href="./interoperability.html">Interop</a><a href="https://global-ai-governance.github.io/containment-ledger/">Containment Ledger</a><a href="https://global-ai-governance.github.io/peace-os/">Peace OS</a></span>
     <a class="gaig-cta" href="./connect.html#agents">Connect your agent</a>
   </nav>
   <main id="top" tabindex="-1">
@@ -61,8 +61,9 @@
 <pre class="agent-prompt" id="prompt-inventory" tabindex="0" role="region" aria-label="Prompt to list the AI you use">Help me list the AI apps, assistants, and agents I use, so I can check them for gaps. Ask me about each one, one at a time. Then give me a CSV in a code block with exactly this header row:
 system_id,system_name,owner,business_unit,vendor_internal,use_case,data_sensitivity,impact_people,impact_money,impact_security,impact_rights,impact_safety,autonomy_level,public_facing,monitoring_active,shutdown_path_exists,evidence_complete
 Rules: system_id like AI-1, AI-2. owner is who is responsible; "Me" is fine. vendor_internal is Vendor, Internal, or Hybrid. data_sensitivity is None, Internal, Personal, Regulated, or Critical. autonomy_level is None (it only suggests), Partial (it acts but I confirm), or Full (it acts on its own). Every other column is Yes or No. If I am not sure, use No.</pre>
-          <p>Save the answer as a file ending in <code>.csv</code>, open the Toolkit, and choose <strong>Load your CSV</strong>. The file is read in your browser and is not uploaded. You will see a result such as <em>Critical gaps need attention</em>, with each gap in plain words: for example, <em>Shutdown path missing</em> for an agent you could not quickly stop.</p>
+          <p>Save the answer as a file ending in <code>.csv</code>, open the Toolkit, and choose <strong>Load your CSV</strong>. The file is read in your browser and is not uploaded. You will see a result such as <em>Critical gaps need attention</em>, with each gap in plain words: for example, <em>Shutdown path missing</em> for an agent you could not quickly stop. Each gap card names the system it applies to.</p>
           <p class="actions-inline"><a class="template-button" href="./#toolkit">Open the Toolkit</a><a class="template-button" href="./ai-system-inventory-template.csv" download>Or fill the blank template</a></p>
+          <p class="fineprint">The blank template includes a <code>Schema Version</code> column. Keep <code>1.0.0</code>, leave that cell blank (it defaults to <code>1.0.0</code>), or delete the example row and add your own. The prompt CSV above has no Schema Version column and is accepted as version <code>1.0.0</code>.</p>
         </li>
         <li>
           <h3>Give your assistant a ground rule</h3>
@@ -87,7 +88,7 @@ Rules: system_id like AI-1, AI-2. owner is who is responsible; "Me" is fine. ven
         <li><a href="./AGENT_SETUP.md"><span>02</span><strong>Assess</strong>Profile results for auditability, organizational maturity, and independent assurance.</a></li>
         <li><a href="./connect.html#agents"><span>03</span><strong>Connect</strong>The same checks, callable by your agents over Model Context Protocol (MCP).</a></li>
         <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance"><span>04</span><strong>Passports</strong>Who each agent acts for, what it may do alone, and when that ends.</a></li>
-        <li><a href="./connect.html#guard"><span>05</span><strong>Guard</strong>Levels 0 to 3 run, Level 4 asks a person, and Level 5 is denied, before each tool call.</a></li>
+        <li><a href="./connect.html#guard"><span>05</span><strong>Guard</strong>Levels 0 to 3 run, Level 5 is denied, and Level 4 asks a person by default or follows the operator's automated approver when the policy lists the tool.</a></li>
         <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/main/conformance/fleet-controls"><span>06</span><strong>Fleet controls</strong>A sub-agent stays within its parent's ceiling and stops when an ancestor is suspended.</a></li>
         <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.0/docs/shutdown-protocol.md"><span>07</span><strong>Shutdown tests</strong>No autonomous agent passes without a passing shutdown test from the last 90 days.</a></li>
         <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance"><span>08</span><strong>Vulnerabilities</strong>Owner, fix, retest, and closure only with evidence reviewed by a separate role.</a></li>

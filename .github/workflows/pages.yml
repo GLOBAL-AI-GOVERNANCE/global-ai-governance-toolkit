@@ -45,7 +45,18 @@ jobs:
           test -f web/maturity/maturity-viewer.mjs
           test -f web/maturity/catalog.generated.mjs
           test -f web/maturity/styles.css
-          ! grep -RIE '(fetch\(|XMLHttpRequest|WebSocket|sendBeacon|navigator\.serviceWorker)' web --include='*.mjs' --include='*.js'
+          test -f web/lead-agent/index.html
+          test -f web/lead-agent/engine.mjs
+          test -f web/lead-agent/app.mjs
+          test -f web/lead-agent/lead-agent.css
+          test -f web/interoperability.html
+          test -f web/bootstrap.sh
+          # The lead agent console may call only a server on this machine that the visitor connects;
+          # automation/tests/test_lead_agent_console.py checks that boundary.
+          ! grep -RIE '(fetch\(|XMLHttpRequest|WebSocket|sendBeacon|navigator\.serviceWorker)' web --include='*.mjs' --include='*.js' --exclude=app.mjs
+          ! grep -IE '(fetch\(|XMLHttpRequest|WebSocket|sendBeacon|navigator\.serviceWorker)' web/app.mjs web/maturity/app.mjs
+          test "$(grep -cE 'fetch\(' web/lead-agent/app.mjs)" = 2
+          ! grep -IE '(XMLHttpRequest|WebSocket|sendBeacon|navigator\.serviceWorker)' web/lead-agent/app.mjs
           python -B automation/scripts/generate_browser_contract_bundle.py --check
           python -B automation/scripts/generate_maturity_catalog.py --check
           node --check web/app.mjs
@@ -56,6 +67,9 @@ jobs:
           node --check web/maturity/maturity-engine.mjs
           node --check web/maturity/maturity-viewer.mjs
           node --check web/maturity/catalog.generated.mjs
+          node --check web/lead-agent/engine.mjs
+          node --check web/lead-agent/app.mjs
+          node web/tests/lead-agent-runner.mjs > /dev/null
 
       - name: Stage static site
         shell: bash

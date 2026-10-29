@@ -61,7 +61,7 @@
     "sample": "./sample-ai-inventory.csv",
     "template": "./ai-system-inventory-template.csv"
   },
-  "machine_interface_version": "1.5.0",
+  "machine_interface_version": "1.6.0",
   "outputs": [
     "normalized-inventory.json",
     "canonical-inventory.csv",
@@ -96,7 +96,12 @@
     "start_here": "./start.html",
     "journeys_guide": "./JOURNEYS.md",
     "journeys_guide_source": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/JOURNEYS.md",
-    "journeys_open_list": "journeys is an open, additive list of worked examples. Entry ids are stable, new entries may be added, no one has to pick one, and every step can be opened directly."
+    "journeys_open_list": "journeys is an open, additive list of worked examples. Entry ids are stable, new entries may be added, no one has to pick one, and every step can be opened directly.",
+    "bootstrap": "./bootstrap.sh",
+    "lead_agent": "./lead-agent/",
+    "interoperability": "./interoperability.html",
+    "interop_doc": "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/INTEROP.md",
+    "autonomous_default": "AGENT_SETUP.md steps 0-8 via bootstrap.sh; unattended passport issuance; automated Level 4 approver; unattended rescan closure"
   },
   "journeys": [
     {
@@ -168,6 +173,11 @@
           "command": "fleet_controls.py"
         },
         {
+          "id": "lead-agent",
+          "entry": "./lead-agent/",
+          "note": "browser mock model; optional local serve"
+        },
+        {
           "id": "shutdown-tests",
           "entry": "./JOURNEYS.md",
           "command": "gaig profile independent-assurance-v0.1"
@@ -212,6 +222,10 @@
         {
           "id": "integrate",
           "entry": "./connect.html#agents"
+        },
+        {
+          "id": "interoperability",
+          "entry": "./interoperability.html"
         },
         {
           "id": "independent-review",
