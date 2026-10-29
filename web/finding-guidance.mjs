@@ -21,7 +21,7 @@ export const findingGuidance = Object.freeze({
   }),
   "GAI-AUTO-005": Object.freeze({
     title: "Full autonomy needs higher review",
-    meaning: "The system is marked fully autonomous without the Critical or Frontier review level required by this policy.",
+    meaning: "The system is marked fully autonomous. This policy requires Critical or Frontier review before an accountable human decision.",
     next: "Escalate the review classification and keep the system under human control until review is complete.",
   }),
 });

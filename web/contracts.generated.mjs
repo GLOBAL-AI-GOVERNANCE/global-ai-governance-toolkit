@@ -367,14 +367,6 @@ export const contracts = {
             "field": "autonomy_level",
             "operator": "equals",
             "value": "Full"
-          },
-          {
-            "field": "calculated_risk_tier",
-            "operator": "not_in",
-            "values": [
-              "Critical",
-              "Frontier"
-            ]
           }
         ],
         "description": "Full autonomy requires Critical or Frontier review.",

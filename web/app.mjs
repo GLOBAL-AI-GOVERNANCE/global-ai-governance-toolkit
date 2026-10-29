@@ -24,8 +24,8 @@ function download(name, content, type = "application/json") {
   link.click();
   setTimeout(() => URL.revokeObjectURL(link.href), 0);
 }
-function summary(label, value) { return `<article><span>${label}</span><strong>${value}</strong></article>`; }
 function escapeHtml(value) { const span = document.createElement("span"); span.textContent = String(value); return span.innerHTML; }
+function summary(label, value) { return `<article><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></article>`; }
 function clearEvaluation(statusText) {
   for (const id of ["normalization-summary", "preview-head", "preview-body", "result-explanation", "finding-list", "download-grid"]) byId(id).innerHTML = "";
   byId("gate").className = "gate"; byId("gate").innerHTML = "";
