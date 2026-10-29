@@ -1,4 +1,4 @@
-import { MATURITY_CATALOG, evaluateMaturity, buildProfileResult, LEVEL_LABELS } from "./maturity-engine.mjs";
+import { MATURITY_CATALOG, evaluateMaturity, buildProfileResult, LEVEL_LABELS, validateMaturityAssessment } from "./maturity-engine.mjs";
 import { renderResult, gapRegister, reviewMarkdown, escapeHtml } from "./maturity-viewer.mjs";
 
 const TIME_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
@@ -209,9 +209,19 @@ function readSetup() {
   state.assessment_coverage = document.querySelector("#coverage").value;
 }
 
-function readEvaluationTime() {
-  const raw = (evaluationTimeInput?.value || "").trim() || nowUtc();
-  if (evaluationTimeInput && !evaluationTimeInput.value.trim()) evaluationTimeInput.value = raw;
+function fixedTimeEnabled() {
+  return Boolean(document.querySelector("#fixed-evaluation-time")?.checked);
+}
+
+/** One UTC instant per Evaluate/export action. Refresh to now unless fixed-time mode is on. */
+function captureEvaluationInstant({ refresh }) {
+  let raw;
+  if (fixedTimeEnabled() || !refresh) {
+    raw = (evaluationTimeInput?.value || "").trim() || nowUtc();
+  } else {
+    raw = nowUtc();
+  }
+  if (evaluationTimeInput) evaluationTimeInput.value = raw;
   if (!isStrictUtcTimestamp(raw)) {
     throw new Error("Evaluation time must be a real UTC timestamp such as 2026-08-29T12:00:00Z.");
   }
@@ -222,7 +232,7 @@ async function evaluate() {
   readSetup();
   let evaluationTime;
   try {
-    evaluationTime = readEvaluationTime();
+    evaluationTime = captureEvaluationInstant({ refresh: true });
   } catch (error) {
     result.replaceChildren();
     const p = document.createElement("p");
@@ -261,7 +271,7 @@ document.querySelector("#export-result").addEventListener("click", async () => {
   readSetup();
   let evaluationTime;
   try {
-    evaluationTime = readEvaluationTime();
+    evaluationTime = captureEvaluationInstant({ refresh: false });
   } catch (error) {
     showImportStatus(error.message, true);
     return;
@@ -273,7 +283,7 @@ document.querySelector("#export-result").addEventListener("click", async () => {
 document.querySelector("#export-gaps").addEventListener("click", () => {
   let evaluationTime;
   try {
-    evaluationTime = readEvaluationTime();
+    evaluationTime = captureEvaluationInstant({ refresh: false });
   } catch (error) {
     showImportStatus(error.message, true);
     return;
@@ -283,7 +293,7 @@ document.querySelector("#export-gaps").addEventListener("click", () => {
 document.querySelector("#export-review").addEventListener("click", () => {
   let evaluationTime;
   try {
-    evaluationTime = readEvaluationTime();
+    evaluationTime = captureEvaluationInstant({ refresh: false });
   } catch (error) {
     showImportStatus(error.message, true);
     return;
@@ -308,28 +318,7 @@ function showImportStatus(message, isError) {
 }
 
 function validateMaturityImport(value) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return "Import must be a JSON object exported from this page or a matching assessment.";
-  }
-  if (value.framework_id !== "unesco-ai-maturity-2025") {
-    return "Import rejected: framework_id must be unesco-ai-maturity-2025.";
-  }
-  if (value.framework_version !== "2025") {
-    return "Import rejected: framework_version must be 2025.";
-  }
-  if (value.authority_effect !== "NONE") {
-    return "Import rejected: authority_effect must be NONE.";
-  }
-  if (!Array.isArray(value.categories)) {
-    return "Import rejected: categories must be an array.";
-  }
-  const known = new Set(MATURITY_CATALOG.pillars.flatMap((pillar) => pillar.categories.map((category) => category.id)));
-  for (const category of value.categories) {
-    if (!category || typeof category !== "object") return "Import rejected: each category must be an object.";
-    if (!known.has(category.category_id)) return `Import rejected: unknown category_id ${category.category_id}.`;
-    if (!category.pillar_id) return "Import rejected: each category needs pillar_id.";
-  }
-  return null;
+  return validateMaturityAssessment(value);
 }
 
 document.querySelector("#import-file").addEventListener("change", async (event) => {

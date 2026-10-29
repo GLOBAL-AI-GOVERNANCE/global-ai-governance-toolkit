@@ -32,6 +32,71 @@ function catalogIndex() {
   return { pillars, categories, ids };
 }
 
+
+function isPlainObject(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function asStringArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+/** Reject malformed assessments before import mutates UI state. Returns problem string or null. */
+export function validateMaturityAssessment(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return "Import must be a JSON object exported from this page or a matching assessment.";
+  }
+  if (value.framework_id !== "unesco-ai-maturity-2025") {
+    return "Import rejected: framework_id must be unesco-ai-maturity-2025.";
+  }
+  if (value.framework_version !== "2025") {
+    return "Import rejected: framework_version must be 2025.";
+  }
+  if (value.authority_effect !== "NONE") {
+    return "Import rejected: authority_effect must be NONE.";
+  }
+  if (!Array.isArray(value.categories)) {
+    return "Import rejected: categories must be an array.";
+  }
+  const catalog = catalogIndex();
+  const known = new Set(Object.keys(catalog.categories));
+  for (const category of value.categories) {
+    if (!isPlainObject(category)) return "Import rejected: each category must be an object.";
+    if (!known.has(category.category_id)) return `Import rejected: unknown category_id ${category.category_id}.`;
+    if (!category.pillar_id || typeof category.pillar_id !== "string") {
+      return "Import rejected: each category needs pillar_id.";
+    }
+    if (catalog.categories[category.category_id].pillar_id !== category.pillar_id) {
+      return `Import rejected: category_id ${category.category_id} does not belong to pillar_id ${category.pillar_id}.`;
+    }
+    if (category.evidence !== undefined) {
+      if (!Array.isArray(category.evidence)) {
+        return "Import rejected: evidence must be an array of evidence objects.";
+      }
+      for (const item of category.evidence) {
+        if (!isPlainObject(item)) {
+          return "Import rejected: each evidence entry must be a plain object (nested arrays are not allowed).";
+        }
+      }
+    }
+    if (category.human_determination !== undefined && category.human_determination !== null) {
+      if (!isPlainObject(category.human_determination)) {
+        return "Import rejected: human_determination must be an object when present.";
+      }
+      const conditions = category.human_determination.conditions;
+      if (conditions !== undefined && !Array.isArray(conditions)) {
+        return "Import rejected: human_determination.conditions must be an array when present.";
+      }
+    }
+    for (const key of ["contradictions", "gaps", "corrective_actions", "reassessment_triggers", "material_change_events"]) {
+      if (category[key] !== undefined && !Array.isArray(category[key])) {
+        return `Import rejected: ${key} must be an array when present.`;
+      }
+    }
+  }
+  return null;
+}
+
 export function evaluateMaturity(data, evaluationTime) {
   const findings = [];
   const evidence = [];
@@ -108,10 +173,11 @@ function evaluateCategory(cat, data, catalog, evalDt, findings, evidence, seen) 
     return null;
   }
   seen.add(cat.category_id);
-  const human = cat.human_determination && typeof cat.human_determination === "object" ? cat.human_determination : null;
+  const human = isPlainObject(cat.human_determination) ? cat.human_determination : null;
   const humanStatus = human ? human.status : null;
   const humanLevel = human ? human.level : null;
   const established = CARRY.includes(humanStatus) && LEVELS.includes(humanLevel);
+  const conditionList = human && Array.isArray(human.conditions) ? [...human.conditions] : [];
   const result = {
     known: true,
     pillar_id: cat.pillar_id,
@@ -122,18 +188,18 @@ function evaluateCategory(cat, data, catalog, evalDt, findings, evidence, seen) 
     target_level: cat.target_level,
     human_determination_status: humanStatus,
     human_determined_level: established ? humanLevel : null,
-    conditions: humanStatus === "ACCEPTED_WITH_CONDITIONS" ? [...(human.conditions || [])] : [],
+    conditions: humanStatus === "ACCEPTED_WITH_CONDITIONS" ? conditionList : [],
     evidence_supported_level: null,
     level_support_state: "NOT_DETERMINED",
     support_status: "UNSUPPORTED",
     freshness_status: "CURRENT",
     assessment_state: "CURRENT",
     confidence: "LOW",
-    contradictions: cat.contradictions || [],
-    gaps: cat.gaps || [],
-    corrective_actions: cat.corrective_actions || [],
-    reassessment_triggers: cat.reassessment_triggers || [],
-    material_change_events: cat.material_change_events || [],
+    contradictions: asStringArray(cat.contradictions),
+    gaps: asStringArray(cat.gaps),
+    corrective_actions: asStringArray(cat.corrective_actions),
+    reassessment_triggers: asStringArray(cat.reassessment_triggers),
+    material_change_events: asStringArray(cat.material_change_events),
   };
   if (!LEVELS.includes(cat.claimed_level)) {
     findings.push(finding("INVALID_LEVEL", "CRITICAL", "Claimed level must be BASIC, READY, DYNAMIC, or ADVANCED.", "Use only the four source vocabulary levels."));
@@ -149,7 +215,10 @@ function evaluateCategory(cat, data, catalog, evalDt, findings, evidence, seen) 
       findings.push(finding("HUMAN_DETERMINATION", "CRITICAL", "Human determination requires an accountable role.", "Name the accountable function, not a person."));
     }
   }
-  const evs = cat.evidence || [];
+  if (cat.evidence != null && !Array.isArray(cat.evidence)) {
+    findings.push(finding("EVIDENCE_SHAPE", "CRITICAL", "Evidence must be an array of evidence objects.", "Submit evidence as a JSON array."));
+  }
+  const evs = Array.isArray(cat.evidence) ? cat.evidence : [];
   let hasOperating = false;
   let hasRepresentative = false;
   let hasPolicy = false;
@@ -159,7 +228,7 @@ function evaluateCategory(cat, data, catalog, evalDt, findings, evidence, seen) 
   let stale = false;
   let integrityFail = false;
   for (const ev of evs) {
-    if (!ev || typeof ev !== "object") continue;
+    if (!isPlainObject(ev)) continue;
     if (ev.reference) evidence.push({ type: "URI", reference: ev.reference, sha256: ev.sha256 });
     if (ev.evidence_class !== "SYNTHETIC") syntheticOnly = false;
     if (ev.evidence_class === "OPERATING") {

@@ -32,6 +32,7 @@
     <p class="eyebrow">Global AI Governance Toolkit</p>
     <h1>Organizational AI maturity evidence</h1>
     <p>Maturity is a judgment a person makes and stands behind. This local page checks whether the submitted evidence can carry that rating. It does not score maturity, certify, or authorize deployment.</p>
+    <p class="fineprint"><strong>Advisory vs enforcement.</strong> Browser and CLI maturity results are advisory. Runtime enforcement is the MCP guard and hooks, not this page.</p>
   </header>
   <main class="shell grid">
     <section id="setup" class="setup" tabindex="-1">
@@ -42,8 +43,9 @@
         <label>Accountable role<input id="owner"></label>
         <label>Coverage<select id="coverage"><option>PARTIAL</option><option>FULL_FRAMEWORK</option></select></label>
         <label>Evaluation time (UTC)<input id="evaluation-time" type="text" placeholder="YYYY-MM-DDTHH:MM:SSZ" aria-describedby="maturity-time-help"></label>
+        <label class="checkbox"><input id="fixed-evaluation-time" type="checkbox"> Use fixed evaluation time (reproducible)</label>
       </div>
-      <p id="maturity-time-help">Defaults to the current UTC time. Override with a real UTC timestamp (YYYY-MM-DDTHH:MM:SSZ). Impossible dates are rejected. Exports record this time.</p>
+      <p id="maturity-time-help">Each Evaluate or export captures one UTC instant for that run and records it in results and downloads. Leave the checkbox off to use the current UTC time. Check it and set the field to replay a prior run with a real UTC timestamp (YYYY-MM-DDTHH:MM:SSZ). Impossible dates are rejected.</p>
     </section>
     <section class="setup">
       <h2>What this page is</h2>
