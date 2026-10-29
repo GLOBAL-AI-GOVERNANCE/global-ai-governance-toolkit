@@ -39,6 +39,31 @@ TARGET_FILES = (
 
 def load_json(path_or_url: str) -> dict:
     if path_or_url.startswith("http://") or path_or_url.startswith("https://"):
+        # Prefer gh api for the canonical suite-manifest on main (retries TLS flakes).
+        if path_or_url.rstrip("/") == DEFAULT_MANIFEST.rstrip("/") or path_or_url.endswith(
+            "/GLOBAL-AI-GOVERNANCE/main/suite-manifest.json"
+        ):
+            last_error: Exception | None = None
+            for _ in range(5):
+                try:
+                    completed = subprocess.run(
+                        [
+                            "gh",
+                            "api",
+                            "repos/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/contents/suite-manifest.json?ref=main",
+                            "-H",
+                            "Accept: application/vnd.github.raw",
+                        ],
+                        check=True,
+                        capture_output=True,
+                        text=True,
+                    )
+                    return json.loads(completed.stdout)
+                except (subprocess.CalledProcessError, FileNotFoundError, json.JSONDecodeError) as error:
+                    last_error = error
+                    continue
+            if last_error:
+                pass  # fall through to urllib
         token = None
         try:
             token = subprocess.run(
