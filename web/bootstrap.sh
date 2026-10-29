@@ -5,7 +5,7 @@
 set -euo pipefail
 
 SITE="${GAIG_SITE:-https://ai-governance.solutions}"
-TOOLKIT_TAG=v2.8.1
+TOOLKIT_TAG=v2.8.2
 MCP_TAG=v0.5.1
 AGENTIC_TAG=v0.1.0-alpha.5
 VVG_TAG=v0.4.0
@@ -30,15 +30,15 @@ source .venv/bin/activate
 echo "== 0. machine front door =="
 curl -fsSL "$SITE/llms.txt" | head -n 1 | grep -q 'Global AI Governance Toolkit'
 curl -fsSL "$SITE/machine-interface.json" \
-  | python -c "import json,sys; d=json.load(sys.stdin); assert d['machine_interface_version']>='1.6.0' and d['release']=='v2.8.1'; print(d['machine_interface_version'], d['release'])"
+  | python -c "import json,sys; d=json.load(sys.stdin); assert d['machine_interface_version']>='1.6.0' and d['release']=='v2.8.2'; print(d['machine_interface_version'], d['release'])"
 
 echo "== 1. toolkit =="
-WHL="global_ai_governance-2.8.1-py3-none-any.whl"
+WHL="global_ai_governance-2.8.2-py3-none-any.whl"
 curl -fsSLO "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/${TOOLKIT_TAG}/${WHL}"
 curl -fsSLO "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/${TOOLKIT_TAG}/SHA256SUMS"
 grep " ${WHL}\$" SHA256SUMS | sha256sum -c -
 "$PIP" install --quiet "./${WHL}"
-gaig --version | grep -qx '2.8.1'
+gaig --version | grep -qx '2.8.2'
 
 echo "== 2. inventory check =="
 curl -fsSLO "$SITE/sample-ai-inventory.csv"
@@ -110,7 +110,7 @@ cd ..
 
 echo "== done check =="
 check() { if eval "$2" >/dev/null 2>&1; then echo "$1 ok"; else echo "$1 FAILED"; exit 1; fi; }
-check "toolkit 2.8.1      " "gaig --version | grep -qx '2.8.1'"
+check "toolkit 2.8.2      " "gaig --version | grep -qx '2.8.2'"
 check "decision pack      " "gaig verify out"
 check "mcp server 0.5.1   " "grep -q 'server gaig-mcp 0.5.1' mcp_out.txt"
 check "action level guard " "printf '{\"tool_name\": \"x__delete_records\"}' | python .claude/hooks/tool_call_hook.py --policy .claude/hooks/action-levels.json | grep -q deny"
