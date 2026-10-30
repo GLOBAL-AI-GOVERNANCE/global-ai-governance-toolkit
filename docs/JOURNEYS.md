@@ -98,7 +98,7 @@ A failing case exits 1, so a pipeline stops for review. How to run and record a 
    ```bash
    for rt in global-ai-governance-toolkit:v2.8.2:global_ai_governance-2.8.2-py3-none-any.whl \
              ai-governance-mcp:v0.5.1:gaig_mcp-0.5.1-py3-none-any.whl \
-             agentic-ai-governance:v0.1.0-alpha.5:agentic-ai-governance-v0.1.0-alpha.5.zip \
+             agentic-ai-governance:v0.1.0-alpha.6:agentic-ai-governance-v0.1.0-alpha.6.zip \
              verified-vulnerability-governance:v0.4.0:verified-vulnerability-governance-v0.4.0.zip \
              containment-ledger:v1.0.0:containment-ledger-v1.0.0-site.zip \
              ai-governance-os:v1.1.1:ai-governance-os-v1.1.1.zip; do

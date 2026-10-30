@@ -7,7 +7,7 @@ set -euo pipefail
 SITE="${GAIG_SITE:-https://ai-governance.solutions}"
 TOOLKIT_TAG=v2.8.2
 MCP_TAG=v0.5.1
-AGENTIC_TAG=v0.1.0-alpha.5
+AGENTIC_TAG=v0.1.0-alpha.6
 VVG_TAG=v0.4.0
 ROOT="$(pwd)/gaig-setup"
 PY="${ROOT}/.venv/bin/python"
