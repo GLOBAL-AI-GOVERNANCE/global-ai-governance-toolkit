@@ -124,7 +124,10 @@ class JourneysSyncTests(unittest.TestCase):
         for url in ("start.html", "JOURNEYS.md", "lead-agent/", "interoperability.html"):
             self.assertIn(f"<loc>{SITE}{url}</loc>", sitemap)
         pages = read(".github/workflows/pages.yml")
-        self.assertIn('- "docs/JOURNEYS.md"', pages)
+        # Pages deploys on every main push (no path filters) and stages JOURNEYS.
+        self.assertIn("workflow_call:", pages)
+        self.assertIn("cp docs/JOURNEYS.md _site/JOURNEYS.md", pages)
+        self.assertNotIn("paths:", pages.split("on:", 1)[1].split("permissions:", 1)[0])
         self.assertIn("node --check web/start.mjs", pages)
         self.assertNotIn("Three ways in", read("web/index.html"))
 
