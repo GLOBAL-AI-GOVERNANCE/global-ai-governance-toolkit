@@ -69,7 +69,8 @@ def render(md: str, title: str) -> str:
                 close_list()
                 body.append("<ul>")
                 list_type = "ul"
-            body.append(f"<li>{inline(re.sub(r'^[-*]\\s+', '', line))}</li>")
+            item = re.sub(r"^[-*]\s+", "", line)
+            body.append(f"<li>{inline(item)}</li>")
             i += 1
             continue
         if re.match(r"^\d+\.\s+", line):
@@ -77,7 +78,8 @@ def render(md: str, title: str) -> str:
                 close_list()
                 body.append("<ol>")
                 list_type = "ol"
-            body.append(f"<li>{inline(re.sub(r'^\\d+\\.\\s+', '', line))}</li>")
+            item = re.sub(r"^\d+\.\s+", "", line)
+            body.append(f"<li>{inline(item)}</li>")
             i += 1
             continue
         if line.strip() == "---":
