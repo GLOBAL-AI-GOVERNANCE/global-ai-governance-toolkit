@@ -33,7 +33,7 @@ curl -fsSLO https://ai-governance.solutions/bootstrap.sh && bash bootstrap.sh
 |---|---|---|
 | Toolkit (`gaig` CLI) | v2.8.2 | release wheel |
 | AI Governance MCP (`gaig-mcp`) | v0.5.1 | `uvx` from the tag |
-| Agentic AI Governance (`validate-passport`) | v0.1.0-alpha.5 | `pip` from the tag |
+| Agentic AI Governance (`validate-passport`) | v0.1.0-alpha.6 | `pip` from the tag |
 | Verified Vulnerability Governance (`vvd`) | v0.4.0 | `pip` from the tag |
 
 <!-- gaig:mcp-bundle -->
@@ -298,7 +298,7 @@ An `allow` needs a current passport, its trusted key, a current signed revocatio
 ## 7. Agent Trust Passports and fleet controls
 
 ```bash
-python -m pip install --quiet "git+https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance@v0.1.0-alpha.5"
+python -m pip install --quiet "git+https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance@v0.1.0-alpha.6"
 validate-passport --example signed-unrevoked >/dev/null; echo "exit $?"
 validate-passport --example signed-revoked >/dev/null; echo "exit $?"
 ```
@@ -308,7 +308,7 @@ Each run also prints, on stderr, that verification is not authorization. Expect 
 The fleet controls reference tool runs from a checkout at the tag:
 
 ```bash
-git -c advice.detachedHead=false clone --quiet --depth 1 --branch v0.1.0-alpha.5 https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance agentic
+git -c advice.detachedHead=false clone --quiet --depth 1 --branch v0.1.0-alpha.6 https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance agentic
 python agentic/tools/fleet_controls.py agentic/examples/fleet-controls/sub-agent-spawn-permitted.json >/dev/null; echo "exit $?"
 python agentic/tools/fleet_controls.py agentic/examples/fleet-controls/ancestor-suspended.json >/dev/null; echo "exit $?"
 ```
@@ -336,7 +336,7 @@ Expect three agents, each `VALID`. Then, for the researcher's passport: an empty
 
 ### Run the reference lead agent / orchestrator
 
-The [lead agent](https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/v0.1.0-alpha.5/examples/lead-agent) plans a task, hands parts to sub-agents, and checks every tool call against the passports and Action Levels above. Its demo uses an offline model, needs no API key, and runs its own shutdown tests:
+The [lead agent](https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/v0.1.0-alpha.6/examples/lead-agent) plans a task, hands parts to sub-agents, and checks every tool call against the passports and Action Levels above. Its demo uses an offline model, needs no API key, and runs its own shutdown tests:
 
 ```bash
 lead-agent demo > lead-agent-demo.json; echo "exit $?"
@@ -436,5 +436,5 @@ Then report what ran and its outputs. Nothing above waits on a person. Level 4 t
 - [Lead agent console](https://ai-governance.solutions/lead-agent/) and the one-command [bootstrap.sh](https://ai-governance.solutions/bootstrap.sh)
 - [Toolkit README](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit#quick-start)
 - [AI Governance MCP](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/tree/v0.5.1)
-- [Agentic AI Governance](https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/v0.1.0-alpha.5)
+- [Agentic AI Governance](https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/tree/v0.1.0-alpha.6)
 - [Verified Vulnerability Governance](https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance/tree/v0.4.0)
