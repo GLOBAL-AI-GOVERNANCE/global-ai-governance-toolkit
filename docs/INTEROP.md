@@ -18,7 +18,7 @@ Live matrix: [ai-governance.solutions/interoperability.html](https://ai-governan
 | MCP registry | `server.json` on ai-governance-mcp | validated against registry schema; launch args pin v0.5.1 | TESTED |
 | OpenAI Agents SDK | `openai_agents_guard.py` | Offline with openai-agents 0.24.0, real gaig-mcp stdio, scripted model | TESTED |
 | OpenAI Codex CLI | `~/.codex/config.toml` recipe | One recorded local stdio run (Codex CLI 0.151.0) | TESTED |
-| OpenAI AGENTS.md | Toolkit / MCP / Agentic / VVG AGENTS.md | Machine front door + suite path | AVAILABLE |
+| OpenAI AGENTS.md | AGENTS.md in every public GLOBAL-AI-GOVERNANCE repository | Machine front door + suite path | AVAILABLE |
 | Anthropic MCP | Spec-shaped server; Claude Code PreToolUse hooks | Hook dry-run offline; not inside Claude Code | TESTED (launch) / AVAILABLE (hooks) |
 | Anthropic Claude Agent SDK | `claude_agent_sdk_guard.py` | Offline with claude-agent-sdk 0.2.174; hook contract | TESTED |
 | Anthropic SKILL.md | Agent skill files in MCP and Agentic | File present; not run inside Claude | AVAILABLE |
