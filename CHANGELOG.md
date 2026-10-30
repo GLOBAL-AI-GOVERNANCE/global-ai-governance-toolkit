@@ -1,6 +1,13 @@
 # Changelog
 ## [Unreleased]
 
+## [2.8.3] - 2026-10-30 - UAT launch polish and bootstrap reliability
+
+- Ship the UAT D5–D27 launch polish already on `main` (Decision Pack zip, anchors, BLOCKED 6 / GAI-AUTO-005 docs, noscript, 404/print/lastmod, companion nav, Lead Agent pin, MCP tag variable).
+- Fix `bootstrap.sh` curl|head SIGPIPE under `set -o pipefail` so AGENT_SETUP steps 0–8 exit 0 on a fresh run.
+- Document AGENTS.md coverage across every public repository; correct INTEROP full-coverage wording.
+- No governance rule or schema change. Status: TESTED. `authority_effect` remains NONE.
+
 ## [2.8.2] - 2026-10-29 - Suite version automation
 
 - Add `automation/suite-pins.json`, `automation/scripts/sync_site_from_manifest.py`, and `.github/workflows/sync-site-versions.yml` so site, docs, machine-interface, llms.txt, AGENT_SETUP, and JOURNEYS pins refresh from the profile `suite-manifest.json` (GitHub release tags) without hand-edits.
