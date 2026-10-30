@@ -4,12 +4,8 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "web/**"
-      - "docs/AGENT_SETUP.md"
-      - "docs/JOURNEYS.md"
-      - ".github/workflows/pages.yml"
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read

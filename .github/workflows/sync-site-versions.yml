@@ -20,7 +20,7 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -43,6 +43,7 @@ jobs:
             git diff --stat
           fi
       - name: Open or refresh sync pull request
+        id: pr
         if: steps.diff.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -71,4 +72,29 @@ jobs:
           BODY
           )")"
           echo "Opened $PR_URL"
+          echo "pr_url=$PR_URL" >> "$GITHUB_OUTPUT"
           gh pr merge --auto --squash "$PR_URL" || true
+      - name: Wait for merge then deploy Pages
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          PR_URL="${{ steps.pr.outputs.pr_url }}"
+          test -n "$PR_URL"
+          for i in $(seq 1 40); do
+            STATE="$(gh pr view "$PR_URL" --json state -q .state)"
+            echo "poll $i state=$STATE"
+            if [ "$STATE" = "MERGED" ]; then
+              echo "Merged; dispatching Pages deploy"
+              gh workflow run pages.yml --ref main
+              exit 0
+            fi
+            if [ "$STATE" = "CLOSED" ]; then
+              echo "PR closed without merge" >&2
+              exit 1
+            fi
+            sleep 20
+          done
+          echo "Timed out waiting for sync PR merge" >&2
+          exit 1
