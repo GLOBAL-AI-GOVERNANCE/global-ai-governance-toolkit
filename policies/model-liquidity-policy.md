@@ -4,7 +4,7 @@ Part of Global AI Governance Toolkit — v2.2.0 AI Sovereignty Control Layer.
 
 ## Policy Statement
 
-The organization must be able to switch AI models and providers with low friction. Dependency on a single provider converts ordinary vendor events — outages, retention-policy changes, refusal-policy changes, pricing changes, geopolitical restrictions — into existential workflow risk, and removes the leverage that makes contractual protections enforceable.
+The organization must be able to switch AI models and providers with low friction. Dependency on a single provider converts ordinary vendor events — outages, retention-policy changes, refusal-policy changes, pricing changes, geopolitical restrictions — into severe workflow disruption, and removes the leverage that makes contractual protections enforceable.
 
 ## Requirements
 
