@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JOURNEYS · Global AI Governance</title>
+  <link rel="stylesheet" href="./styles.css?v=2.8.2">
+  <link rel="canonical" href="https://ai-governance.solutions/JOURNEYS.html">
+</head>
+<body>
+  <a class="skip-link" href="#top">Skip to main content</a>
+  <nav class="gaig-bar shell" aria-label="Global AI Governance sites">
+    <a class="gaig-brand" href="./">Global AI Governance</a>
+    <span class="gaig-links"><a href="./start.html">Start here</a><a href="./#toolkit">Toolkit</a><a href="./connect.html">Connect</a><a href="./lead-agent/">Lead Agent</a><a href="./interoperability.html">Interop</a><a href="//global-ai-governance.github.io/containment-ledger/">Containment Ledger</a><a href="//global-ai-governance.github.io/peace-os/">Peace OS</a></span>
+    <a class="gaig-cta" href="./connect.html#agents">Connect your agent</a>
+  </nav>
+  <main id="top" class="shell connect-section" tabindex="-1">
+<h1 id="start-where-you-are">Start where you are</h1>
+<p>Global AI Governance is for anyone who uses, builds, deploys, oversees, researches, or regulates AI. This guide gives worked examples for people using everyday AI apps, for builders of AI organizations and agent fleets, and for frontier labs, plus a map for everyone else. These are examples only. Start wherever fits, skip what you do not need, and go straight to any step. There is no account, sign-up, or form anywhere.</p>
+<p>Live copy: &lt;https://ai-governance.solutions/JOURNEYS.html&gt; (also available as <a href="./JOURNEYS.html">Markdown</a>). For people: &lt;https://ai-governance.solutions/start.html&gt;. For an agent setting everything up: &lt;https://ai-governance.solutions/AGENT_SETUP.html&gt;.</p>
+<p>Status: TESTED. The browser steps were run in a desktop and a mobile browser, and the <code>bash</code> blocks below were run in order in a clean Linux environment (Python 3.13). Nothing here is independently verified.</p>
+<p>The same rule holds on every path: tools check and record, and a person makes the decision. Every output carries <code>authority_effect: NONE</code>.</p>
+<h2 id="example-you-use-ai-apps-such-as-chatgpt-claude-grok-gemini-or-copilot">Example: you use AI apps such as ChatGPT, Claude, Grok, Gemini, or Copilot</h2>
+<p>No terminal and no install. Each step takes a few minutes.</p>
+<ol>
+<li><strong>Practise a hard decision.</strong> Open <a href="https://global-ai-governance.github.io/peace-os/">Peace OS: Crisis Room</a>, choose Practice and a scenario, and work through it. Scenarios are fictional, and nothing leaves your browser.</li>
+<li><strong>Check the AI you use.</strong> Paste this into your AI app:</li>
+</ol>
+<p>   ```text</p>
+<p>   Help me list the AI apps, assistants, and agents I use, so I can check them for gaps. Ask me about each one, one at a time. Then give me a CSV in a code block with exactly this header row:</p>
+<p>   system_id,system_name,owner,business_unit,vendor_internal,use_case,data_sensitivity,impact_people,impact_money,impact_security,impact_rights,impact_safety,autonomy_level,public_facing,monitoring_active,shutdown_path_exists,evidence_complete</p>
+<p>   Rules: system_id like AI-1, AI-2. owner is who is responsible; &quot;Me&quot; is fine. vendor_internal is Vendor, Internal, or Hybrid. data_sensitivity is None, Internal, Personal, Regulated, or Critical. autonomy_level is None (it only suggests), Partial (it acts but I confirm), or Full (it acts on its own). Every other column is Yes or No. If I am not sure, use No.</p>
+<p>   ```</p>
+<p>   Save the CSV it gives you as a file ending in <code>.csv</code>, open the <a href="https://ai-governance.solutions/#toolkit">Toolkit</a>, and choose <strong>Load your CSV</strong>. The file is read on your device and is not uploaded. Expect a result such as <code>Critical gaps need attention</code> with each gap explained in plain words, for example <code>Shutdown path missing</code> for an agent you could not quickly stop. Each gap card names the system it applies to. You can also fill the <a href="https://ai-governance.solutions/ai-system-inventory-template.csv">blank template</a> in any spreadsheet app: keep Schema Version <code>1.0.0</code>, leave that cell blank to default to <code>1.0.0</code>, or replace the example row. The prompt CSV has no Schema Version column and is accepted as <code>1.0.0</code>.</p>
+<ol>
+<li><strong>Give your assistant a ground rule.</strong> Paste this at the start of a conversation, or into the app&#x27;s custom instructions:</li>
+</ol>
+<p>   ```text</p>
+<p>   Before you send, buy, delete, publish, or change anything outside this chat, stop. Tell me exactly what you will do and what could go wrong, and wait for me to say yes. If I say stop, stop. If you are unsure, say so and show me your evidence.</p>
+<p>   ```</p>
+<p>   This is an instruction, not a technical control: an app can forget or ignore it. Enforced checks before each tool call are in the builder example below.</p>
+<ol>
+<li><strong>Ask an assistant to set things up.</strong> Assistants that can run commands, such as Claude Code, Codex, the Grok CLI, or Cursor, can do the whole setup. Tell one: <code>Follow https://ai-governance.solutions/AGENT_SETUP.html and tell me what is ready and what needs me.</code> Chat-only apps cannot run commands; they can read the guide and explain it.</li>
+</ol>
+<h2 id="example-you-build-ai-organizations-or-agent-fleets">Example: you build AI organizations or agent fleets</h2>
+<p>For a lead agent / orchestrator and the people accountable for it. The order runs from knowing what exists to closing what went wrong. Each step stands alone.</p>
+<p>| Step | What you get | Where |</p>
+<p>|---|---|---|</p>
+<p>| 1. Inventory | Every AI system and agent, with an owner, monitoring, a shutdown path, and evidence, or a finding where one is missing | <code>gaig check</code>, <a href="https://ai-governance.solutions/AGENT_SETUP.html#3-run-a-check-and-build-a-decision-pack">AGENT_SETUP step 3</a> |</p>
+<p>| 2. Assess | Profile results for auditability, maturity, and independent assurance | <code>gaig profile</code>, <a href="https://ai-governance.solutions/AGENT_SETUP.html#optional-assurance-profiles">AGENT_SETUP step 3</a> |</p>
+<p>| 3. Connect | The same checks callable by your agents over MCP | <a href="https://ai-governance.solutions/AGENT_SETUP.html#4-run-the-mcp-server">AGENT_SETUP steps 4 and 5</a> |</p>
+<p>| 4. Passports | Who an agent acts for and what it may do alone | <code>validate-passport</code>, <a href="https://ai-governance.solutions/AGENT_SETUP.html#7-agent-trust-passports-and-fleet-controls">AGENT_SETUP step 7</a> |</p>
+<p>| 5. Guard | Levels 0 to 3 run, Level 5 is denied, Level 4 asks a person by default or follows the operator&#x27;s automated approver when the policy lists the tool | <a href="https://ai-governance.solutions/AGENT_SETUP.html#6-guard-tool-calls-with-action-levels">AGENT_SETUP step 6</a> |</p>
+<p>| 6. Fleet controls | A sub-agent stays within its parent&#x27;s ceiling and stops when an ancestor is suspended | <code>fleet_controls.py</code>, <a href="https://ai-governance.solutions/AGENT_SETUP.html#7-agent-trust-passports-and-fleet-controls">AGENT_SETUP step 7</a> |</p>
+<p>| 7. Shutdown tests | No autonomous agent passes without a recent, passing shutdown test | below |</p>
+<p>| 8. Vulnerabilities | Owner, fix, retest, and closure only with evidence reviewed by a separate role | <code>vvd</code>, <a href="https://ai-governance.solutions/AGENT_SETUP.html#8-verified-vulnerability-governance">AGENT_SETUP step 8</a> |</p>
+<p>| 9. Boundaries | A person&#x27;s review of a system&#x27;s domains, paths, and evidence | <a href="https://global-ai-governance.github.io/containment-ledger/">Containment Ledger</a>, in the browser |</p>
+<p>| 10. Resilience | Limits on blast radius, protected recovery, and continuity | <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework">AI Cyber Resilience Framework</a> |</p>
+<h3 id="shutdown-tests">Shutdown tests</h3>
+<p>The <code>independent-assurance-v0.1</code> profile requires each autonomous agent to have a passport reference and a passing shutdown test no more than 90 days old. These synthetic cases show each outcome:</p>
+<pre tabindex="0"><code class="language-bash">
+mkdir gaig-journeys &amp;&amp; cd gaig-journeys
+
+python3 -m venv .venv &amp;&amp; . .venv/bin/activate
+
+REL=https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.2
+
+curl -fsSLO &quot;$REL/global_ai_governance-2.8.2-py3-none-any.whl&quot;
+
+curl -fsSLO &quot;$REL/SHA256SUMS&quot;
+
+grep &#x27; global_ai_governance-2.8.2-py3-none-any.whl$&#x27; SHA256SUMS | sha256sum -c -
+
+python -m pip install --quiet ./global_ai_governance-2.8.2-py3-none-any.whl jsonschema
+
+FIX=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.2/automation/assurance/independent-assurance/fixtures
+
+for c in agent_pass agent_failed_shutdown_test agent_stale_shutdown_test agent_missing_shutdown_test; do
+
+  curl -fsSL -o &quot;$c.json&quot; &quot;$FIX/$c.json&quot;
+
+  gaig profile independent-assurance-v0.1 &quot;$c.json&quot; --outdir &quot;p-$c&quot; --evaluation-time 2026-10-15T00:00:00Z &gt;/dev/null 2&gt;&amp;1
+
+  python -c &quot;import json,sys; r=json.load(open(sys.argv[1])); print(sys.argv[2], r[&#x27;status&#x27;], *[f[&#x27;id&#x27;].split(&#x27;:&#x27;)[1] for f in r[&#x27;findings&#x27;]])&quot; &quot;p-$c/profile-result.json&quot; &quot;$c&quot;
+
+done
+
+</code></pre>
+<p>Expect <code>global_ai_governance-2.8.2-py3-none-any.whl: OK</code>, then:</p>
+<pre tabindex="0"><code class="language-text">
+agent_pass PASS
+
+agent_failed_shutdown_test FAIL SHUTDOWN_TEST_NOT_PASSED
+
+agent_stale_shutdown_test FAIL SHUTDOWN_TEST_STALE
+
+agent_missing_shutdown_test FAIL SHUTDOWN_TEST_MISSING
+
+</code></pre>
+<p>A failing case exits 1, so a pipeline stops for review. How to run and record a shutdown test is in the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.2/docs/shutdown-protocol.md">shutdown protocol</a>.</p>
+<h2 id="example-you-work-at-a-frontier-lab">Example: you work at a frontier lab</h2>
+<ol>
+<li><strong>Map it to what you already use.</strong> The <a href="https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/blob/main/docs/FRONTIER_AND_REGULATORY_CROSSWALK.md">frontier and regulatory crosswalk</a> relates the suite to frontier safety frameworks, the EU AI Act, and ISO/IEC 42001:2023. It is informative and establishes no compliance.</li>
+<li><strong>Read the contracts.</strong> <a href="https://ai-governance.solutions/machine-interface.json">machine-interface.json</a> lists the CLI, inputs, outputs, schemas, and profiles. Outputs validate against the published JSON Schemas (draft 2020-12). From the <code>gaig-journeys</code> folder above:</li>
+</ol>
+<p>   ```bash</p>
+<p>   SCHEMA=$(curl -fsSL https://ai-governance.solutions/machine-interface.json | python -c &quot;import json,sys; print(json.load(sys.stdin)[&#x27;profiles&#x27;][&#x27;result_contract&#x27;])&quot;)</p>
+<p>   curl -fsSL -o profile-result.schema.json &quot;$SCHEMA&quot;</p>
+<p>   for c in agent_pass agent_failed_shutdown_test; do</p>
+<p>     python -c &quot;import json,sys,jsonschema; jsonschema.validate(json.load(open(sys.argv[1])), json.load(open(&#x27;profile-result.schema.json&#x27;)), format_checker=jsonschema.FormatChecker()); print(sys.argv[2], &#x27;valid&#x27;)&quot; &quot;p-$c/profile-result.json&quot; &quot;$c&quot;</p>
+<p>   done</p>
+<p>   ```</p>
+<p>   Expect <code>agent_pass valid</code>, then <code>agent_failed_shutdown_test valid</code>. A failing result is still a valid result.</p>
+<ol>
+<li><strong>Check where each release came from.</strong> Release assets ship SHA-256 checksums, and most carry GitHub build provenance. With the GitHub CLI installed and signed in:</li>
+</ol>
+<p>   ```bash</p>
+<p>   for rt in global-ai-governance-toolkit:v2.8.2:global_ai_governance-2.8.2-py3-none-any.whl \</p>
+<p>             ai-governance-mcp:v0.5.1:gaig_mcp-0.5.1-py3-none-any.whl \</p>
+<p>             agentic-ai-governance:v0.1.0-alpha.6:agentic-ai-governance-v0.1.0-alpha.6.zip \</p>
+<p>             verified-vulnerability-governance:v0.4.0:verified-vulnerability-governance-v0.4.0.zip \</p>
+<p>             containment-ledger:v1.0.0:containment-ledger-v1.0.0-site.zip \</p>
+<p>             ai-governance-os:v1.1.1:ai-governance-os-v1.1.1.zip; do</p>
+<p>     IFS=: read -r repo tag asset &lt;&lt;&lt; &quot;$rt&quot;</p>
+<p>     gh release download &quot;$tag&quot; -R &quot;GLOBAL-AI-GOVERNANCE/$repo&quot; -p &quot;$asset&quot; --clobber</p>
+<p>     gh attestation verify &quot;$asset&quot; -R &quot;GLOBAL-AI-GOVERNANCE/$repo&quot; &gt;/dev/null &amp;&amp; echo &quot;$repo $tag attested&quot;</p>
+<p>   done</p>
+<p>   ```</p>
+<p>   Expect six <code>attested</code> lines. Peace OS <code>v0.3.0</code> ships a <code>SHA256SUMS.txt</code>, a provenance file, and an SBOM instead of a GitHub attestation. AI Cyber Resilience Framework <code>v0.2.0</code> is a tagged document release with attested release assets.</p>
+<ol>
+<li><strong>Connect it to your own agents and evals.</strong></li>
+</ol>
+<p>   - Put the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp">AI Governance MCP</a> server in your agent harness, and the Action Level guard in front of tool calls (<a href="https://ai-governance.solutions/AGENT_SETUP.html#4-run-the-mcp-server">AGENT_SETUP steps 4 to 6</a>).</p>
+<p>   - Treat <code>profile-result.json</code> and <code>governance-result.json</code> as eval outputs: each has a schema, a status, finding IDs, and <code>authority_effect: NONE</code>.</p>
+<p>   - Hand results to people through the Decision Pack, whose <code>manifest.json</code> lists a digest for each file, and <code>gaig verify</code> checks it.</p>
+<p>   - Import findings from your own scanners as SARIF with <code>vvd finding import --sarif</code> (<a href="https://ai-governance.solutions/AGENT_SETUP.html#8-verified-vulnerability-governance">AGENT_SETUP step 8</a>).</p>
+<ol>
+<li><strong>Review it independently.</strong> Each of these is open to an outside reviewer:</li>
+</ol>
+<p>   - AI Cyber Resilience Framework: the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework/blob/main/docs/crypto-agility-review/README.md">crypto-agility review kit</a> (released with v0.2.0).</p>
+<p>   - Agentic AI Governance: the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/blob/main/conformance/independent-verifier/README.md">independent verifier kit</a>. Independent verification is not yet established.</p>
+<p>   - Governed Systems Administration: the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/governed-systems-administration/tree/main/docs/independent-audit">independent audit kit</a>.</p>
+<ol>
+<li><strong>Know what it does not do.</strong> It does not approve deployment, certify compliance, accept risk, or shut anything down. It does not monitor your systems, call an outside AI, or send data anywhere. It is not affiliated with or endorsed by any AI lab, platform, or public body.</li>
+</ol>
+<h2 id="for-anyone-else">For anyone else</h2>
+<p>Teams, enterprises, researchers, educators, public-interest bodies, and regulators can take any piece on its own:</p>
+<p>| If you want to | Start with |</p>
+<p>|---|---|</p>
+<p>| See what governance gaps look like | <a href="https://ai-governance.solutions/#toolkit">Run the example with gaps</a> in the browser |</p>
+<p>| Check your own AI systems | The <a href="https://ai-governance.solutions/#toolkit">Toolkit</a> and its <a href="https://ai-governance.solutions/ai-system-inventory-template.csv">blank template</a> |</p>
+<p>| Watch a governed lead agent / orchestrator | The browser <a href="https://ai-governance.solutions/lead-agent/">Lead Agent</a> (mock model; no account or key) |</p>
+<p>| See what stacks this works with | The <a href="https://ai-governance.solutions/interoperability.html">interoperability matrix</a> |</p>
+<p>| Assess organizational AI maturity | <a href="https://ai-governance.solutions/maturity/">Maturity evidence</a> |</p>
+<p>| Teach or practise high-stakes decisions | <a href="https://global-ai-governance.github.io/peace-os/">Peace OS: Crisis Room</a> |</p>
+<p>| Review a system&#x27;s boundaries | <a href="https://global-ai-governance.github.io/containment-ledger/">Containment Ledger</a> |</p>
+<p>| Set limits for agents | <a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance">Agentic AI Governance</a> |</p>
+<p>| Close vulnerabilities with evidence | <a href="https://github.com/GLOBAL-AI-GOVERNANCE/verified-vulnerability-governance">Verified Vulnerability Governance</a> |</p>
+<p>| Plan for AI-accelerated cyber risk | <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework">AI Cyber Resilience Framework</a> |</p>
+<p>| Adopt a governance model and registers | <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-os">AI Governance Foundations</a> |</p>
+<p>| Specify AI-assisted systems administration | <a href="https://github.com/GLOBAL-AI-GOVERNANCE/governed-systems-administration">Governed Systems Administration</a> |</p>
+<p>| Relate this to a framework or law | The <a href="https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/blob/main/docs/FRONTIER_AND_REGULATORY_CROSSWALK.md">crosswalk</a> |</p>
+<p>| Connect an agent | <a href="https://ai-governance.solutions/AGENT_SETUP.html">Agent setup</a> |</p>
+<p>The machine-readable list of these examples is <code>journeys</code> in <a href="https://ai-governance.solutions/machine-interface.json">machine-interface.json</a>. It is open: new examples are added without changing existing ones.</p>
+  </main>
+  <footer class="shell gaig-footer"><p>Global AI Governance · Non-authorizing · <a href="https://github.com/GLOBAL-AI-GOVERNANCE">GitHub</a></p></footer>
+</body>
+</html>

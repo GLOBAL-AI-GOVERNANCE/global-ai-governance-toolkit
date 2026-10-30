@@ -2,6 +2,7 @@ import { contracts, evaluateCsv, GovernanceInputError, pretty } from "./governan
 import { guidanceFor } from "./finding-guidance.mjs";
 import { renderProfileResult, SYNTHETIC_CISO_PROFILE_RESULT } from "./profile-viewer.mjs";
 import { createEvaluationSession, describeInputError } from "./evaluation-session.mjs";
+import { buildZipStore } from "./zip-store.mjs";
 
 const session = createEvaluationSession();
 const state = { csv: "", sourceName: "", selectedOutput: "normalized" };
@@ -46,15 +47,53 @@ function renderResults(output) {
     ? { result: "Critical gaps need attention", meaning: "The current automated checks found at least one critical governance gap.", next: "Resolve the critical gaps, rerun the review, and keep the final decision with an accountable human." }
     : result.governance_gate_state === "REVIEW_REQUIRED"
       ? { result: "Human review is required", meaning: "The current automated checks found governance gaps that need review.", next: "Review each gap, add the missing controls or evidence, and document the accountable human decision." }
-      : { result: "Current automated checks passed", meaning: "No gap was found by the five bounded rules in this toolkit.", next: "Review the evidence and Decision Pack. An accountable human must still make the decision." };
+      : { result: "Current automated checks passed", meaning: "No gap was found by the current bounded rules in this toolkit.", next: "Review the evidence and Decision Pack. An accountable human must still make the decision." };
   byId("gate").innerHTML = `<p>Result</p><h3>${resultCopy.result}</h3><span>Human decision remains pending</span>`;
   byId("result-explanation").innerHTML = `<article><h3>What this means</h3><p>${resultCopy.meaning}</p></article><article><h3>What to do next</h3><p>${resultCopy.next}</p></article>`;
-  const tierCards = Object.entries(tiers).map(([id, tier]) => `<article class="finding"><span class="severity tier">${tier} risk</span><h3>${escapeHtml(id)}</h3><p>Preliminary risk tier from the built-in calculator.</p></article>`);
+  const recordsById = Object.fromEntries((output.normalized?.records || []).map((row) => [row.system_id, row]));
+  const findingBySystem = findings.findings.reduce((acc, item) => {
+    (acc[item.system_id] ||= []).push(item);
+    return acc;
+  }, {});
+  const severityCounts = findings.findings.reduce((acc, item) => {
+    acc[item.severity] = (acc[item.severity] || 0) + 1;
+    return acc;
+  }, {});
+  const tierCounts = Object.values(tiers).reduce((acc, tier) => {
+    acc[tier] = (acc[tier] || 0) + 1;
+    return acc;
+  }, {});
+  const summaryHtml = `<div class="finding-summary" aria-label="Result summary">
+    ${summary("Systems", Object.keys(tiers).length)}
+    ${summary("Findings", findings.findings.length)}
+    ${Object.keys(tierCounts).sort().map((tier) => summary(`${tier} risk`, tierCounts[tier])).join("")}
+    ${Object.keys(severityCounts).sort().map((sev) => summary(sev, severityCounts[sev])).join("")}
+  </div>`;
+  const tierCards = Object.entries(tiers).map(([id, tier]) => {
+    const name = recordsById[id]?.system_name || id;
+    return `<article class="finding"><span class="severity tier">${tier} risk</span><h3>${escapeHtml(name)}</h3><p class="finding-system"><span class="finding-system-name">${escapeHtml(name)}</span> <code>${escapeHtml(id)}</code></p><p>Preliminary risk tier from the built-in calculator.</p></article>`;
+  });
   const findingCards = findings.findings.map((item) => {
     const guidance = guidanceFor(item.rule_id);
     return `<article class="finding"><span class="severity ${item.severity.toLowerCase()}">${item.severity} · ${escapeHtml(item.rule_id)}</span><h3>${guidance.title}</h3><p class="finding-system"><span class="finding-system-name">${escapeHtml(item.system_name)}</span> <code>${escapeHtml(item.system_id)}</code></p><h4>What this means</h4><p>${guidance.meaning}</p><h4>What to do next</h4><p>${guidance.next}</p><details><summary>Technical detail</summary><p>System: ${escapeHtml(item.system_name)} (${escapeHtml(item.system_id)})</p><p>Policy message: ${escapeHtml(item.message)}</p><p>Finding ID: <code>${escapeHtml(item.finding_id)}</code></p></details></article>`;
   });
-  byId("finding-list").innerHTML = [...tierCards, ...(findingCards.length ? findingCards : ['<article class="finding clear"><span class="severity">No gaps</span><h3>Passed current automated checks</h3><p>A human decision is still required.</p></article>'])].join("");
+  const systemGroups = Object.keys(tiers).sort().map((id) => {
+    const name = recordsById[id]?.system_name || id;
+    const items = findingBySystem[id] || [];
+    const open = items.length ? " open" : "";
+    const label = items.length ? `${items.length} finding(s)` : "Clean — no automated findings";
+    const body = items.length
+      ? items.map((item) => {
+          const guidance = guidanceFor(item.rule_id);
+          return `<article class="finding"><span class="severity ${item.severity.toLowerCase()}">${item.severity} · ${escapeHtml(item.rule_id)}</span><h3>${guidance.title}</h3><h4>What this means</h4><p>${guidance.meaning}</p><h4>What to do next</h4><p>${guidance.next}</p></article>`;
+        }).join("")
+      : `<p class="fineprint">No automated gaps for this system. A human decision is still required.</p>`;
+    return `<details class="system-group"${open}><summary>${escapeHtml(name)} <code>${escapeHtml(id)}</code> · ${label}</summary>${body}</details>`;
+  }).join("");
+  const useGroups = Object.keys(tiers).length >= 8;
+  byId("finding-list").innerHTML = summaryHtml + (useGroups
+    ? systemGroups
+    : [...tierCards, ...(findingCards.length ? findingCards : ['<article class="finding clear"><span class="severity">No gaps</span><h3>Passed current automated checks</h3><p>A human decision is still required.</p></article>'])].join(""));
 }
 function renderMachine() {
   const output = session.current.output;
@@ -70,6 +109,17 @@ function renderDownloads(output, token) {
     "normalized-inventory.json": pretty(output.normalized), "governance-findings.json": pretty(output.findings), "governance-result.json": pretty(output.result), "manifest.json": pretty(output.manifest), "governance-handoff.json": pretty(output.handoff), ...output.documents,
   };
   byId("download-grid").innerHTML = "";
+  const all = document.createElement("button");
+  all.type = "button";
+  all.className = "download primary";
+  all.innerHTML = `<span>PACK</span>Download all (.zip)`;
+  all.addEventListener("click", () => {
+    if (!session.canDownload(token)) return;
+    const entries = Object.entries(files).map(([name, content]) => ({ name, content }));
+    const bytes = buildZipStore(entries);
+    download("decision-pack.zip", bytes, "application/zip");
+  });
+  byId("download-grid").append(all);
   for (const [name, content] of Object.entries(files)) {
     const button = document.createElement("button"); button.type = "button"; button.className = "download"; button.innerHTML = `<span>${name.endsWith(".md") ? "HUMAN" : "MACHINE"}</span>${name}`;
     button.addEventListener("click", () => { if (session.canDownload(token)) download(name, content, name.endsWith(".md") ? "text/markdown" : "application/json"); });
@@ -132,7 +182,13 @@ byId("profile-file").addEventListener("change", async (event) => {
   const [file] = event.target.files;
   if (!file) return;
   byId("profile-error").hidden = true;
+  byId("profile-error").textContent = "";
   try { renderProfileResult(JSON.parse(await file.text()), document); }
-  catch (error) { byId("profile-error").textContent = error.message; byId("profile-error").hidden = false; }
+  catch (error) {
+    const target = byId("profile-result");
+    if (target) target.innerHTML = "";
+    byId("profile-error").textContent = error.message;
+    byId("profile-error").hidden = false;
+  }
 });
 byId("run-profile-sample").addEventListener("click", () => renderProfileResult(SYNTHETIC_CISO_PROFILE_RESULT, document));

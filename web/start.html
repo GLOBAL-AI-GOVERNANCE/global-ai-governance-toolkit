@@ -21,14 +21,20 @@
   <link rel="canonical" href="https://ai-governance.solutions/start.html">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./apple-touch-icon.png">
-  <link rel="preload" href="./styles.css" as="style">
-  <link rel="stylesheet" href="./styles.css">
-  <link rel="alternate" type="text/markdown" href="./JOURNEYS.md" title="Start where you are (Markdown)">
+  <link rel="preload" href="./styles.css?v=2.8.2" as="style">
+  <link rel="stylesheet" href="./styles.css?v=2.8.2">
+  <link rel="alternate" type="text/markdown" href="./JOURNEYS.html" title="Start where you are (Markdown)">
   <link rel="alternate" type="application/json" href="./machine-interface.json" title="Machine interface">
   <link rel="alternate" type="text/plain" href="./llms.txt" title="llms.txt">
-  <script type="module" src="./start.mjs"></script>
+  <script type="module" src="./start.mjs?v=2.8.2"></script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Start here · Global AI Governance","url":"https://ai-governance.solutions/start.html","isPartOf":{"@type":"WebSite","name":"Global AI Governance","url":"https://ai-governance.solutions/"},"description":"Start with the Toolkit, Peace OS, Containment Ledger, or the agent setup guide."}</script>
 </head>
 <body>
+  <noscript>
+    <div class="noscript-banner shell" role="status">
+      <p><strong>JavaScript is required</strong> for interactive checks on this page. Enable JavaScript, or use the <a href="./AGENT_SETUP.html">command-line setup guide</a>.</p>
+    </div>
+  </noscript>
   <a class="skip-link" href="#top">Skip to main content</a>
   <nav class="gaig-bar shell" aria-label="Global AI Governance sites">
     <a class="gaig-brand" href="./">Global AI Governance</a>
@@ -46,7 +52,7 @@
         <li><a href="#labs"><span>Example</span>You work at a frontier lab</a></li>
         <li><a href="#anyone"><span>Open to all</span>Anyone else</a></li>
       </ul>
-      <p class="fineprint">On every path, tools check and record, and a person makes the decision. Every output carries <code>authority_effect: NONE</code>. An AI agent can read the same guide as <a href="./JOURNEYS.md">JOURNEYS.md</a>.</p>
+      <p class="fineprint">On every path, tools check and record, and a person makes the decision. Every output carries <code>authority_effect: NONE</code>. An AI agent can read the same guide as <a href="./JOURNEYS.html">JOURNEYS.md</a>.</p>
     </section>
 
     <section id="apps" class="shell connect-section" aria-labelledby="apps-heading">
@@ -78,7 +84,7 @@ Rules: system_id like AI-1, AI-2. owner is who is responsible; "Me" is fine. ven
         <li>
           <h3>Ask an assistant to set things up</h3>
           <p>Assistants that can run commands, such as Claude Code, Codex, the Grok CLI, or Cursor, can do the whole setup and tell you what needs you. Chat-only apps cannot run commands; they can read the guide and explain it.</p>
-<pre class="agent-prompt" id="prompt-setup" tabindex="0" role="region" aria-label="Instruction for an assistant that can run commands">Follow https://ai-governance.solutions/AGENT_SETUP.md step by step. Check each expected result, run the done check, and tell me what is ready and what needs my decision.</pre>
+<pre class="agent-prompt" id="prompt-setup" tabindex="0" role="region" aria-label="Instruction for an assistant that can run commands">Follow https://ai-governance.solutions/AGENT_SETUP.html step by step. Check each expected result, run the done check, and tell me what is ready and what needs my decision.</pre>
         </li>
       </ol>
     </section>
@@ -86,10 +92,10 @@ Rules: system_id like AI-1, AI-2. owner is who is responsible; "Me" is fine. ven
     <section id="builders" class="shell connect-section" aria-labelledby="builders-heading">
       <p class="eyebrow">Example · AI organizations and agent fleets</p>
       <h2 id="builders-heading">You build AI organizations or agent fleets</h2>
-      <p>For a lead agent / orchestrator and the people accountable for it. The order runs from knowing what exists to closing what went wrong; each step also stands alone. Commands and expected results are in the <a href="./AGENT_SETUP.md">agent setup guide</a> and <a href="./JOURNEYS.md">JOURNEYS.md</a>.</p>
+      <p>For a lead agent / orchestrator and the people accountable for it. The order runs from knowing what exists to closing what went wrong; each step also stands alone. Commands and expected results are in the <a href="./AGENT_SETUP.html">agent setup guide</a> and <a href="./JOURNEYS.html">JOURNEYS.md</a>.</p>
       <ol class="flow">
         <li><a href="./#toolkit"><span>01</span><strong>Inventory</strong>Every AI system and agent with an owner, monitoring, a shutdown path, and evidence, or a finding where one is missing.</a></li>
-        <li><a href="./AGENT_SETUP.md"><span>02</span><strong>Assess</strong>Profile results for auditability, organizational maturity, and independent assurance.</a></li>
+        <li><a href="./AGENT_SETUP.html"><span>02</span><strong>Assess</strong>Profile results for auditability, organizational maturity, and independent assurance.</a></li>
         <li><a href="./connect.html#agents"><span>03</span><strong>Connect</strong>The same checks, callable by your agents over Model Context Protocol (MCP).</a></li>
         <li><a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance"><span>04</span><strong>Passports</strong>Who each agent acts for, what it may do alone, and when that ends.</a></li>
         <li><a href="./connect.html#guard"><span>05</span><strong>Guard</strong>Levels 0 to 3 run, Level 5 is denied, and Level 4 asks a person by default or follows the operator's automated approver when the policy lists the tool.</a></li>
@@ -108,7 +114,7 @@ Rules: system_id like AI-1, AI-2. owner is who is responsible; "Me" is fine. ven
       <dl class="lab-list">
         <div><dt>Map it</dt><dd>The <a href="https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/blob/main/docs/FRONTIER_AND_REGULATORY_CROSSWALK.md">frontier and regulatory crosswalk</a> relates the suite to frontier safety frameworks, the EU AI Act, and ISO/IEC 42001:2023. It is informative and establishes no compliance.</dd></div>
         <div><dt>Read the contracts</dt><dd><a href="./machine-interface.json">machine-interface.json</a> lists the CLI, inputs, outputs, profiles, and JSON Schemas (draft 2020-12). Results validate against them, failing results included.</dd></div>
-        <div><dt>Check provenance</dt><dd>Toolkit, AI Governance MCP, Agentic AI Governance, Verified Vulnerability Governance, Containment Ledger, and AI Governance Foundations releases carry SHA-256 checksums and GitHub build attestations; <a href="./JOURNEYS.md">JOURNEYS.md</a> verifies all six in one loop.</dd></div>
+        <div><dt>Check provenance</dt><dd>Toolkit, AI Governance MCP, Agentic AI Governance, Verified Vulnerability Governance, Containment Ledger, and AI Governance Foundations releases carry SHA-256 checksums and GitHub build attestations; <a href="./JOURNEYS.html">JOURNEYS.md</a> verifies all six in one loop.</dd></div>
         <div><dt>Connect your agents and evals</dt><dd>Run the <a href="./connect.html#agents">MCP server</a> in your harness and the <a href="./connect.html#guard">Action Level guard</a> before tool calls. Treat <code>profile-result.json</code> as an eval output, hand results to people as a digest-listed Decision Pack, and import scanner findings as SARIF.</dd></div>
         <div><dt>Review it independently</dt><dd>Open kits for outside reviewers: the AI Cyber Resilience Framework <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework/blob/main/docs/crypto-agility-review/README.md">G7 external review</a>, the Agentic AI Governance <a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/blob/main/conformance/independent-verifier/README.md">independent verifier kit</a>, and the Governed Systems Administration <a href="https://github.com/GLOBAL-AI-GOVERNANCE/governed-systems-administration/tree/main/docs/independent-audit">independent audit kit</a>.</dd></div>
         <div><dt>What it does not do</dt><dd>It does not approve deployment, certify compliance, accept risk, or shut anything down. It does not monitor your systems or send data anywhere. It is not affiliated with or endorsed by any AI lab, platform, or public body.</dd></div>
@@ -133,7 +139,7 @@ Rules: system_id like AI-1, AI-2. owner is who is responsible; "Me" is fine. ven
           <tr><td>Adopt a governance model and registers</td><td><a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-os">AI Governance Foundations</a></td></tr>
           <tr><td>Specify AI-assisted systems administration</td><td><a href="https://github.com/GLOBAL-AI-GOVERNANCE/governed-systems-administration">Governed Systems Administration</a></td></tr>
           <tr><td>Relate this to a framework or law</td><td>The <a href="https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/blob/main/docs/FRONTIER_AND_REGULATORY_CROSSWALK.md">crosswalk</a></td></tr>
-          <tr><td>Connect an agent</td><td>The <a href="./AGENT_SETUP.md">agent setup guide</a></td></tr>
+          <tr><td>Connect an agent</td><td>The <a href="./AGENT_SETUP.html">agent setup guide</a></td></tr>
         </tbody>
       </table></div>
       <p class="fineprint">These examples are an open list. If none fits, start with the Toolkit's example with gaps: it shows in a minute what the suite looks for.</p>

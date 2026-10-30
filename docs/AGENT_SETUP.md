@@ -2,7 +2,7 @@
 
 This guide is for an AI agent, or a lead agent / orchestrator, that has been asked to set up Global AI Governance from <https://ai-governance.solutions/>. Each step gives the exact command and the result to expect. No account, API key, or sign-up is needed, and every install comes from a tagged GitHub release.
 
-Live copy: <https://ai-governance.solutions/AGENT_SETUP.md>. Source: [`docs/AGENT_SETUP.md`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/AGENT_SETUP.md).
+Live copy: <https://ai-governance.solutions/AGENT_SETUP.html> (also available as [Markdown](https://ai-governance.solutions/AGENT_SETUP.md)). Source: [`docs/AGENT_SETUP.md`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/main/docs/AGENT_SETUP.md).
 
 Status: TESTED end to end in a clean Linux environment (Python 3.13, uv) by running the commands below in order. It is not independently verified, and it has not been run inside Claude Code, Claude Desktop, Cursor, VS Code, the Grok CLI, or the Gemini CLI; the client configs are launch-tested only.
 
@@ -104,7 +104,7 @@ gaig check sample-with-gaps.csv --outdir out-gaps --fail-on none >/dev/null
 python -c "import json; r=json.load(open('out-gaps/governance-result.json')); print(r['governance_gate_state'], r['finding_count'])"
 ```
 
-Expect `BLOCKED 5`: five findings to resolve. Without `--fail-on none`, `gaig check` exits nonzero when findings meet the threshold, which is how a pipeline stops for review.
+Expect `BLOCKED 6`: six findings to resolve (including GAI-AUTO-005 for full autonomy without a human gate). Without `--fail-on none`, `gaig check` exits nonzero when findings meet the threshold, which is how a pipeline stops for review.
 
 To check your own systems, download the blank template from <https://ai-governance.solutions/ai-system-inventory-template.csv>, fill one row per AI system or agent, and run `gaig check` on it. `gaig verify` works on `gaig check` output folders only.
 

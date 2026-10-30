@@ -46,6 +46,7 @@ export function describeInputError(issue) {
   if (row) where.push(`row ${row} (the header is row 1)`);
   const expected = listExpected(issue.expected);
   const expectedText = !expected ? "" :
+    issue.code === "BINARY_INPUT" ? "" :
     issue.code === "UNKNOWN_COLUMN" ? ` Accepted columns include: ${expected}.` :
     issue.code === "MISSING_REQUIRED_COLUMN" ? ` Missing: ${expected}.` :
     issue.code === "ROW_WIDTH_MISMATCH" ? ` Expected ${issue.expected.length} values, one per header.` :

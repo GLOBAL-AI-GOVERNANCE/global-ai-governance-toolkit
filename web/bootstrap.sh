@@ -47,12 +47,13 @@ gaig verify out >/dev/null
 
 echo "== 3-4. MCP server =="
 "$PIP" install --quiet "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@${MCP_TAG}"
+export GAIG_MCP_FROM="git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@${MCP_TAG}"
 cat > mcp_check.py <<'PY'
-import asyncio, json
+import asyncio, json, os
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 async def main():
-    params = StdioServerParameters(command="uvx", args=["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.1", "gaig-mcp"])
+    params = StdioServerParameters(command="uvx", args=["--from", os.environ["GAIG_MCP_FROM"], "gaig-mcp"])
     async with stdio_client(params) as (r, w):
         async with ClientSession(r, w) as s:
             init = await s.initialize()

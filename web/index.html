@@ -21,13 +21,18 @@
   <link rel="canonical" href="https://ai-governance.solutions/">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./apple-touch-icon.png">
-  <link rel="preload" href="./styles.css" as="style">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="preload" href="./styles.css?v=2.8.2" as="style">
+  <link rel="stylesheet" href="./styles.css?v=2.8.2">
   <link rel="alternate" type="application/json" href="./machine-interface.json" title="Machine interface">
   <link rel="alternate" type="text/plain" href="./llms.txt" title="llms.txt">
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://ai-governance.solutions/#organization","name":"Global AI Governance","url":"https://ai-governance.solutions/","logo":"https://ai-governance.solutions/apple-touch-icon.png","sameAs":["https://github.com/GLOBAL-AI-GOVERNANCE"]},{"@type":"WebSite","@id":"https://ai-governance.solutions/#website","name":"Global AI Governance","url":"https://ai-governance.solutions/","publisher":{"@id":"https://ai-governance.solutions/#organization"},"inLanguage":"en"},{"@type":"SoftwareApplication","@id":"https://ai-governance.solutions/#toolkit","name":"Global AI Governance Toolkit","applicationCategory":"DeveloperApplication","operatingSystem":"Web browser; Python 3.11 or later","softwareVersion":"2.8.2","url":"https://ai-governance.solutions/#toolkit","downloadUrl":"https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/tag/v2.8.2","codeRepository":"https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit","license":"https://opensource.org/license/mit","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Local-first checks for AI systems and agents that surface missing owners, monitoring, shutdown paths, and evidence, then prepare a Decision Pack for an accountable human. Non-authorizing.","publisher":{"@id":"https://ai-governance.solutions/#organization"}},{"@type":"SoftwareApplication","@id":"https://ai-governance.solutions/connect.html#agents","name":"AI Governance MCP","alternateName":"gaig-mcp","applicationCategory":"DeveloperApplication","operatingSystem":"Python 3.11 or later","softwareVersion":"0.5.1","url":"https://ai-governance.solutions/connect.html#agents","codeRepository":"https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp","license":"https://www.apache.org/licenses/LICENSE-2.0","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Read-only Model Context Protocol server with check_inventory, build_decision_pack, and validate_passport. Every result carries authority_effect NONE.","publisher":{"@id":"https://ai-governance.solutions/#organization"}}]}</script>
 </head>
 <body>
+  <noscript>
+    <div class="noscript-banner shell" role="status">
+      <p><strong>JavaScript is required</strong> for interactive checks on this page. Enable JavaScript, or use the <a href="./AGENT_SETUP.html">command-line setup guide</a>.</p>
+    </div>
+  </noscript>
   <a class="skip-link" href="#top">Skip to main content</a>
   <nav class="gaig-bar shell" aria-label="Global AI Governance sites">
     <a class="gaig-brand" href="./" aria-current="page">Global AI Governance</a>
@@ -63,7 +68,7 @@
         <li><a href="./start.html#anyone"><strong>Anyone else</strong><span>Teams, enterprises, researchers, educators, public-interest bodies, and regulators: every piece in one map.</span></a></li>
       </ul>
       <p class="start-ways">Or go by how you work: <a href="#toolkit">in this browser</a>, <a href="//github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit#quick-start">from the command line</a>, or <a href="./connect.html#setup">inside your agent</a>.</p>
-      <p class="fineprint">For AI agents: start at <a href="./AGENT_SETUP.md">AGENT_SETUP.md</a>, <a href="./JOURNEYS.md">JOURNEYS.md</a>, or <a href="./llms.txt">llms.txt</a>. Every command comes with the result to expect.</p>
+      <p class="fineprint">For AI agents: start at <a href="./AGENT_SETUP.html">AGENT_SETUP.md</a>, <a href="./JOURNEYS.html">JOURNEYS.md</a>, or <a href="./llms.txt">llms.txt</a>. Every command comes with the result to expect.</p>
     </section>
 
     <section id="products" class="shell connect-section" aria-labelledby="products-heading">
@@ -104,14 +109,16 @@
         <p id="sample-boundary" class="fineprint">Both examples are synthetic inventories. The example with gaps includes an autonomous agent with no named owner, monitoring, or shutdown path.</p>
         <p class="machine-link"><a href="./machine-interface.json">Machine interface</a> · Versioned contracts and agent entry point</p>
       </div>
+    </section>
+
+  </main>
       <aside class="contract-card" aria-label="How a check runs">
         <p class="card-kicker">How a check runs</p>
         <ol>
           <li><span>01</span> Normalize</li><li><span>02</span> Validate</li><li><span>03</span> Evaluate</li><li><span>04</span> Review</li><li><span>05</span> Handoff</li>
         </ol>
       </aside>
-    </section>
-
+  <main id="workspace-main" tabindex="-1">
     <section id="workspace" class="workspace shell" hidden>
       <div class="workspace-head">
         <div><p class="eyebrow">Current evaluation</p><h2 id="source-name">Inventory</h2></div>
@@ -154,6 +161,6 @@
     <p class="gaig-footer-ctas"><a href="./start.html">Start where you are</a> · <a href="#toolkit">Run a check</a> · <a href="./connect.html#agents">Connect your agent</a> · <a href="./connect.html#spec">Read the spec</a> · <a href="//github.com/GLOBAL-AI-GOVERNANCE">GitHub</a></p>
     <p>Global AI Governance · Open source · Outputs are non-authorizing (<code>authority_effect: NONE</code>)</p>
   </footer>
-  <script type="module" src="./app.mjs"></script>
+  <script type="module" src="./app.mjs?v=2.8.2"></script>
 </body>
 </html>

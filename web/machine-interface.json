@@ -53,7 +53,13 @@
       "max_shutdown_test_age_days": 90,
       "boundary": "Checks submitted records. It does not establish that a shutdown test occurred or validate the passport itself.",
       "authority_effect": "NONE"
-    }
+    },
+    "cli_only_note": "Three profiles are CLI-only because they need signed artifacts, local file digests, or case bundles that the browser profile viewer does not load: independent-assurance-v0.1, mission-assurance-v0.1, and machine-learning-assurance-v0.1. Run them with `gaig profile` from the Toolkit CLI. The four browser_supported profiles render from a local profile-result.json with no network.",
+    "cli_only": [
+      "independent-assurance-v0.1",
+      "mission-assurance-v0.1",
+      "machine-learning-assurance-v0.1"
+    ]
   },
   "input": {
     "canonical_schema": "https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.7.2/automation/contracts/v1/canonical-inventory-record.schema.json",

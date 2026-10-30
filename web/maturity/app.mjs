@@ -33,6 +33,7 @@ const state = {
   categories: [],
 };
 let selected = null;
+let hasEvaluatedResult = false;
 
 const pillarNav = document.querySelector("#pillar-nav");
 const editor = document.querySelector("#editor");
@@ -40,6 +41,14 @@ const result = document.querySelector("#result");
 const count = document.querySelector("#count");
 const evaluationTimeInput = document.querySelector("#evaluation-time");
 if (evaluationTimeInput && !evaluationTimeInput.value) evaluationTimeInput.value = nowUtc();
+
+
+function setExportsEnabled(enabled) {
+  for (const id of ["export-result", "export-gaps", "export-review"]) {
+    const node = document.querySelector("#" + id);
+    if (node) node.disabled = !enabled;
+  }
+}
 
 function blankCategory(pillarId, categoryId) {
   return {
@@ -83,6 +92,13 @@ function renderNav() {
     pillarNav.append(section);
   }
   const missing = MATURITY_CATALOG.pillars.flatMap((pillar) => pillar.categories).filter((category) => !current(category.id));
+  if (!pillarNav.children.length) {
+    const empty = document.createElement("p");
+    empty.className = "empty-state";
+    empty.setAttribute("role", "status");
+    empty.textContent = query ? `No categories match “${document.querySelector("#filter").value.trim()}”.` : "No categories available.";
+    pillarNav.append(empty);
+  }
   count.textContent = `${state.categories.length} assessed / ${MATURITY_CATALOG.pillars.reduce((sum, pillar) => sum + pillar.categories.length, 0)}. ${state.assessment_coverage === "FULL_FRAMEWORK" && missing.length ? `Full-framework coverage is incomplete: ${missing.length} categories remain.` : `Unassessed categories: ${missing.length}. Partial coverage is not framework completion.`}`;
 }
 
@@ -245,6 +261,8 @@ async function evaluate() {
   }
   const evaluated = evaluateMaturity(state, evaluationTime);
   result.innerHTML = renderResult(evaluated.details);
+  hasEvaluatedResult = true;
+  setExportsEnabled(true);
   document.querySelector("#live").textContent = `Evaluated ${evaluated.details.assessed_category_count} categories at ${evaluationTime}. ${evaluated.details.coverage_status}.`;
   return evaluated;
 }
@@ -268,6 +286,7 @@ pillarNav.addEventListener("click", (event) => {
 });
 document.querySelector("#evaluate").addEventListener("click", evaluate);
 document.querySelector("#export-result").addEventListener("click", async () => {
+  if (!hasEvaluatedResult) { showImportStatus("Evaluate locally before exporting.", true); return; }
   readSetup();
   let evaluationTime;
   try {
@@ -281,6 +300,7 @@ document.querySelector("#export-result").addEventListener("click", async () => {
   download("profile-result.json", `${JSON.stringify(output, null, 2)}\n`, "application/json");
 });
 document.querySelector("#export-gaps").addEventListener("click", () => {
+  if (!hasEvaluatedResult) { showImportStatus("Evaluate locally before exporting.", true); return; }
   let evaluationTime;
   try {
     evaluationTime = captureEvaluationInstant({ refresh: false });
@@ -291,6 +311,7 @@ document.querySelector("#export-gaps").addEventListener("click", () => {
   download("maturity-gap-register.json", `${JSON.stringify(gapRegister(evaluateMaturity(state, evaluationTime).details), null, 2)}\n`, "application/json");
 });
 document.querySelector("#export-review").addEventListener("click", () => {
+  if (!hasEvaluatedResult) { showImportStatus("Evaluate locally before exporting.", true); return; }
   let evaluationTime;
   try {
     evaluationTime = captureEvaluationInstant({ refresh: false });
@@ -405,4 +426,5 @@ document.querySelector("#sample").addEventListener("click", () => {
 });
 
 renderNav();
+setExportsEnabled(false);
 renderEditor();

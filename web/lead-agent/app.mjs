@@ -222,7 +222,11 @@ function wire() {
       out.textContent = `Connected to ${base} (lead-agent ${health.version}, ${health.model}). Goals now run on that server.`;
       addMessage("Lead agent", `Connected to the local server at ${base}. Its model: ${health.model}.`);
     } catch (error) {
-      out.textContent = `Not connected: ${error.message}. Is "lead-agent serve" running?`;
+      const raw = String(error && error.message || error);
+      const friendly = /unexpected token|json|syntaxerror|<|failed to fetch|networkerror|load failed/i.test(raw)
+        ? "No Lead Agent server found at this address"
+        : raw;
+      out.textContent = `Not connected: ${friendly}. Is "lead-agent serve" running?`;
     }
   });
   $("disconnect").addEventListener("click", async () => {
