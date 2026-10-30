@@ -28,7 +28,9 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 echo "== 0. machine front door =="
-curl -fsSL "$SITE/llms.txt" | head -n 1 | grep -q 'Global AI Governance Toolkit'
+# Avoid curl SIGPIPE (exit 23) under pipefail when head closes the pipe early.
+llms_first="$(curl -fsSL "$SITE/llms.txt" | sed -n '1p')"
+printf '%s\n' "$llms_first" | grep -q 'Global AI Governance Toolkit'
 curl -fsSL "$SITE/machine-interface.json" \
   | python -c "import json,sys; d=json.load(sys.stdin); assert d['machine_interface_version']>='1.6.0' and d['release']=='v2.8.2'; print(d['machine_interface_version'], d['release'])"
 
