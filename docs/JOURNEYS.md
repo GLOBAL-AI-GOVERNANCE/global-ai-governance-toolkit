@@ -2,7 +2,7 @@
 
 Global AI Governance is for anyone who uses, builds, deploys, oversees, researches, or regulates AI. This guide gives worked examples for people using everyday AI apps, for builders of AI organizations and agent fleets, and for frontier labs, plus a map for everyone else. These are examples only. Start wherever fits, skip what you do not need, and go straight to any step. There is no account, sign-up, or form anywhere.
 
-Live copy: <https://ai-governance.solutions/JOURNEYS.md>. For people: <https://ai-governance.solutions/start.html>. For an agent setting everything up: <https://ai-governance.solutions/AGENT_SETUP.md>.
+Live copy: <https://ai-governance.solutions/JOURNEYS.html> (also available as [Markdown](https://ai-governance.solutions/JOURNEYS.md)). For people: <https://ai-governance.solutions/start.html>. For an agent setting everything up: <https://ai-governance.solutions/AGENT_SETUP.html>.
 
 Status: TESTED. The browser steps were run in a desktop and a mobile browser, and the `bash` blocks below were run in order in a clean Linux environment (Python 3.13). Nothing here is independently verified.
 
@@ -29,7 +29,7 @@ No terminal and no install. Each step takes a few minutes.
    ```
 
    This is an instruction, not a technical control: an app can forget or ignore it. Enforced checks before each tool call are in the builder example below.
-4. **Ask an assistant to set things up.** Assistants that can run commands, such as Claude Code, Codex, the Grok CLI, or Cursor, can do the whole setup. Tell one: `Follow https://ai-governance.solutions/AGENT_SETUP.md and tell me what is ready and what needs me.` Chat-only apps cannot run commands; they can read the guide and explain it.
+4. **Ask an assistant to set things up.** Assistants that can run commands, such as Claude Code, Codex, the Grok CLI, or Cursor, can do the whole setup. Tell one: `Follow https://ai-governance.solutions/AGENT_SETUP.html and tell me what is ready and what needs me.` Chat-only apps cannot run commands; they can read the guide and explain it.
 
 ## Example: you build AI organizations or agent fleets
 
@@ -37,14 +37,14 @@ For a lead agent / orchestrator and the people accountable for it. The order run
 
 | Step | What you get | Where |
 |---|---|---|
-| 1. Inventory | Every AI system and agent, with an owner, monitoring, a shutdown path, and evidence, or a finding where one is missing | `gaig check`, [AGENT_SETUP step 3](https://ai-governance.solutions/AGENT_SETUP.md#3-run-a-check-and-build-a-decision-pack) |
-| 2. Assess | Profile results for auditability, maturity, and independent assurance | `gaig profile`, [AGENT_SETUP step 3](https://ai-governance.solutions/AGENT_SETUP.md#optional-assurance-profiles) |
-| 3. Connect | The same checks callable by your agents over MCP | [AGENT_SETUP steps 4 and 5](https://ai-governance.solutions/AGENT_SETUP.md#4-run-the-mcp-server) |
-| 4. Passports | Who an agent acts for and what it may do alone | `validate-passport`, [AGENT_SETUP step 7](https://ai-governance.solutions/AGENT_SETUP.md#7-agent-trust-passports-and-fleet-controls) |
-| 5. Guard | Levels 0 to 3 run, Level 5 is denied, Level 4 asks a person by default or follows the operator's automated approver when the policy lists the tool | [AGENT_SETUP step 6](https://ai-governance.solutions/AGENT_SETUP.md#6-guard-tool-calls-with-action-levels) |
-| 6. Fleet controls | A sub-agent stays within its parent's ceiling and stops when an ancestor is suspended | `fleet_controls.py`, [AGENT_SETUP step 7](https://ai-governance.solutions/AGENT_SETUP.md#7-agent-trust-passports-and-fleet-controls) |
+| 1. Inventory | Every AI system and agent, with an owner, monitoring, a shutdown path, and evidence, or a finding where one is missing | `gaig check`, [AGENT_SETUP step 3](https://ai-governance.solutions/AGENT_SETUP.html#3-run-a-check-and-build-a-decision-pack) |
+| 2. Assess | Profile results for auditability, maturity, and independent assurance | `gaig profile`, [AGENT_SETUP step 3](https://ai-governance.solutions/AGENT_SETUP.html#optional-assurance-profiles) |
+| 3. Connect | The same checks callable by your agents over MCP | [AGENT_SETUP steps 4 and 5](https://ai-governance.solutions/AGENT_SETUP.html#4-run-the-mcp-server) |
+| 4. Passports | Who an agent acts for and what it may do alone | `validate-passport`, [AGENT_SETUP step 7](https://ai-governance.solutions/AGENT_SETUP.html#7-agent-trust-passports-and-fleet-controls) |
+| 5. Guard | Levels 0 to 3 run, Level 5 is denied, Level 4 asks a person by default or follows the operator's automated approver when the policy lists the tool | [AGENT_SETUP step 6](https://ai-governance.solutions/AGENT_SETUP.html#6-guard-tool-calls-with-action-levels) |
+| 6. Fleet controls | A sub-agent stays within its parent's ceiling and stops when an ancestor is suspended | `fleet_controls.py`, [AGENT_SETUP step 7](https://ai-governance.solutions/AGENT_SETUP.html#7-agent-trust-passports-and-fleet-controls) |
 | 7. Shutdown tests | No autonomous agent passes without a recent, passing shutdown test | below |
-| 8. Vulnerabilities | Owner, fix, retest, and closure only with evidence reviewed by a separate role | `vvd`, [AGENT_SETUP step 8](https://ai-governance.solutions/AGENT_SETUP.md#8-verified-vulnerability-governance) |
+| 8. Vulnerabilities | Owner, fix, retest, and closure only with evidence reviewed by a separate role | `vvd`, [AGENT_SETUP step 8](https://ai-governance.solutions/AGENT_SETUP.html#8-verified-vulnerability-governance) |
 | 9. Boundaries | A person's review of a system's domains, paths, and evidence | [Containment Ledger](https://global-ai-governance.github.io/containment-ledger/), in the browser |
 | 10. Resilience | Limits on blast radius, protected recovery, and continuity | [AI Cyber Resilience Framework](https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework) |
 
@@ -110,10 +110,10 @@ A failing case exits 1, so a pipeline stops for review. How to run and record a 
 
    Expect six `attested` lines. Peace OS `v0.3.0` ships a `SHA256SUMS.txt`, a provenance file, and an SBOM instead of a GitHub attestation. AI Cyber Resilience Framework `v0.2.0` is a tagged document release with attested release assets.
 4. **Connect it to your own agents and evals.**
-   - Put the [AI Governance MCP](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp) server in your agent harness, and the Action Level guard in front of tool calls ([AGENT_SETUP steps 4 to 6](https://ai-governance.solutions/AGENT_SETUP.md#4-run-the-mcp-server)).
+   - Put the [AI Governance MCP](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp) server in your agent harness, and the Action Level guard in front of tool calls ([AGENT_SETUP steps 4 to 6](https://ai-governance.solutions/AGENT_SETUP.html#4-run-the-mcp-server)).
    - Treat `profile-result.json` and `governance-result.json` as eval outputs: each has a schema, a status, finding IDs, and `authority_effect: NONE`.
    - Hand results to people through the Decision Pack, whose `manifest.json` lists a digest for each file, and `gaig verify` checks it.
-   - Import findings from your own scanners as SARIF with `vvd finding import --sarif` ([AGENT_SETUP step 8](https://ai-governance.solutions/AGENT_SETUP.md#8-verified-vulnerability-governance)).
+   - Import findings from your own scanners as SARIF with `vvd finding import --sarif` ([AGENT_SETUP step 8](https://ai-governance.solutions/AGENT_SETUP.html#8-verified-vulnerability-governance)).
 5. **Review it independently.** Each of these is open to an outside reviewer:
    - AI Cyber Resilience Framework: the [crypto-agility review kit](https://github.com/GLOBAL-AI-GOVERNANCE/ai-cyber-resilience-framework/blob/main/docs/crypto-agility-review/README.md) (released with v0.2.0).
    - Agentic AI Governance: the [independent verifier kit](https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/blob/main/conformance/independent-verifier/README.md). Independent verification is not yet established.
@@ -139,6 +139,6 @@ Teams, enterprises, researchers, educators, public-interest bodies, and regulato
 | Adopt a governance model and registers | [AI Governance Foundations](https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-os) |
 | Specify AI-assisted systems administration | [Governed Systems Administration](https://github.com/GLOBAL-AI-GOVERNANCE/governed-systems-administration) |
 | Relate this to a framework or law | The [crosswalk](https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/blob/main/docs/FRONTIER_AND_REGULATORY_CROSSWALK.md) |
-| Connect an agent | [Agent setup](https://ai-governance.solutions/AGENT_SETUP.md) |
+| Connect an agent | [Agent setup](https://ai-governance.solutions/AGENT_SETUP.html) |
 
 The machine-readable list of these examples is `journeys` in [machine-interface.json](https://ai-governance.solutions/machine-interface.json). It is open: new examples are added without changing existing ones.

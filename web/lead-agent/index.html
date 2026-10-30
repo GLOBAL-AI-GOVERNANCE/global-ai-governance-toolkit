@@ -21,12 +21,12 @@
   <link rel="canonical" href="https://ai-governance.solutions/lead-agent/">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="../apple-touch-icon.png">
-  <link rel="preload" href="../styles.css" as="style">
-  <link rel="stylesheet" href="../styles.css">
-  <link rel="stylesheet" href="./lead-agent.css">
+  <link rel="preload" href="../styles.css?v=2.8.2" as="style">
+  <link rel="stylesheet" href="../styles.css?v=2.8.2">
+  <link rel="stylesheet" href="./lead-agent.css?v=2.8.2">
   <link rel="alternate" type="application/json" href="../machine-interface.json" title="Machine interface">
   <link rel="alternate" type="text/plain" href="../llms.txt" title="llms.txt">
-  <script type="module" src="./app.mjs"></script>
+  <script type="module" src="./app.mjs?v=2.8.2"></script>
 </head>
 <body class="la-body">
   <a class="skip-link" href="#top">Skip to main content</a>
@@ -114,7 +114,7 @@
       <p class="eyebrow">Optional</p>
       <h2 id="own-h">Use your own models.</h2>
       <p>Run the same lead agent on your machine. It uses the same governance code with signed passports, and calls OpenAI, Anthropic or xAI only when you set that provider's key in its environment.</p>
-      <pre class="la-cmd"><code>pip install "agentic-ai-governance @ git+https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance@main"
+      <pre class="la-cmd"><code>pip install "agentic-ai-governance @ git+https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance@v0.1.0-alpha.6"
 export OPENAI_API_KEY=…   # or ANTHROPIC_API_KEY, or XAI_API_KEY
 lead-agent serve --port 8765</code></pre>
       <form class="la-form la-connect" id="connect-form">

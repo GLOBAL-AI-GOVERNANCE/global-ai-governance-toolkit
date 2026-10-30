@@ -33,6 +33,7 @@ TARGET_FILES = (
     "web/llms.txt",
     "web/machine-interface.json",
     "web/start.html",
+    "web/lead-agent/index.html",
     "README.md",
 )
 

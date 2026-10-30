@@ -82,6 +82,9 @@ async function sha256(text) {
 function pretty(value) { return `${JSON.stringify(value, null, 2)}\n`; }
 
 export async function normalizeCsv(text, sourceName = "inventory.csv") {
+  if (/[\x00-\x08\x0e-\x1f]/.test(text) || (text.length > 0 && (text.match(/[^\x09\x0a\x0d\x20-\x7e]/g) || []).length / text.length > 0.05)) {
+    throw new GovernanceInputError("BINARY_INPUT", null, null, [], "This file doesn't look like a CSV. Save a UTF-8 text CSV and try again.");
+  }
   const rawRows = parseCsv(text.replace(/^\uFEFF/, ""));
   if (rawRows.length < 2) throw new GovernanceInputError("EMPTY_INPUT", null, null, [], "Provide a header and at least one inventory record.");
   const headers = rawRows[0];
@@ -128,7 +131,13 @@ export async function normalizeCsv(text, sourceName = "inventory.csv") {
   }).sort((a, b) => a.system_id.localeCompare(b.system_id) || a.system_name.localeCompare(b.system_name));
   if (new Set(records.map((record) => record.system_id)).size !== records.length) throw new GovernanceInputError("DUPLICATE_SYSTEM_ID", "system_id", null, [], "Use one stable, unique system_id per record.");
   const humanLabels = new Set(Object.values(contracts.mapping.fields).map((definition) => definition.human_label));
-  const format = headers.length === humanLabels.size && headers.every((header) => humanLabels.has(header)) ? "generated_human_csv" : (versionIndex >= 0 || headers.join("|") === canonicalFields().join("|")) ? "canonical_csv" : "legacy_csv";
+  const canonical = canonicalFields();
+  const isCanonicalHeaderSet = headers.length === canonical.length && headers.every((header) => canonical.includes(header));
+  const format = headers.length === humanLabels.size && headers.every((header) => humanLabels.has(header))
+    ? "generated_human_csv"
+    : (versionIndex >= 0 || headers.join("|") === ["schema_version", ...canonical].join("|") || isCanonicalHeaderSet)
+      ? "canonical_csv"
+      : "legacy_csv";
   const warnings = versionIndex < 0 ? ["Source CSV did not declare schema_version; canonical v1 compatibility was applied."] : [];
   warnings.push(...ignoredHeaders.map((header) => `Known legacy column was not part of canonical governance meaning and was ignored: ${header}`));
   return { schema_version: SCHEMA_VERSION, normalization_version: NORMALIZATION_VERSION, source: { name: sourceName, sha256: await sha256(text), format }, mappings_applied: [...new Set(mappings)].sort(), warnings, records };
@@ -162,14 +171,23 @@ function gate(findings) {
   return "PASSED_CURRENT_AUTOMATED_CHECKS";
 }
 function markdownDocuments(records, findings, tiers, result) {
-  const list = findings.length ? findings.map((item) => `- [${item.rule_id}] ${item.system_name}: ${item.severity} — ${item.message}`).join("\n") : "No governance gaps found.";
+  const bySeverity = findings.reduce((acc, item) => { acc[item.severity] = (acc[item.severity] || 0) + 1; return acc; }, {});
+  const severityLine = Object.keys(bySeverity).sort().map((key) => `${bySeverity[key]} ${key}`).join(", ") || "none";
+  const list = findings.length ? findings.map((item) => `- [${item.rule_id}] ${item.system_name} (${item.system_id}): ${item.severity} — ${item.message}`).join("\n") : "No governance gaps found.";
+  const actionRows = findings.length
+    ? findings.map((item) => {
+        const record = records.find((row) => row.system_id === item.system_id) || {};
+        const owner = record.owner && String(record.owner).trim() ? record.owner : "UNASSIGNED — name an owner";
+        return `- **${item.system_name}** (\`${item.system_id}\`) · ${item.rule_id} · ${item.severity}\n  - Owner: ${owner}\n  - Finding: ${item.message}\n  - Next action: resolve the gap, attach evidence, and keep the human decision pending until review is complete.`;
+      }).join("\n")
+    : "- No automated findings. An accountable human still reviews the Decision Pack before any operational decision.";
   return {
-    "executive-summary.md": `# AI Governance Decision Pack\n\nAutomated gate: **${result.governance_gate_state}**\n\nHuman decision: **PENDING**\n\nThis reference output is not approval, certification, or risk acceptance.\n`,
+    "executive-summary.md": `# AI Governance Decision Pack\n\nAutomated gate: **${result.governance_gate_state}**\n\nHuman decision: **PENDING**\n\nSystems reviewed: **${records.length}**\n\nFindings: **${findings.length}** (${severityLine})\n\nSystems:\n${records.map((item) => `- ${item.system_name} (${item.system_id}) — preliminary risk ${tiers[item.system_id]}`).join("\n")}\n\nThis reference output is not approval, certification, or risk acceptance.\n`,
     "system-profile.md": `# System Profile\n\n${records.map((item) => `- ${item.system_name} (${item.system_id}) — preliminary risk: ${tiers[item.system_id]}`).join("\n")}\n`,
-    "risk-and-findings.md": `# Risk and Findings\n\n${list}\n`,
-    "action-plan.md": "# Action Plan\n\nA human reviewer must assess findings, evidence, ownership, monitoring, and shutdown readiness before any decision.\n",
+    "risk-and-findings.md": `# Risk and Findings\n\nCounts: ${findings.length} finding(s) (${severityLine}).\n\n${list}\n`,
+    "action-plan.md": `# Action Plan\n\nFindings: **${findings.length}** (${severityLine}). A human reviewer must assess findings, evidence, ownership, monitoring, and shutdown readiness before any decision.\n\n${actionRows}\n`,
     "decision-record.md": "# Decision Record\n\nDecision status: **PENDING HUMAN DECISION**\n\nNo automated result grants operational authority.\n",
-    "evidence-and-ownership.md": `# Evidence and Ownership\n\n${records.map((item) => `- ${item.system_id}: owner ${item.owner || "MISSING"}; evidence ${item.evidence_complete}`).join("\n")}\n`,
+    "evidence-and-ownership.md": `# Evidence and Ownership\n\n${records.map((item) => `- ${item.system_name} (${item.system_id}): owner ${item.owner || "MISSING"}; evidence ${item.evidence_complete}`).join("\n")}\n`,
   };
 }
 

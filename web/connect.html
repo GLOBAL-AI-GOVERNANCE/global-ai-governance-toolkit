@@ -21,12 +21,18 @@
   <link rel="canonical" href="https://ai-governance.solutions/connect.html">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./apple-touch-icon.png">
-  <link rel="preload" href="./styles.css" as="style">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="preload" href="./styles.css?v=2.8.2" as="style">
+  <link rel="stylesheet" href="./styles.css?v=2.8.2">
   <link rel="alternate" type="application/json" href="./machine-interface.json" title="Machine interface">
   <link rel="alternate" type="text/plain" href="./llms.txt" title="llms.txt">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Connect your agent · Global AI Governance","url":"https://ai-governance.solutions/connect.html","isPartOf":{"@type":"WebSite","name":"Global AI Governance","url":"https://ai-governance.solutions/"},"description":"Governance checks your AI agents can call over Model Context Protocol (MCP). Local-first and non-authorizing."}</script>
 </head>
 <body>
+  <noscript>
+    <div class="noscript-banner shell" role="status">
+      <p><strong>JavaScript is required</strong> for interactive checks on this page. Enable JavaScript, or use the <a href="./AGENT_SETUP.html">command-line setup guide</a>.</p>
+    </div>
+  </noscript>
   <a class="skip-link" href="#top">Skip to main content</a>
   <nav class="gaig-bar shell" aria-label="Global AI Governance sites">
     <a class="gaig-brand" href="./">Global AI Governance</a>
@@ -49,15 +55,15 @@
     <section id="setup" class="shell connect-section" aria-labelledby="setup-heading">
       <p class="eyebrow">Agent setup</p>
       <h2 id="setup-heading">Let your agent set it up</h2>
-      <p>Give your agent this instruction. The <a href="./AGENT_SETUP.md">agent setup guide</a> lists every command with the result to expect after it, the client configs, and a final done check. Setup needs no account, API key, or human step. Tested end to end in a clean environment; not yet run inside each agent client.</p>
-<pre class="agent-prompt" tabindex="0" role="region" aria-label="Instruction for your agent">Set up Global AI Governance by following https://ai-governance.solutions/AGENT_SETUP.md step by step. Check each expected result, run the done check, and tell me what is ready and what needs my decision.</pre>
+      <p>Give your agent this instruction. The <a href="./AGENT_SETUP.html">agent setup guide</a> lists every command with the result to expect after it, the client configs, and a final done check. Setup needs no account, API key, or human step. Tested end to end in a clean environment; not yet run inside each agent client.</p>
+<pre class="agent-prompt" tabindex="0" role="region" aria-label="Instruction for your agent">Set up Global AI Governance by following https://ai-governance.solutions/AGENT_SETUP.html step by step. Check each expected result, run the done check, and tell me what is ready and what needs my decision.</pre>
       <p>Your agent installs the <code>gaig</code> CLI v2.8.2, runs AI Governance MCP v0.5.1 in your client, and adds the Action Level guard, with Agentic AI Governance and Verified Vulnerability Governance as options. Setup itself needs no person. Operator safety settings stay available: a Decision Pack still waits for a human decision unless your process says otherwise; passports can be issued unattended from a fleet policy; Level 4 tool calls ask a person by default, or follow the operator's automated approver when the policy lists the tool.</p>
     </section>
 
     <section id="agents" class="shell connect-section">
       <p class="eyebrow">For AI agents</p>
       <h2>Connect your agent</h2>
-      <p><strong>Read first:</strong> the <a href="./AGENT_SETUP.md">agent setup guide</a>, <a href="./llms.txt">llms.txt</a>, and <a href="./machine-interface.json">machine-interface.json</a> list the CLI, inputs, outputs, profiles, and raw schema URLs.</p>
+      <p><strong>Read first:</strong> the <a href="./AGENT_SETUP.html">agent setup guide</a>, <a href="./llms.txt">llms.txt</a>, and <a href="./machine-interface.json">machine-interface.json</a> list the CLI, inputs, outputs, profiles, and raw schema URLs.</p>
       <p><strong>Use it in your agent in 5 minutes</strong> with <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp">AI Governance MCP</a>, the AI Governance Model Context Protocol Server. Model Context Protocol (MCP) is an open standard that lets AI assistants call external tools. It is read-only and has three tools: <code>check_inventory</code>, <code>build_decision_pack</code>, and <code>validate_passport</code>.</p>
 <pre tabindex="0" role="region" aria-label="AI Governance MCP run command">uvx --from git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp@v0.5.1 gaig-mcp   # stdio</pre>
       <p>That one command needs only <a href="https://docs.astral.sh/uv/">uv</a>: the pinned Toolkit and Agentic files are bundled in the package, so nothing else is cloned or fetched. It was tested in a clean environment. To run from source instead, or to run the test suite and smoke test:</p>
@@ -148,7 +154,7 @@ args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp
       <p class="fineprint"><strong>Where your data goes:</strong> the browser Toolkit processes files only in this browser. Through MCP, the inventory or passport you pass becomes part of your AI client's conversation, so a hosted assistant sends it to its provider, and a remote server you host receives it over HTTPS. <code>validate_passport</code> checks a passport document; it does not monitor, enforce, or revoke anything at runtime.</p>
     </section>
 
-    <section id="guard" class="shell connect-section">
+    <section id="guard" class="shell connect-section"><div id="works-with" tabindex="-1"></div>
       <p class="eyebrow">For agent builders</p>
       <h2>Guard every tool call</h2>
       <p>Your agent has more tools than these three. A small <a href="https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp/blob/v0.5.1/examples/agent-stacks/action_level_guard.py">Action Level guard</a> (Python standard library) checks each tool call before it runs, using the Action Levels in the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/agentic-ai-governance/blob/v0.1.0-alpha.6/spec/08-action-authority.md">action-authority spec</a>: Levels 0 to 3 run, Level 5 is blocked, and a tool missing from your policy counts as Level 4. Level 4 asks an accountable person by default; the operator can instead route listed Level 4 tools to an automated approver that records <code>approved_by</code>. Unknown tools are never auto-approved.</p>
@@ -196,5 +202,6 @@ args = ["--from", "git+https://github.com/GLOBAL-AI-GOVERNANCE/ai-governance-mcp
     <p class="gaig-footer-ctas"><a href="./start.html">Start where you are</a> · <a href="#agents">Connect your agent</a> · <a href="#guard">Guard tool calls</a> · <a href="#spec">Read the spec</a></p>
     <p>Global AI Governance · Outputs are non-authorizing (<code>authority_effect: NONE</code>) · Compatible with MCP-based agents · <a href="https://github.com/GLOBAL-AI-GOVERNANCE">GitHub</a></p>
   </footer>
+  <script type="module" src="./connect-copy.mjs?v=2.8.2"></script>
 </body>
 </html>

@@ -121,12 +121,13 @@ class JourneysSyncTests(unittest.TestCase):
             nav = re.search(r'<span class="gaig-links">(.*?)</span>', read(f"web/{page}"), re.S).group(1)
             self.assertIn(f'<a href="{href}"', nav, page)
         sitemap = read("web/sitemap.xml")
-        for url in ("start.html", "JOURNEYS.md", "lead-agent/", "interoperability.html"):
+        for url in ("start.html", "JOURNEYS.md", "JOURNEYS.html", "AGENT_SETUP.html", "lead-agent/", "interoperability.html"):
             self.assertIn(f"<loc>{SITE}{url}</loc>", sitemap)
         pages = read(".github/workflows/pages.yml")
         # Pages deploys on every main push (no path filters) and stages JOURNEYS.
         self.assertIn("workflow_call:", pages)
         self.assertIn("cp docs/JOURNEYS.md _site/JOURNEYS.md", pages)
+        self.assertIn("render_docs_html.py", pages)
         self.assertNotIn("paths:", pages.split("on:", 1)[1].split("permissions:", 1)[0])
         self.assertIn("node --check web/start.mjs", pages)
         self.assertNotIn("Three ways in", read("web/index.html"))
