@@ -69,12 +69,12 @@ The current automation pipeline:
 
 ### Quick Start
 
-**Fastest CLI path, no clone:** install the v2.8.2 release wheel and run the sample with gaps. Requires Python 3.11 or later and `curl`.
+**Fastest CLI path, no clone:** install the v2.8.3 release wheel and run the sample with gaps. Requires Python 3.11 or later and `curl`.
 
 ```bash
 python3 -m venv gaig-venv && . gaig-venv/bin/activate   # Python 3.11 or later
 python -m pip install https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.3/global_ai_governance-2.8.3-py3-none-any.whl
-curl -fsSLO https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.2/automation/sample-data/sample-ai-inventory.csv
+curl -fsSLO https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.3/automation/sample-data/sample-ai-inventory.csv
 OUT="$(mktemp -d)"
 gaig check sample-ai-inventory.csv --outdir "$OUT" --fail-on none
 gaig verify "$OUT"
@@ -138,7 +138,7 @@ The sovereignty checker is additive to the primary Decision Pack runtime. `gover
 
 ## Advanced Profiles
 
-The current registry contains the released optional profile set. v2.3.0 introduced Auditable AI, the synthetic Quantum-AI exercise, and CISO accountability. v2.4.0 added independent assurance, mission assurance, and machine-learning assurance. v2.5.0 added organizational AI maturity evidence. v2.8.2 makes independent assurance require an agent passport reference and a passing shutdown test no older than 90 days for an autonomous agent. Organizational maturity has its own local-first maturity route. [`automation/profiles/registry.json`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.3/automation/profiles/registry.json) is the discovery source of truth for registered and browser-supported profiles. They follow one additive path:
+The current registry contains the released optional profile set. v2.3.0 introduced Auditable AI, the synthetic Quantum-AI exercise, and CISO accountability. v2.4.0 added independent assurance, mission assurance, and machine-learning assurance. v2.5.0 added organizational AI maturity evidence. v2.8.3 makes independent assurance require an agent passport reference and a passing shutdown test no older than 90 days for an autonomous agent. Organizational maturity has its own local-first maturity route. [`automation/profiles/registry.json`](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.3/automation/profiles/registry.json) is the discovery source of truth for registered and browser-supported profiles. They follow one additive path:
 
 Decision Pack → optional advanced profile → profile result + evidence → accountable human review → optional non-authorizing handoff.
 
@@ -333,7 +333,7 @@ The repository preserves the following development lineage:
 - v2.7.0: `gaig` Only
 - v2.7.1: Plain Run Output
 - v2.8.3: UAT launch polish and bootstrap reliability
-- v2.8.2: Resolvable Schema Identifiers
+- v2.8.3: Resolvable Schema Identifiers
 - Current public identity: Global AI Governance Toolkit
 
 Historical version names remain in version-specific release records where appropriate.
@@ -344,7 +344,7 @@ Historical version names remain in version-specific release records where approp
 - Review [v2.3.0 release readiness](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.3/docs/release-readiness-v2.3.0.md).
 - Review the [v2.3.0 release notes](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.3/release-notes/v2.3.0-assurance-accountability-profiles.md).
 - Review the [v2.4.0 release gate](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.3/docs/release-readiness-v2.4.0.md).
-- Release assets (wheel, sdist, and `SHA256SUMS`) are built from the release tag and attached by the [Release Assets workflow](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.3/.github/workflows/release-assets.yml). For releases published after v2.7.0, the workflow also attaches a CycloneDX SBOM (`*.cdx.json`) and records a GitHub build-provenance attestation for every asset listed in `SHA256SUMS`; check one with `gh attestation verify <file> --repo GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit`. Releases up to and including v2.7.0 have no SBOM or attestation. From v2.8.2, the wheel and sdist are named after the distribution `global-ai-governance` (for example `global_ai_governance-2.8.3-py3-none-any.whl`); earlier releases keep their file names, and the `gaig` command is the same.
+- Release assets (wheel, sdist, and `SHA256SUMS`) are built from the release tag and attached by the [Release Assets workflow](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.3/.github/workflows/release-assets.yml). For releases published after v2.7.0, the workflow also attaches a CycloneDX SBOM (`*.cdx.json`) and records a GitHub build-provenance attestation for every asset listed in `SHA256SUMS`; check one with `gh attestation verify <file> --repo GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit`. Releases up to and including v2.7.0 have no SBOM or attestation. From v2.8.3, the wheel and sdist are named after the distribution `global-ai-governance` (for example `global_ai_governance-2.8.3-py3-none-any.whl`); earlier releases keep their file names, and the `gaig` command is the same.
 - Run `python -B automation/scripts/validate_repository.py`.
 - Run `python -B automation/scripts/build_decision_pack_example.py --check`.
 
