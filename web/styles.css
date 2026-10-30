@@ -251,3 +251,4 @@ pre:focus-visible,.table-wrap:focus-visible,.panel:focus-visible,.tab:focus-visi
 .copy-wrap { position:relative; }
 .copy-wrap .copy-btn { position:absolute; top:8px; right:8px; z-index:1; }
 pre[tabindex] { overflow-x:auto; max-width:100%; }
+.plain-list { margin:16px 0 0; padding-left:1.15em; max-width:820px; }.plain-list li { color:var(--g-text-2); }.plain-list li + li { margin-top:10px; }
