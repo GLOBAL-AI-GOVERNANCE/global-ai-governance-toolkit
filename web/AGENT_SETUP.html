@@ -35,11 +35,11 @@
 curl -fsSLO https://ai-governance.solutions/bootstrap.sh &amp;&amp; bash bootstrap.sh
 
 </code></pre>
-<p><a href="https://ai-governance.solutions/bootstrap.sh"><code>bootstrap.sh</code></a> runs steps 0 to 8 below without a prompt: it installs every component from its release tag into <code>gaig-setup/.venv</code>, issues passports for a sample fleet, guards three tool calls, runs the lead agent demo, closes a vulnerability from a rescan, and ends with a done check where every line ends in <code>ok</code>. Exit code 0 means every check passed. Read it before you run it; it is short. Run it again in the same folder and it repeats the checks. The steps below do the same thing one at a time.</p>
+<p><a href="https://ai-governance.solutions/bootstrap.sh"><code>bootstrap.sh</code></a> runs steps 0 to 8 below without a prompt: it installs every component from its release tag into <code>gaig-setup/.venv</code>, issues passports for a sample fleet, guards three tool calls, runs the lead agent demo, closes a vulnerability from a rescan, and ends with a done check where every line ends in <code>ok</code>. Exit code 0 means every check passed. Read it before you run it; it is short. Run it again in the same folder and it repeats the checks. The steps below do the same thing one at a time. The one-command path is for bash on Linux, macOS, or Windows Git Bash. On Windows PowerShell, follow the PowerShell commands in steps 0 to 3, then continue with the same tools after the virtual environment is active.</p>
 <h2 id="current-versions">Current versions</h2>
 <p>| Component | Version | Install |</p>
 <p>|---|---|---|</p>
-<p>| Toolkit (<code>gaig</code> CLI) | v2.8.2 | release wheel |</p>
+<p>| Toolkit (<code>gaig</code> CLI) | v2.8.3 | release wheel |</p>
 <p>| AI Governance MCP (<code>gaig-mcp</code>) | v0.5.1 | <code>uvx</code> from the tag |</p>
 <p>| Agentic AI Governance (<code>validate-passport</code>) | v0.1.0-alpha.6 | <code>pip</code> from the tag |</p>
 <p>| Verified Vulnerability Governance (<code>vvd</code>) | v0.4.0 | <code>pip</code> from the tag |</p>
@@ -47,11 +47,20 @@ curl -fsSLO https://ai-governance.solutions/bootstrap.sh &amp;&amp; bash bootstr
 <p><code>gaig-mcp</code> v0.5.1 bundles the Toolkit at v2.8.1 (commit <code>0ab38c6a94a705e4423bfc9bb19ef2137f59f5c5</code>) and Agentic AI Governance at commit <code>58bdfb291df0de7c9437b4476e370a609c4b1d5f</code>. Its outputs report those commits in <code>source</code>. Bundle pins come from MCP <code>UPSTREAM_LOCK.json</code>, not from the Toolkit release tag.</p>
 <p>&lt;!-- /gaig:mcp-bundle --&gt;</p>
 <h2 id="0-requirements">0. Requirements</h2>
-<p>Python 3.11 or later, <code>git</code>, and <code>curl</code>. The MCP server also needs <a href="https://docs.astral.sh/uv/">uv</a>; step 4 installs it into the virtual environment if it is missing. Commands are for bash on Linux or macOS. On Windows, use Git Bash and activate with <code>. .venv/Scripts/activate</code>.</p>
+<p>Python 3.11 or later, <code>git</code>, and <code>curl</code> (or PowerShell). The MCP server also needs <a href="https://docs.astral.sh/uv/">uv</a>; step 4 installs it into the virtual environment if it is missing. Commands marked as bash are for Linux or macOS. On Windows, Git Bash works if you activate with <code>. .venv/Scripts/activate</code>, or use the PowerShell commands that follow each first-run step. After the environment is active, <code>python</code>, <code>pip</code>, <code>gaig</code>, <code>gaig-mcp</code>, and <code>validate-passport</code> are the same on every platform; use <code>curl.exe</code> or <code>Invoke-WebRequest</code> in place of <code>curl</code>, and <code>Get-FileHash -Algorithm SHA256</code> in place of <code>sha256sum</code>.</p>
 <pre tabindex="0"><code class="language-bash">
 mkdir gaig-setup &amp;&amp; cd gaig-setup
 
 python3 -m venv .venv &amp;&amp; . .venv/bin/activate
+
+python -c &quot;import sys; assert sys.version_info &gt;= (3, 11), sys.version; print(&#x27;python ok&#x27;)&quot;
+
+</code></pre>
+<p>PowerShell (Windows):</p>
+<pre tabindex="0"><code class="language-powershell">
+mkdir gaig-setup; Set-Location gaig-setup
+
+python -m venv .venv; .\.venv\Scripts\Activate.ps1
 
 python -c &quot;import sys; assert sys.version_info &gt;= (3, 11), sys.version; print(&#x27;python ok&#x27;)&quot;
 
@@ -66,27 +75,50 @@ curl -fsSL https://ai-governance.solutions/machine-interface.json \
   | python -c &quot;import json,sys; d=json.load(sys.stdin); print(d[&#x27;machine_interface_version&#x27;], d[&#x27;release&#x27;])&quot;
 
 </code></pre>
-<p>Expect the llms.txt title <code># Global AI Governance Toolkit</code> and its <code>## Agent setup (start here)</code> section, then <code>1.6.0 v2.8.2</code>.</p>
-<p>The schema URLs in llms.txt and machine-interface.json point at the <code>v2.7.2</code> tag on purpose: those schemas did not change in v2.8.2, and their <code>$id</code> values name v2.7.2.</p>
+<p>Expect the llms.txt title <code># Global AI Governance Toolkit</code> and its <code>## Agent setup (start here)</code> section, then <code>1.6.0 v2.8.3</code>.</p>
+<p>The schema URLs in llms.txt and machine-interface.json point at the <code>v2.7.2</code> tag on purpose: those schemas did not change in v2.8.3, and their <code>$id</code> values name v2.7.2.</p>
 <h2 id="2-install-the-toolkit-cli">2. Install the Toolkit CLI</h2>
 <pre tabindex="0"><code class="language-bash">
-REL=https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.2
+REL=https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.3
 
-curl -fsSLO &quot;$REL/global_ai_governance-2.8.2-py3-none-any.whl&quot;
+curl -fsSLO &quot;$REL/global_ai_governance-2.8.3-py3-none-any.whl&quot;
 
 curl -fsSLO &quot;$REL/SHA256SUMS&quot;
 
-grep &#x27; global_ai_governance-2.8.2-py3-none-any.whl$&#x27; SHA256SUMS | sha256sum -c -
+grep &#x27; global_ai_governance-2.8.3-py3-none-any.whl$&#x27; SHA256SUMS | sha256sum -c -
 
-python -m pip install --quiet ./global_ai_governance-2.8.2-py3-none-any.whl
+python -m pip install --quiet ./global_ai_governance-2.8.3-py3-none-any.whl
 
 gaig --version
 
 </code></pre>
-<p>Expect: <code>global_ai_governance-2.8.2-py3-none-any.whl: OK</code>, then <code>2.8.2</code>. On macOS, use <code>shasum -a 256 -c -</code> in place of <code>sha256sum -c -</code>.</p>
+<p>PowerShell (Windows):</p>
+<pre tabindex="0"><code class="language-powershell">
+$Rel = &quot;https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.3&quot;
+
+$Whl = &quot;global_ai_governance-2.8.3-py3-none-any.whl&quot;
+
+Invoke-WebRequest -Uri &quot;$Rel/$Whl&quot; -OutFile $Whl
+
+Invoke-WebRequest -Uri &quot;$Rel/SHA256SUMS&quot; -OutFile SHA256SUMS
+
+$Expected = (Select-String -Path SHA256SUMS -Pattern &quot; $Whl$&quot;).Line.Split(&quot; &quot;)[0]
+
+$Actual = (Get-FileHash -Algorithm SHA256 -Path $Whl).Hash
+
+if ($Actual.ToLower() -ne $Expected.ToLower()) { throw &quot;checksum mismatch&quot; }
+
+Write-Output &quot;${Whl}: OK&quot;
+
+python -m pip install --quiet .\$Whl
+
+gaig --version
+
+</code></pre>
+<p>Expect: <code>global_ai_governance-2.8.3-py3-none-any.whl: OK</code>, then <code>2.8.3</code>. On macOS, use <code>shasum -a 256 -c -</code> in place of <code>sha256sum -c -</code>.</p>
 <p>Optional build-provenance check, if the GitHub CLI is installed and signed in:</p>
 <pre tabindex="0"><code class="language-text">
-gh attestation verify global_ai_governance-2.8.2-py3-none-any.whl --owner GLOBAL-AI-GOVERNANCE
+gh attestation verify global_ai_governance-2.8.3-py3-none-any.whl --owner GLOBAL-AI-GOVERNANCE
 
 </code></pre>
 <p>Expect exit code 0.</p>
@@ -101,12 +133,32 @@ gaig verify out
 python -c &quot;import json; r=json.load(open(&#x27;out/governance-result.json&#x27;)); print(r[&#x27;validation_state&#x27;], r[&#x27;governance_gate_state&#x27;], r[&#x27;human_decision_state&#x27;])&quot;
 
 </code></pre>
+<p>PowerShell (Windows):</p>
+<pre tabindex="0"><code class="language-powershell">
+Invoke-WebRequest -Uri https://ai-governance.solutions/sample-ai-inventory.csv -OutFile sample-ai-inventory.csv
+
+gaig check sample-ai-inventory.csv --outdir out
+
+gaig verify out
+
+python -c &quot;import json; r=json.load(open(&#x27;out/governance-result.json&#x27;)); print(r[&#x27;validation_state&#x27;], r[&#x27;governance_gate_state&#x27;], r[&#x27;human_decision_state&#x27;])&quot;
+
+</code></pre>
 <p>Expect <code>Governance automation complete.</code> with a list of outputs, then <code>Output contracts and Decision Pack integrity verified.</code>, then <code>VALID PASSED_CURRENT_AUTOMATED_CHECKS PENDING_HUMAN_DECISION</code>. The Decision Pack is in <code>out/decision-pack/</code> for the person accountable.</p>
 <p>The site&#x27;s sample is the clean inventory. To see what a check finds, run the example with gaps:</p>
 <pre tabindex="0"><code class="language-bash">
-curl -fsSL -o sample-with-gaps.csv https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.2/automation/sample-data/sample-ai-inventory.csv
+curl -fsSL -o sample-with-gaps.csv https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.3/automation/sample-data/sample-ai-inventory.csv
 
 gaig check sample-with-gaps.csv --outdir out-gaps --fail-on none &gt;/dev/null
+
+python -c &quot;import json; r=json.load(open(&#x27;out-gaps/governance-result.json&#x27;)); print(r[&#x27;governance_gate_state&#x27;], r[&#x27;finding_count&#x27;])&quot;
+
+</code></pre>
+<p>PowerShell (Windows):</p>
+<pre tabindex="0"><code class="language-powershell">
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.3/automation/sample-data/sample-ai-inventory.csv -OutFile sample-with-gaps.csv
+
+gaig check sample-with-gaps.csv --outdir out-gaps --fail-on none
 
 python -c &quot;import json; r=json.load(open(&#x27;out-gaps/governance-result.json&#x27;)); print(r[&#x27;governance_gate_state&#x27;], r[&#x27;finding_count&#x27;])&quot;
 
@@ -114,9 +166,9 @@ python -c &quot;import json; r=json.load(open(&#x27;out-gaps/governance-result.j
 <p>Expect <code>BLOCKED 6</code>: six findings to resolve (including GAI-AUTO-005 for full autonomy without a human gate). Without <code>--fail-on none</code>, <code>gaig check</code> exits nonzero when findings meet the threshold, which is how a pipeline stops for review.</p>
 <p>To check your own systems, download the blank template from &lt;https://ai-governance.solutions/ai-system-inventory-template.csv&gt;, fill one row per AI system or agent, and run <code>gaig check</code> on it. <code>gaig verify</code> works on <code>gaig check</code> output folders only.</p>
 <h3 id="optional-assurance-profiles">Optional: assurance profiles</h3>
-<p><code>gaig profile</code> reads a JSON case file, not the inventory CSV. These synthetic cases are from the v2.8.2 tag:</p>
+<p><code>gaig profile</code> reads a JSON case file, not the inventory CSV. These synthetic cases are from the v2.8.3 tag:</p>
 <pre tabindex="0"><code class="language-bash">
-RAW=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.2
+RAW=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.3
 
 curl -fsSL -o auditable.json &quot;$RAW/automation/assurance/auditable-ai/fixtures/pass.json&quot;
 
@@ -484,7 +536,7 @@ cd ..
 <pre tabindex="0"><code class="language-bash">
 check() { if eval &quot;$2&quot; &gt;/dev/null 2&gt;&amp;1; then echo &quot;$1 ok&quot;; else echo &quot;$1 FAILED&quot;; fi; }
 
-check &quot;toolkit 2.8.2      &quot; &quot;gaig --version | grep -qx &#x27;2.8.2&#x27;&quot;
+check &quot;toolkit 2.8.3      &quot; &quot;gaig --version | grep -qx &#x27;2.8.3&#x27;&quot;
 
 check &quot;decision pack      &quot; &quot;gaig verify out&quot;
 
@@ -517,7 +569,7 @@ check &quot;rescan closure     &quot; &quot;cd vvg-rescan &amp;&amp; vvd audit v
 <p>| <code>check_tool_call</code> returns <code>deny</code>, status <code>EXPIRED</code> | Expected for the bundled examples. Issue current passports from a policy file (step 7). |</p>
 <p>| Every tool asks for approval | No level is set for it, so it counts as Level 4. Add it to <code>action-levels.json</code>, or list it under <code>level_4_approver.approve</code> if it is Level 4 and the operator wants it unattended. |</p>
 <p>| <code>uvx: command not found</code> in a client | Use the absolute path from <code>command -v uvx</code> in the client config. |</p>
-<p>| Schema URLs name <code>v2.7.2</code> | Intended. Those schemas did not change in v2.8.2. |</p>
+<p>| Schema URLs name <code>v2.7.2</code> | Intended. Those schemas did not change in v2.8.3. |</p>
 <h2 id="more">More</h2>
 <ul>
 <li><a href="https://ai-governance.solutions/llms.txt">llms.txt</a> and <a href="https://ai-governance.solutions/machine-interface.json">machine-interface.json</a></li>

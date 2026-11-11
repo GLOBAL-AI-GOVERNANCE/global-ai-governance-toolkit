@@ -189,3 +189,56 @@ jobs:
           test "$GAIG_CHECK_GATE_STATE" = "BLOCKED"
           test "$GAIG_CHECK_REPORT_DIR" = "${{ runner.temp }}/action-critical"
           grep -q "CRITICAL - Missing named owner" "${{ runner.temp }}/action-critical/governance-validation-report.md"
+
+
+  first-run:
+    name: First-run smoke (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.11"
+
+      - name: Documented first-run (Linux and macOS)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/gaig-venv"
+          . "$RUNNER_TEMP/gaig-venv/bin/activate"
+          python -m pip install --disable-pip-version-check .
+          OUT="$(mktemp -d)"
+          gaig check automation/sample-data/sample-ai-inventory.csv --outdir "$OUT" --fail-on none
+          gaig verify "$OUT"
+          grep -m1 "BLOCKED BY CRITICAL FINDINGS" "$OUT/decision-pack/executive-summary.md"
+
+      - name: Documented first-run (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          python -m venv "$env:RUNNER_TEMP\gaig-venv"
+          & "$env:RUNNER_TEMP\gaig-venv\Scripts\Activate.ps1"
+          python -m pip install --disable-pip-version-check .
+          $Out = Join-Path $env:RUNNER_TEMP "gaig-first-run"
+          New-Item -ItemType Directory -Path $Out | Out-Null
+          gaig check automation/sample-data/sample-ai-inventory.csv --outdir $Out --fail-on none
+          if ($LASTEXITCODE -ne 0) { throw "gaig check exited $LASTEXITCODE" }
+          gaig verify $Out
+          if ($LASTEXITCODE -ne 0) { throw "gaig verify exited $LASTEXITCODE" }
+          $summary = Join-Path $Out "decision-pack\executive-summary.md"
+          if (-not (Select-String -Path $summary -Pattern "BLOCKED BY CRITICAL FINDINGS" -Quiet)) {
+            throw "expected blocked-state summary"
+          }
+          Write-Output (Select-String -Path $summary -Pattern "BLOCKED BY CRITICAL FINDINGS" | Select-Object -First 1)

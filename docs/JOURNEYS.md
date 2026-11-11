@@ -68,6 +68,8 @@ for c in agent_pass agent_failed_shutdown_test agent_stale_shutdown_test agent_m
 done
 ```
 
+On macOS, use `shasum -a 256 -c -` in place of `sha256sum -c -`. On Windows, Git Bash works if you activate with `. .venv/Scripts/activate`; PowerShell first-run equivalents for the wheel install and `gaig` command are in the [Toolkit README Quick Start](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit#quick-start) and [AGENT_SETUP](https://ai-governance.solutions/AGENT_SETUP.md).
+
 Expect `global_ai_governance-2.8.3-py3-none-any.whl: OK`, then:
 
 ```text
