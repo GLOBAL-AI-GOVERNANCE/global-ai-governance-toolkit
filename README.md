@@ -69,7 +69,7 @@ The current automation pipeline:
 
 ### Quick Start
 
-**Fastest CLI path, no clone:** install the v2.8.3 release wheel and run the sample with gaps. Requires Python 3.11 or later and `curl`.
+**Fastest CLI path, no clone:** install the v2.8.3 release wheel and run the sample with gaps. Requires Python 3.11 or later. On Linux and macOS you also need `curl`.
 
 ```bash
 python3 -m venv gaig-venv && . gaig-venv/bin/activate   # Python 3.11 or later
@@ -81,7 +81,20 @@ gaig verify "$OUT"
 grep -m1 "BLOCKED BY CRITICAL FINDINGS" "$OUT/decision-pack/executive-summary.md"
 ```
 
-TESTED in a clean environment: both commands exit `0` and the last line prints the blocked-state summary. To check the wheel, download `SHA256SUMS` from the same release and run `grep ' global_ai_governance-2.8.3-py3-none-any.whl$' SHA256SUMS | sha256sum -c -`; with the GitHub CLI, `gh attestation verify global_ai_governance-2.8.3-py3-none-any.whl --owner GLOBAL-AI-GOVERNANCE` checks build provenance. The package is not on PyPI.
+PowerShell (Windows):
+
+```powershell
+python -m venv gaig-venv; .\gaig-venv\Scripts\Activate.ps1   # Python 3.11 or later
+python -m pip install https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.3/global_ai_governance-2.8.3-py3-none-any.whl
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.3/automation/sample-data/sample-ai-inventory.csv -OutFile sample-ai-inventory.csv
+$Out = Join-Path $env:TEMP ("gaig-" + [guid]::NewGuid().ToString())
+New-Item -ItemType Directory -Path $Out | Out-Null
+gaig check sample-ai-inventory.csv --outdir $Out --fail-on none
+gaig verify $Out
+Select-String -Path (Join-Path $Out "decision-pack\executive-summary.md") -Pattern "BLOCKED BY CRITICAL FINDINGS" | Select-Object -First 1
+```
+
+TESTED in a clean environment: both commands exit `0` and the last line prints the blocked-state summary. To check the wheel, download `SHA256SUMS` from the same release and run `grep ' global_ai_governance-2.8.3-py3-none-any.whl$' SHA256SUMS | sha256sum -c -` (on macOS, use `shasum -a 256 -c -`; on Windows, compare `Get-FileHash -Algorithm SHA256`). With the GitHub CLI, `gh attestation verify global_ai_governance-2.8.3-py3-none-any.whl --owner GLOBAL-AI-GOVERNANCE` checks build provenance. The package is not on PyPI.
 
 **From a checkout:** Python 3.11 (the version used in hosted CI) and Git. Reports go to a new temporary directory, so the run changes no tracked file in the checkout.
 
@@ -96,7 +109,21 @@ gaig verify "$OUT"
 grep -m1 "BLOCKED BY CRITICAL FINDINGS" "$OUT/decision-pack/executive-summary.md"
 ```
 
-Expected: both commands exit `0`, and the last line prints the `BLOCKED BY CRITICAL FINDINGS` status line from the Decision Pack summary. Open `"$OUT/decision-pack/"` to review the pack. To use the published release instead of current `main`, add `--branch v2.8.3` to `git clone`.
+PowerShell (Windows):
+
+```powershell
+git clone https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit.git
+cd global-ai-governance-toolkit
+python -m venv ..\gaig-venv; ..\gaig-venv\Scripts\Activate.ps1   # Python 3.11 or later
+python -m pip install .
+$Out = Join-Path $env:TEMP ("gaig-" + [guid]::NewGuid().ToString())
+New-Item -ItemType Directory -Path $Out | Out-Null
+gaig check automation/sample-data/sample-ai-inventory.csv --outdir $Out --fail-on none
+gaig verify $Out
+Select-String -Path (Join-Path $Out "decision-pack\executive-summary.md") -Pattern "BLOCKED BY CRITICAL FINDINGS" | Select-Object -First 1
+```
+
+Expected: both commands exit `0`, and the last line prints the `BLOCKED BY CRITICAL FINDINGS` status line from the Decision Pack summary. Open `"$OUT/decision-pack/"` (on Windows, `$Out\decision-pack\`) to review the pack. To use the published release instead of current `main`, add `--branch v2.8.3` to `git clone`.
 
 The bundled sample intentionally includes systems with critical control gaps. The quick start therefore uses explicit report-only mode so the toolkit can generate a blocked-state Decision Pack for review. Remove `--fail-on none` to exercise the default fail-closed gate. To check your own systems, download the [blank template](https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.3/web/ai-system-inventory-template.csv), fill one row per AI system or agent, and pass that file instead of the sample. The repository-relative script `python automation/scripts/run_governance_checks.py` accepts the same arguments.
 

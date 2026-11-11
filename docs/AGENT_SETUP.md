@@ -25,7 +25,7 @@ Every output carries `authority_effect: NONE`. A passing check means no check st
 curl -fsSLO https://ai-governance.solutions/bootstrap.sh && bash bootstrap.sh
 ```
 
-[`bootstrap.sh`](https://ai-governance.solutions/bootstrap.sh) runs steps 0 to 8 below without a prompt: it installs every component from its release tag into `gaig-setup/.venv`, issues passports for a sample fleet, guards three tool calls, runs the lead agent demo, closes a vulnerability from a rescan, and ends with a done check where every line ends in `ok`. Exit code 0 means every check passed. Read it before you run it; it is short. Run it again in the same folder and it repeats the checks. The steps below do the same thing one at a time.
+[`bootstrap.sh`](https://ai-governance.solutions/bootstrap.sh) runs steps 0 to 8 below without a prompt: it installs every component from its release tag into `gaig-setup/.venv`, issues passports for a sample fleet, guards three tool calls, runs the lead agent demo, closes a vulnerability from a rescan, and ends with a done check where every line ends in `ok`. Exit code 0 means every check passed. Read it before you run it; it is short. Run it again in the same folder and it repeats the checks. The steps below do the same thing one at a time. The one-command path is for bash on Linux, macOS, or Windows Git Bash. On Windows PowerShell, follow the PowerShell commands in steps 0 to 3, then continue with the same tools after the virtual environment is active.
 
 ## Current versions
 
@@ -42,11 +42,19 @@ curl -fsSLO https://ai-governance.solutions/bootstrap.sh && bash bootstrap.sh
 
 ## 0. Requirements
 
-Python 3.11 or later, `git`, and `curl`. The MCP server also needs [uv](https://docs.astral.sh/uv/); step 4 installs it into the virtual environment if it is missing. Commands are for bash on Linux or macOS. On Windows, use Git Bash and activate with `. .venv/Scripts/activate`.
+Python 3.11 or later, `git`, and `curl` (or PowerShell). The MCP server also needs [uv](https://docs.astral.sh/uv/); step 4 installs it into the virtual environment if it is missing. Commands marked as bash are for Linux or macOS. On Windows, Git Bash works if you activate with `. .venv/Scripts/activate`, or use the PowerShell commands that follow each first-run step. After the environment is active, `python`, `pip`, `gaig`, `gaig-mcp`, and `validate-passport` are the same on every platform; use `curl.exe` or `Invoke-WebRequest` in place of `curl`, and `Get-FileHash -Algorithm SHA256` in place of `sha256sum`.
 
 ```bash
 mkdir gaig-setup && cd gaig-setup
 python3 -m venv .venv && . .venv/bin/activate
+python -c "import sys; assert sys.version_info >= (3, 11), sys.version; print('python ok')"
+```
+
+PowerShell (Windows):
+
+```powershell
+mkdir gaig-setup; Set-Location gaig-setup
+python -m venv .venv; .\.venv\Scripts\Activate.ps1
 python -c "import sys; assert sys.version_info >= (3, 11), sys.version; print('python ok')"
 ```
 
@@ -75,6 +83,21 @@ python -m pip install --quiet ./global_ai_governance-2.8.3-py3-none-any.whl
 gaig --version
 ```
 
+PowerShell (Windows):
+
+```powershell
+$Rel = "https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.3"
+$Whl = "global_ai_governance-2.8.3-py3-none-any.whl"
+Invoke-WebRequest -Uri "$Rel/$Whl" -OutFile $Whl
+Invoke-WebRequest -Uri "$Rel/SHA256SUMS" -OutFile SHA256SUMS
+$Expected = (Select-String -Path SHA256SUMS -Pattern " $Whl$").Line.Split(" ")[0]
+$Actual = (Get-FileHash -Algorithm SHA256 -Path $Whl).Hash
+if ($Actual.ToLower() -ne $Expected.ToLower()) { throw "checksum mismatch" }
+Write-Output "${Whl}: OK"
+python -m pip install --quiet .\$Whl
+gaig --version
+```
+
 Expect: `global_ai_governance-2.8.3-py3-none-any.whl: OK`, then `2.8.3`. On macOS, use `shasum -a 256 -c -` in place of `sha256sum -c -`.
 
 Optional build-provenance check, if the GitHub CLI is installed and signed in:
@@ -94,6 +117,15 @@ gaig verify out
 python -c "import json; r=json.load(open('out/governance-result.json')); print(r['validation_state'], r['governance_gate_state'], r['human_decision_state'])"
 ```
 
+PowerShell (Windows):
+
+```powershell
+Invoke-WebRequest -Uri https://ai-governance.solutions/sample-ai-inventory.csv -OutFile sample-ai-inventory.csv
+gaig check sample-ai-inventory.csv --outdir out
+gaig verify out
+python -c "import json; r=json.load(open('out/governance-result.json')); print(r['validation_state'], r['governance_gate_state'], r['human_decision_state'])"
+```
+
 Expect `Governance automation complete.` with a list of outputs, then `Output contracts and Decision Pack integrity verified.`, then `VALID PASSED_CURRENT_AUTOMATED_CHECKS PENDING_HUMAN_DECISION`. The Decision Pack is in `out/decision-pack/` for the person accountable.
 
 The site's sample is the clean inventory. To see what a check finds, run the example with gaps:
@@ -101,6 +133,14 @@ The site's sample is the clean inventory. To see what a check finds, run the exa
 ```bash
 curl -fsSL -o sample-with-gaps.csv https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.3/automation/sample-data/sample-ai-inventory.csv
 gaig check sample-with-gaps.csv --outdir out-gaps --fail-on none >/dev/null
+python -c "import json; r=json.load(open('out-gaps/governance-result.json')); print(r['governance_gate_state'], r['finding_count'])"
+```
+
+PowerShell (Windows):
+
+```powershell
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.3/automation/sample-data/sample-ai-inventory.csv -OutFile sample-with-gaps.csv
+gaig check sample-with-gaps.csv --outdir out-gaps --fail-on none
 python -c "import json; r=json.load(open('out-gaps/governance-result.json')); print(r['governance_gate_state'], r['finding_count'])"
 ```
 

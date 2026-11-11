@@ -64,17 +64,17 @@ mkdir gaig-journeys &amp;&amp; cd gaig-journeys
 
 python3 -m venv .venv &amp;&amp; . .venv/bin/activate
 
-REL=https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.2
+REL=https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/releases/download/v2.8.3
 
-curl -fsSLO &quot;$REL/global_ai_governance-2.8.2-py3-none-any.whl&quot;
+curl -fsSLO &quot;$REL/global_ai_governance-2.8.3-py3-none-any.whl&quot;
 
 curl -fsSLO &quot;$REL/SHA256SUMS&quot;
 
-grep &#x27; global_ai_governance-2.8.2-py3-none-any.whl$&#x27; SHA256SUMS | sha256sum -c -
+grep &#x27; global_ai_governance-2.8.3-py3-none-any.whl$&#x27; SHA256SUMS | sha256sum -c -
 
-python -m pip install --quiet ./global_ai_governance-2.8.2-py3-none-any.whl jsonschema
+python -m pip install --quiet ./global_ai_governance-2.8.3-py3-none-any.whl jsonschema
 
-FIX=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.2/automation/assurance/independent-assurance/fixtures
+FIX=https://raw.githubusercontent.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/v2.8.3/automation/assurance/independent-assurance/fixtures
 
 for c in agent_pass agent_failed_shutdown_test agent_stale_shutdown_test agent_missing_shutdown_test; do
 
@@ -87,7 +87,8 @@ for c in agent_pass agent_failed_shutdown_test agent_stale_shutdown_test agent_m
 done
 
 </code></pre>
-<p>Expect <code>global_ai_governance-2.8.2-py3-none-any.whl: OK</code>, then:</p>
+<p>On macOS, use <code>shasum -a 256 -c -</code> in place of <code>sha256sum -c -</code>. On Windows, Git Bash works if you activate with <code>. .venv/Scripts/activate</code>; PowerShell first-run equivalents for the wheel install and <code>gaig</code> command are in the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit#quick-start">Toolkit README Quick Start</a> and <a href="./AGENT_SETUP.html">AGENT_SETUP</a>.</p>
+<p>Expect <code>global_ai_governance-2.8.3-py3-none-any.whl: OK</code>, then:</p>
 <pre tabindex="0"><code class="language-text">
 agent_pass PASS
 
@@ -98,7 +99,7 @@ agent_stale_shutdown_test FAIL SHUTDOWN_TEST_STALE
 agent_missing_shutdown_test FAIL SHUTDOWN_TEST_MISSING
 
 </code></pre>
-<p>A failing case exits 1, so a pipeline stops for review. How to run and record a shutdown test is in the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.2/docs/shutdown-protocol.md">shutdown protocol</a>.</p>
+<p>A failing case exits 1, so a pipeline stops for review. How to run and record a shutdown test is in the <a href="https://github.com/GLOBAL-AI-GOVERNANCE/global-ai-governance-toolkit/blob/v2.8.3/docs/shutdown-protocol.md">shutdown protocol</a>.</p>
 <h2 id="example-you-work-at-a-frontier-lab">Example: you work at a frontier lab</h2>
 <ol>
 <li><strong>Map it to what you already use.</strong> The <a href="https://github.com/GLOBAL-AI-GOVERNANCE/GLOBAL-AI-GOVERNANCE/blob/main/docs/FRONTIER_AND_REGULATORY_CROSSWALK.md">frontier and regulatory crosswalk</a> relates the suite to frontier safety frameworks, the EU AI Act, and ISO/IEC 42001:2023. It is informative and establishes no compliance.</li>
@@ -116,7 +117,7 @@ agent_missing_shutdown_test FAIL SHUTDOWN_TEST_MISSING
 <li><strong>Check where each release came from.</strong> Release assets ship SHA-256 checksums, and most carry GitHub build provenance. With the GitHub CLI installed and signed in:</li>
 </ol>
 <p>   ```bash</p>
-<p>   for rt in global-ai-governance-toolkit:v2.8.2:global_ai_governance-2.8.2-py3-none-any.whl \</p>
+<p>   for rt in global-ai-governance-toolkit:v2.8.3:global_ai_governance-2.8.3-py3-none-any.whl \</p>
 <p>             ai-governance-mcp:v0.5.1:gaig_mcp-0.5.1-py3-none-any.whl \</p>
 <p>             agentic-ai-governance:v0.1.0-alpha.6:agentic-ai-governance-v0.1.0-alpha.6.zip \</p>
 <p>             verified-vulnerability-governance:v0.4.0:verified-vulnerability-governance-v0.4.0.zip \</p>

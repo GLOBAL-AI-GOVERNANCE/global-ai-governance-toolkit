@@ -72,6 +72,7 @@ python3 -m venv .venv &amp;&amp; . .venv/bin/activate &amp;&amp; pip install -e 
 gaig-mcp                     # stdio (Claude Desktop and other local clients)
 gaig-mcp --http --port 8000  # Streamable HTTP at /mcp
 pytest &amp;&amp; python scripts/smoke_test.py   # optional checks; need the [dev] extra</pre>
+      <p>On Windows PowerShell, create and activate the environment with <code>python -m venv .venv</code> then <code>.\.venv\Scripts\Activate.ps1</code>. From source, point the client at <code>C:\ABS\PATH\ai-governance-mcp\.venv\Scripts\gaig-mcp.exe</code>.</p>
       <h3 class="recipe-group">On your machine</h3>
       <div class="recipes">
         <article class="recipe">
